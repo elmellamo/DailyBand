@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<!-- 왼쪽 반 원 (투명도 낮음) -->
+<item>
+    <shape
+        android:shape="oval"
+        android:gravity="start"
+        >
+        <solid android:color="#40FFFFFF" /> <!-- 투명한 흰색 배경색 (투명도 낮음) -->
+    </shape>
+</item>
+<!-- 오른쪽 반 원 (투명도 높음) -->
+<item>
+    <shape
+        android:shape="oval"
+        android:gravity="end"
+        >
+        <solid android:color="#80FFFFFF" /> <!-- 투명한 흰색 배경색 (투명도 높음) -->
+    </shape>
+</item>
+</layer-list>

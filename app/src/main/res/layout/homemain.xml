@@ -11,11 +11,61 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/layout_home"
+        android:background="@color/midgreen"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/layout_popular"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_weight="0.3">
+        app:layout_constraintVertical_weight="0.4"
+        >
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/circle_iv"
+            app:civ_border_overlay="true"
+            app:civ_border_width="0dp"
+            app:civ_border_color="#000000"
+            android:src="@drawable/basic_img"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/username"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintVertical_weight="0.8"
+            android:paddingBottom="10dp"
+            android:paddingTop="20dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="사용자"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:id="@+id/username"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/circle_iv"
+            app:layout_constraintBottom_toTopOf="@+id/gomakeyourmusic"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintVertical_weight="0.2"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="나만의 음악을 만들어보세요"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:id="@+id/gomakeyourmusic"
+            app:layout_constraintTop_toBottomOf="@+id/username"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintVertical_weight="0.2"
+            />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -23,6 +73,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/layout_popular"
+        android:background="@color/graygreen"
         app:layout_constraintTop_toBottomOf="@+id/layout_home"
         app:layout_constraintBottom_toTopOf="@+id/menu_bar"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -88,7 +139,7 @@
             <ImageButton
                 android:id="@+id/addbtn"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="0dp"
                 android:adjustViewBounds="true"
                 android:backgroundTint="@color/graygreen"
                 android:contentDescription="내 음악 추가하기"
@@ -103,7 +154,7 @@
             <ImageButton
                 android:id="@+id/librarybtn"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="0dp"
                 android:adjustViewBounds="true"
                 android:backgroundTint="@color/graygreen"
                 android:contentDescription="라이브러리"
@@ -118,9 +169,9 @@
             <ImageButton
                 android:id="@+id/setbtn"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="0dp"
                 android:adjustViewBounds="true"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/graygreen"
                 android:contentDescription="설정"
                 android:scaleType="fitCenter"
                 app:layout_constraintBottom_toBottomOf="parent"
