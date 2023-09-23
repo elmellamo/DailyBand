@@ -1,4 +1,12 @@
 package com.example.dailyband;
 
-public class HomeMain {
+        import android.os.Bundle;
+
+        import androidx.appcompat.app.AppCompatActivity;
+public class HomeMain extends AppCompatActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.homemain);
+    }
 }
