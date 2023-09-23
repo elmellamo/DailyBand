@@ -12,8 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DailyBand"
         tools:targetApi="31" >
+
         <activity
-            android:name="com.example.dailyband.HomeMain"
+            android:name="com.example.dailyband.StartActivity"
             android:exported="true"
             >
             <intent-filter>
@@ -21,5 +22,18 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity android:name=".HomeMain"
+            android:exported="true">
+        </activity>
+
+        <activity android:name=".LoginActivity"
+            android:exported="true">
+        </activity>
+
+        <activity android:name=".RegisterActivity"
+            android:exported="true">
+        </activity>
+
     </application>
 </manifest>
