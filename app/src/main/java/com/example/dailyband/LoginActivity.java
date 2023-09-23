@@ -55,6 +55,13 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+
+        gotoregisterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(RegisterActivity.class);
+            }
+        });
     }
 
     private void myStartActivity(Class c){
