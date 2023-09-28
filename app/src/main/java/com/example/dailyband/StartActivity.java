@@ -6,6 +6,8 @@ import android.widget.Button;
 import android.view.View;
 
 import com.example.dailyband.R;
+import com.google.android.material.imageview.ShapeableImageView;
+
 import androidx.appcompat.app.AppCompatActivity;
 public class StartActivity extends AppCompatActivity {
 
