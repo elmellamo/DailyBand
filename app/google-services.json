@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "659444294494",
+    "firebase_url": "https://dailyband-d0c8e-default-rtdb.firebaseio.com",
+    "project_id": "dailyband-d0c8e",
+    "storage_bucket": "dailyband-d0c8e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:659444294494:android:8baf092a010da9223325cf",
+        "android_client_info": {
+          "package_name": "com.example.dailyband"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgXvts6c-pzSDDxKrWfpguOZPCBTRBRj4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

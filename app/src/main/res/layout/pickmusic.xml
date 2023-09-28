@@ -1,70 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/layout_home"
-        android:background="@color/midgreen"
+        android:id="@+id/picktop"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/layout_popular"
+        app:layout_constraintBottom_toTopOf="@+id/ingmusic"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_weight="0.4"
-        >
-
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:id="@+id/circle_iv"
-            app:civ_border_overlay="true"
-            app:civ_border_width="0dp"
-            app:civ_border_color="#000000"
-            android:src="@drawable/basic_img"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/username"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintVertical_weight="0.8"
-            android:paddingBottom="10dp"
-            android:paddingTop="20dp"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:text="사용자"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:id="@+id/username"
-            android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@+id/circle_iv"
-            app:layout_constraintBottom_toTopOf="@+id/gomakeyourmusic"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintVertical_weight="0.15"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:text="나만의 음악을 만들어보세요"
-            android:gravity="center"
-            android:textSize="15sp"
-            android:id="@+id/gomakeyourmusic"
-            app:layout_constraintTop_toBottomOf="@+id/username"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintVertical_weight="0.23"
-            />
-
+        app:layout_constraintRight_toRightOf="parent">
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -72,40 +18,53 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/layout_popular"
-        android:background="@color/graygreen"
-        app:layout_constraintTop_toBottomOf="@+id/layout_home"
-        app:layout_constraintBottom_toTopOf="@+id/menu_bar"
+        android:id="@+id/ingmusic"
+        app:layout_constraintTop_toBottomOf="@+id/picktop"
+        app:layout_constraintBottom_toTopOf="@+id/variation_music"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/variation_music"
+        app:layout_constraintTop_toBottomOf="@+id/picktop"
+        app:layout_constraintBottom_toTopOf="@+id/iconlayout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/iconlayout"
+        app:layout_constraintTop_toBottomOf="@+id/variation_music"
+        app:layout_constraintBottom_toTopOf="@+id/collaboration_text"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:textStyle="bold"
+        android:text="콜라보레이션"
+        android:gravity="center"
+        android:id="@+id/collaboration_text"
+        app:layout_constraintTop_toBottomOf="@+id/iconlayout"
+        app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_weight="0.8">
+    </TextView>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="인기 순위"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:id="@+id/popular_title"
-            app:layout_constraintTop_toTopOf="@+id/layout_popular"
-            app:layout_constraintBottom_toTopOf="@+id/popularlist"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
-        
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:id="@+id/popularlist"
-            android:background="#FFFFFF"
-            app:layout_constraintTop_toBottomOf="@+id/popular_title"
-            app:layout_constraintBottom_toTopOf="@+id/layout_popular"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
-        </androidx.recyclerview.widget.RecyclerView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
