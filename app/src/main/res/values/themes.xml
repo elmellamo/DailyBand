@@ -15,4 +15,17 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="EditTextGreyStyle" parent="Widget.Design.TextInputLayout"> // important : parent 를 이것으로.
+
+        <item name="colorControlNormal">@android:color/transparent</item>  // unFocus 상태일때 밑줄 색.
+        <item name="boxStrokeColor">@android:color/transparent</item> // Focus 상태일때 밑줄 색.
+        <item name="android:textCursorDrawable">@color/mainblack</item>  // cursor 색.
+
+        <item name="android:textColorHint">@color/gray_sto</item>  // hint 색
+        <item name="hintTextColor">@color/gray_sto</item>   // floating hint 색
+
+        <item name="errorTextColor">@color/midgreen</item>
+
+    </style>
 </resources>
