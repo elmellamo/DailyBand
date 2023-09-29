@@ -6,6 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/topscreen_homemain"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/menu_bar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_weight="0.9"
+        >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -75,10 +85,11 @@
         android:id="@+id/layout_popular"
         android:background="@color/graygreen"
         app:layout_constraintTop_toBottomOf="@+id/layout_home"
-        app:layout_constraintBottom_toTopOf="@+id/menu_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_weight="0.8">
+        app:layout_constraintVertical_weight="0.8"
+        android:paddingBottom="10dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -110,17 +121,19 @@
         </androidx.recyclerview.widget.RecyclerView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/menu_bar"
         android:background="@color/graygreen"
         android:layout_alignParentBottom="true"
-        app:layout_constraintTop_toBottomOf="@+id/layout_popular"
+        app:layout_constraintTop_toBottomOf="@+id/topscreen_homemain"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_weight="0.14"
+        app:layout_constraintVertical_weight="0.1"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout

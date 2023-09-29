@@ -2,7 +2,20 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/graygreen"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/topscreen_pickmusic"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/menu_bar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:paddingBottom="10dp"
+        app:layout_constraintVertical_weight="0.9">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -11,10 +24,41 @@
         app:layout_constraintBottom_toTopOf="@+id/ingmusic"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_weight="0.05"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
 
-        app:layout_constraintVertical_weight="0.14">
 
+        <ImageView
+            android:id="@+id/backcontext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back_arrow"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
 
+        <TextView
+            android:id="@+id/pickuser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="user_name"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            app:layout_constraintLeft_toRightOf="@+id/backcontext"
+            android:layout_marginStart="15dp"
+            />
+
+        <ImageView
+            android:id="@+id/optionmenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/optionmenu"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,25 +69,100 @@
         app:layout_constraintBottom_toTopOf="@+id/variation_music"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_weight="0.05"
+        android:layout_marginBottom="20dp">
 
-        app:layout_constraintVertical_weight="0.14">
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00:00"
+            android:textSize="25sp"
+            android:id="@+id/musictime"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/musicplaycontroll"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/medicontrol"
+            android:id="@+id/musicplaycontroll"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            app:layout_constraintLeft_toRightOf="@+id/musictime"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <ImageView
+                android:id="@+id/playbtn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/playbtn"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/pausebtn"
+                android:layout_marginEnd="15dp"/>
 
 
+            <ImageView
+                android:id="@+id/pausebtn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/pause"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/playbtn"
+                app:layout_constraintRight_toLeftOf="@+id/stopbtn"
+                android:layout_marginEnd="15dp"/>
+
+
+            <ImageView
+                android:id="@+id/stopbtn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/stop"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/pausebtn"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/variation_music"
-        app:layout_constraintTop_toBottomOf="@+id/picktop"
+        app:layout_constraintTop_toBottomOf="@+id/ingmusic"
         app:layout_constraintBottom_toTopOf="@+id/iconlayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-
-        app:layout_constraintVertical_weight="0.14">
-
-
+        app:layout_constraintVertical_weight="0.05"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="여기에 음파 variation 들어가야 한다."
+            android:padding="20dp"
+            android:background="@drawable/medicontrol"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -53,8 +172,41 @@
         app:layout_constraintBottom_toTopOf="@+id/collaboration_text"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_weight="0.04">
 
-        app:layout_constraintVertical_weight="0.14">
+        <ImageView
+            android:id="@+id/heartbtn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/heart_outline"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/chatbtn"
+            android:layout_marginEnd="15dp"/>
+
+
+        <ImageView
+            android:id="@+id/chatbtn"
+            android:layout_width="29dp"
+            android:layout_height="29dp"
+            android:src="@drawable/chat"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/heartbtn"
+            app:layout_constraintRight_toLeftOf="@+id/downloadbtn"
+            android:layout_marginEnd="15dp"/>
+
+
+        <ImageView
+            android:id="@+id/downloadbtn"
+            android:layout_width="29dp"
+            android:layout_height="29dp"
+            android:src="@drawable/downloadbtn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/chatbtn"
+            app:layout_constraintRight_toRightOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -65,13 +217,14 @@
         android:textStyle="bold"
         android:text="콜라보레이션"
         android:gravity="center"
+        android:textSize="15sp"
         android:id="@+id/collaboration_text"
         app:layout_constraintTop_toBottomOf="@+id/iconlayout"
-        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/collaborationlist"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-
-        app:layout_constraintVertical_weight="0.14">
+        app:layout_constraintVertical_weight="0.02"
+        android:layout_marginBottom="10dp">
 
     </TextView>
 
@@ -83,27 +236,26 @@
         android:id="@+id/collaborationlist"
         android:background="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/collaboration_text"
-        app:layout_constraintBottom_toTopOf="@+id/menu_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-
         app:layout_constraintVertical_weight="0.14"
         >
     </androidx.recyclerview.widget.RecyclerView>
 
 
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/menu_bar"
         android:background="@color/graygreen"
         android:layout_alignParentBottom="true"
-        app:layout_constraintTop_toBottomOf="@+id/collaborationlist"
+        app:layout_constraintTop_toBottomOf="@+id/topscreen_pickmusic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_weight="0.14"
+        app:layout_constraintVertical_weight="0.1"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
