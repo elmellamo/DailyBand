@@ -7,16 +7,18 @@ public class TestSong implements Parcelable {
     private String post_id;
     private String user_id;
     private String title;
+    private int love;
 
     public TestSong() {
     }
 
-    public TestSong(String title, String caption, String date_created, String image_path, String post_id,
-                String user_id) {
+    public TestSong(String title, String date_created, String post_id,
+                String user_id, int love) {
         this.date_created = date_created;
         this.post_id = post_id;
         this.user_id = user_id;
         this.title = title;
+        this.love = love;
     }
 
     protected TestSong(Parcel in) {
@@ -24,6 +26,7 @@ public class TestSong implements Parcelable {
         post_id = in.readString();
         user_id = in.readString();
         title = in.readString();
+        love = in.readInt();
     }
 
     @Override
@@ -32,6 +35,7 @@ public class TestSong implements Parcelable {
         dest.writeString(post_id);
         dest.writeString(user_id);
         dest.writeString(title);
+        dest.writeInt(love);
     }
 
     @Override
@@ -85,6 +89,13 @@ public class TestSong implements Parcelable {
         this.user_id = user_id;
     }
 
+    public int getLove() {
+        return love;
+    }
+
+    public void setLove(int love) {
+        this.love = love;
+    }
     @Override
     public String toString() {
 
@@ -92,6 +103,7 @@ public class TestSong implements Parcelable {
                 "title='" + title + '\''+
                 ", date_created='" + date_created + '\'' +
                 ", post_id='" + post_id + '\'' +
+                ", love='" + love + '\'' +
                 ", user_id='" + user_id +
                 '}';
     }

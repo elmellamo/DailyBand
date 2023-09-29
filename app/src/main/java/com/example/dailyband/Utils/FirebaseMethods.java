@@ -58,6 +58,7 @@ public class FirebaseMethods {
     }
 
     //부모, 자식 없이 우선 타이틀, 녹음만 스토리지에 올리기
+    //흑흑 녹음 왜 오류나는 거임 >> 타이틀만 우선해서 하트순> 최신순 실험해보자
     public void uploadNewStorage(final String title, String outputFile, String postId) {
         Log.e("로그", "음악 업로드 중...");
 
@@ -88,6 +89,7 @@ public class FirebaseMethods {
         testSong.setDate_created(getTimeStamp());
         testSong.setUser_id(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
         testSong.setPost_id(newPostKey);
+        testSong.setLove(0);
 
         // 데이터베이스에 넣기
         assert newPostKey != null;

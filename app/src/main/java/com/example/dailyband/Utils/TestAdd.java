@@ -2,6 +2,7 @@ package com.example.dailyband.Utils;
 
 import static android.Manifest.*;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.dailyband.HomeMain;
 import com.example.dailyband.R;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -30,6 +33,7 @@ public class TestAdd extends AppCompatActivity {
     private ImageView stopbtn;
     private FirebaseMethods mFirebaseMethods;
     private String postId;
+    private TextView savemenu;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +49,7 @@ public class TestAdd extends AppCompatActivity {
         playbtn = findViewById(R.id.playbtn);
         pausebtn = findViewById(R.id.pausebtn);
         stopbtn = findViewById(R.id.stopbtn);
+        savemenu = findViewById(R.id.savemenu);
 
         playbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +65,26 @@ public class TestAdd extends AppCompatActivity {
                 uploadToFirebase();
             }
         });
+        savemenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                testFirebase();
+            }
+        });
 
+    }
+
+    private void testFirebase(){
+        TextInputLayout textInputLayout = findViewById(R.id.songname_edit_layout);
+        final String title = textInputLayout.getEditText().getText().toString();
+        if(title.length()>0){
+            //여기 아무것도 녹음하지 않았을 때 안 함. 테스트니까..!
+            postId = mFirebaseMethods.addSongToDatabase(title);
+            Intent intent = new Intent(this, HomeMain.class);
+            startActivity(intent);
+        }else{
+            startToast("곡명을 정해주세요.");
+        }
     }
 
     private void startRecording(){
