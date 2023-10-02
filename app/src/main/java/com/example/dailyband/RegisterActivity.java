@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,8 +23,8 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth; // 파이어 베이스 인증
     private DatabaseReference mDatabaseRef; // 실시간 데이터 베이스
     private EditText nameEdittext,emailEdittext, pwEdittext,pwchkEdittext;
-    private Button gotologinBtn, registerBtn;
-
+    private Button  registerBtn;
+    private TextView gotologinBtn;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
