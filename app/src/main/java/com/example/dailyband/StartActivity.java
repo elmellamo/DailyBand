@@ -23,6 +23,9 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
+        Intent musicServiceIntent = new Intent(this, MusicService.class);
+        startService(musicServiceIntent);
+
         View rootView = findViewById(R.id.background_layout);
         rootView.setOnTouchListener(new View.OnTouchListener() {
             @Override

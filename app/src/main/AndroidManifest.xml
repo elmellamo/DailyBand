@@ -47,5 +47,9 @@
         <activity android:name=".Utils.TestAdd"
             android:exported="true">
         </activity>
+        <service
+            android:name=".MusicService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 </manifest>
