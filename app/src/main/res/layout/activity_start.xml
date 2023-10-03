@@ -4,9 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_color"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     >
 
     <TextView
@@ -16,6 +19,7 @@
         android:textStyle="bold"
         android:textSize="35sp"
         android:textColor="#000000"
+        android:letterSpacing="0.08"
         android:id="@+id/dailyband_logo"
         android:gravity="center"
         android:layout_marginTop="70dp"
@@ -56,6 +60,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="나만의 음악을 만들어보세요"
+            android:letterSpacing="0.06"
             android:textColor="#A6000000"
             android:textSize="14sp"
             android:textStyle="bold"

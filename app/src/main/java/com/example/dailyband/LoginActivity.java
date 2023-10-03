@@ -1,8 +1,11 @@
 package com.example.dailyband;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,6 +32,16 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        View rootView = findViewById(R.id.background_layout);
+        rootView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // 포커스를 잃으면 키보드를 숨깁니다.
+                hideKeyboard();
+                return false;
+            }
+        });
+
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
 
@@ -42,6 +55,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String emailstr = emailEdittext.getText().toString();
                 String pwstr = pwEdittext.getText().toString();
+
+                if (emailstr.isEmpty() || pwstr.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "정보를 정확히 입력하세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 mFirebaseAuth.signInWithEmailAndPassword(emailstr, pwstr).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -70,5 +89,13 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, c);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+
+    private void hideKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }
