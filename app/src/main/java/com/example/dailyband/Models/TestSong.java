@@ -2,6 +2,10 @@ package com.example.dailyband.Models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class TestSong implements Parcelable {
     private String date_created;
     private String post_id;
@@ -58,7 +62,6 @@ public class TestSong implements Parcelable {
     public static Creator<TestSong> getCREATOR() {
         return CREATOR;
     }
-
     public String getTitle(){
         return title;
     }

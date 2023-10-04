@@ -1,6 +1,7 @@
 package com.example.dailyband.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dailyband.Models.TestSong;
+import com.example.dailyband.PickMusic;
 import com.example.dailyband.R;
 
 import java.util.List;
@@ -32,10 +34,25 @@ public class RankingSongAdapter extends RecyclerView.Adapter<RankingSongAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RankingSongAdapter.RankingViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RankingSongAdapter.RankingViewHolder holder, final int position) {
         TestSong song = songs.get(position);
         holder.numRanking.setText(String.valueOf(position + 1));
         holder.songName.setText(song.getTitle());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int adapterPosition = holder.getAbsoluteAdapterPosition();
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    TestSong selectedSong = songs.get(adapterPosition);
+                    Intent intent = new Intent(context, PickMusic.class);
+                    intent.putExtra("postId", selectedSong.getPost_id());
+                    intent.putExtra("title", selectedSong.getTitle());
+                    intent.putExtra("user_id", selectedSong.getUser_id()); //해당 노래를 작곡한 사람
+                    context.startActivity(intent);
+                }
+            }
+        });
     }
 
     @Override

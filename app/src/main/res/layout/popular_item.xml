@@ -7,8 +7,8 @@
     <LinearLayout
         android:layout_margin="10dp"
         android:id="@+id/ranking"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:background="@drawable/num_background"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

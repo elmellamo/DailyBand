@@ -112,7 +112,7 @@
             android:layout_marginEnd="20dp"
             app:layout_constraintVertical_weight="0.8"
             android:id="@+id/popularlist"
-            android:background="#FFFFFF"
+            android:background="@drawable/recycle_background"
             app:layout_constraintTop_toBottomOf="@+id/popular_title"
             app:layout_constraintBottom_toBottomOf="@+id/layout_popular"
             app:layout_constraintLeft_toLeftOf="parent"

@@ -74,6 +74,7 @@ public class TestAdd extends AppCompatActivity {
 
     }
 
+    //녹음 없이 그저 타이틀만 보낼 때! 실험용
     private void testFirebase(){
         TextInputLayout textInputLayout = findViewById(R.id.songname_edit_layout);
         final String title = textInputLayout.getEditText().getText().toString();
