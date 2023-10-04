@@ -77,8 +77,8 @@ public class FirebaseMethods {
         void onFailed(String errorMessage);
     }
 
-    public void chkIsLiked(String postId, final OnLikeCheckListener listener) {
-        DatabaseReference likeRef = myRef.child("like").child(postId).child(userID);
+    public void chkIsLiked(String songId, final OnLikeCheckListener listener) {
+        DatabaseReference likeRef = myRef.child("user_like").child(userID).child(songId);
         likeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -101,131 +101,96 @@ public class FirebaseMethods {
     // 음악을 좋아요 했을 때의 동작을 처리하는 메서드
     public void addLike(String songId, String writer_uid, final OnLikeActionListener listener) {
         // 1. like 카테고리에서 해당 음악 postId의 child에 현재 사용자 uid를 추가하고 값을 true로 설정
-        myRef.child("like").child(songId).child(userID).setValue(true)
+        myRef.child("user_like").child(userID).child(songId).setValue(true)
                 .addOnSuccessListener(aVoid -> {
                     // 2. songs 카테고리에서 해당 음악 postId의 love의 수를 하나 늘림
-                    myRef.child("songs").child(songId).child("love")
-                            .runTransaction(new Transaction.Handler() {
-                                @NonNull
-                                @Override
-                                public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                                    int currentLove = 0;
-                                    if (mutableData.getValue() != null) {
-                                        currentLove = mutableData.getValue(int.class);
-                                        mutableData.setValue(currentLove + 1);
-                                    }else{
-                                        mutableData.setValue(0);
-                                    }
+                    myRef.child("songs").child(songId).child("love").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            int currentLove = 0;
+                            if (dataSnapshot.exists()) {
+                                currentLove = dataSnapshot.getValue(Integer.class);
+                            }
+                            myRef.child("songs").child(songId).child("love").setValue(currentLove + 1);
 
-                                    Log.e("태그", "add 1번 "+currentLove);
-                                    return Transaction.success(mutableData);
+                            // 3. user_songs에서 사용자가 해당 음악 postId를 찾은 후에 love의 수를 하나 늘림
+                            myRef.child("user_songs").child(writer_uid).child(songId).child("love").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    int currentLove = 0;
+                                    if (dataSnapshot.exists()) {
+                                        currentLove = dataSnapshot.getValue(Integer.class);
+                                    }
+                                    myRef.child("user_songs").child(writer_uid).child(songId).child("love").setValue(currentLove + 1);
+                                    listener.onLikeAdded();
                                 }
 
                                 @Override
-                                public void onComplete(@Nullable DatabaseError databaseError, boolean committed, @Nullable DataSnapshot dataSnapshot) {
-                                    if (committed) {
-                                        // 3. user_songs에서 사용자가 해당 음악 postId를 찾은 후에 love의 수를 하나 늘림
-                                        myRef.child("user_songs").child(writer_uid).child(songId).child("love")
-                                                .runTransaction(new Transaction.Handler() {
-                                                    @NonNull
-                                                    @Override
-                                                    public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                                                        int currentLove = 0;
-                                                        if (mutableData.getValue() != null) {
-                                                            currentLove = mutableData.getValue(int.class);
-                                                            mutableData.setValue(currentLove + 1);
-                                                        }else{
-                                                            mutableData.setValue(0);
-                                                        }
-
-                                                        Log.e("태그", "add 2번 "+currentLove);
-
-                                                        return Transaction.success(mutableData);
-                                                    }
-
-                                                    @Override
-                                                    public void onComplete(@Nullable DatabaseError databaseError, boolean committed, @Nullable DataSnapshot dataSnapshot) {
-                                                        if (committed) {
-                                                            listener.onLikeAdded();
-                                                        } else {
-                                                            listener.onFailed("Failed to update user_songs love count.");
-                                                        }
-                                                    }
-                                                });
-                                    } else {
-                                        listener.onFailed("Failed to update songs love count.");
-                                    }
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    listener.onFailed("Failed to update user_songs love count.");
                                 }
                             });
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            listener.onFailed("Failed to update songs love count.");
+                        }
+                    });
                 })
                 .addOnFailureListener(e -> {
                     listener.onFailed("Failed to add like: " + e.getMessage());
                 });
     }
 
-    // 음악 좋아요를 취소했을 때의 동작을 처리하는 메서드
     public void removeLike(String songId, String writer_uid, final OnLikeActionListener listener) {
         // 1. like 카테고리에서 해당 음악 postId의 child에 현재 사용자 uid를 제거
-        myRef.child("like").child(songId).child(userID).removeValue()
+        myRef.child("user_like").child(userID).child(songId).removeValue()
                 .addOnSuccessListener(aVoid -> {
                     // 2. songs 카테고리에서 해당 음악 postId의 love의 수를 하나 줄임
-                    myRef.child("songs").child(songId).child("love")
-                            .runTransaction(new Transaction.Handler() {
-                                @NonNull
-                                @Override
-                                public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                                    int currentLove = 0;
-                                    if (mutableData.getValue() != null) {
-                                        currentLove = mutableData.getValue(int.class);
-                                        mutableData.setValue(currentLove - 1);
-                                    }else{
-                                        mutableData.setValue(0);
-                                    }
+                    myRef.child("songs").child(songId).child("love").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            int currentLove = 0;
+                            if (dataSnapshot.exists()) {
+                                currentLove = dataSnapshot.getValue(Integer.class);
+                            }
+                            myRef.child("songs").child(songId).child("love").setValue(currentLove - 1);
+                            Log.e("태그", "remove~~~ "+  (currentLove)+"    "+(currentLove-1));
 
-                                    Log.e("태그", "remove 1번 "+currentLove);
-                                    return Transaction.success(mutableData);
+                            // 3. user_songs에서 사용자가 해당 음악 postId를 찾은 후에 love의 수를 하나 줄임
+                            myRef.child("user_songs").child(writer_uid).child(songId).child("love").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    int currentLove = 0;
+                                    if (dataSnapshot.exists()) {
+                                        currentLove = dataSnapshot.getValue(Integer.class);
+                                    }
+                                    myRef.child("user_songs").child(writer_uid).child(songId).child("love").setValue(currentLove - 1);
+                                    Log.e("태그", "remove "+  (currentLove) +"    "+(currentLove-1));
+
+                                    listener.onLikeRemoved();
+                                    // 좋아요가 제거되었을 때 updateHeartButton 함수 호출
                                 }
 
                                 @Override
-                                public void onComplete(@Nullable DatabaseError databaseError, boolean committed, @Nullable DataSnapshot dataSnapshot) {
-                                    if (committed) {
-                                        // 3. user_songs에서 사용자가 해당 음악 postId를 찾은 후에 love의 수를 하나 줄임
-                                        myRef.child("user_songs").child(writer_uid).child(songId).child("love")
-                                                .runTransaction(new Transaction.Handler() {
-                                                    @NonNull
-                                                    @Override
-                                                    public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                                                        int currentLove = 0;
-                                                        if (mutableData.getValue() != null) {
-                                                            currentLove = mutableData.getValue(int.class);
-                                                            mutableData.setValue(currentLove - 1);
-                                                        }else{
-                                                            mutableData.setValue(0);
-                                                        }
-
-                                                        Log.e("태그", "remove 2번 "+currentLove);
-                                                        return Transaction.success(mutableData);
-                                                    }
-
-                                                    @Override
-                                                    public void onComplete(@Nullable DatabaseError databaseError, boolean committed, @Nullable DataSnapshot dataSnapshot) {
-                                                        if (committed) {
-                                                            listener.onLikeRemoved();
-                                                        } else {
-                                                            listener.onFailed("Failed to update user_songs love count.");
-                                                        }
-                                                    }
-                                                });
-                                    } else {
-                                        listener.onFailed("Failed to update songs love count.");
-                                    }
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    listener.onFailed("Failed to update user_songs love count.");
                                 }
                             });
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            listener.onFailed("Failed to update songs love count.");
+                        }
+                    });
                 })
                 .addOnFailureListener(e -> {
                     listener.onFailed("Failed to remove like: " + e.getMessage());
                 });
     }
+
 
     public void addOrRemoveLike(String songId, boolean isLiked, String writer_uid, OnLikeActionListener listener) {
         if (isLiked) {

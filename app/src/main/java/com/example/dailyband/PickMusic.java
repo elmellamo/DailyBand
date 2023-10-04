@@ -17,7 +17,16 @@ public class PickMusic extends AppCompatActivity {
     private String postId;
     private String title;
     private String writer_uid;
-
+    private void updateHeartButton(boolean like) {
+        heartbtn = findViewById(R.id.heartbtn);
+        if (like) {
+            heartbtn.setImageResource(R.drawable.full_heart);
+            isLiked = true;
+        } else {
+            heartbtn.setImageResource(R.drawable.empty_heart);
+            isLiked = false;
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,13 +85,5 @@ public class PickMusic extends AppCompatActivity {
                 });
             }
         });
-    }
-
-    private void updateHeartButton(boolean isLiked) {
-        if (isLiked) {
-            heartbtn.setImageResource(R.drawable.full_heart);
-        } else {
-            heartbtn.setImageResource(R.drawable.empty_heart);
-        }
     }
 }
