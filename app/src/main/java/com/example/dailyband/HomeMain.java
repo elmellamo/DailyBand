@@ -46,7 +46,7 @@ public class HomeMain extends AppCompatActivity{
         setContentView(R.layout.homemain);
 
         mFirebaseMethods = new FirebaseMethods(HomeMain.this);
-
+//
         recyclerView = findViewById(R.id.popularlist);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         songs = new ArrayList<>();
