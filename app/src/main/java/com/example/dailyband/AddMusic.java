@@ -3,6 +3,7 @@ package com.example.dailyband;
 import static android.Manifest.permission;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +16,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -37,7 +40,8 @@ import java.io.InputStream;
 
 public class AddMusic extends AppCompatActivity {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-    private MediaRecorder mediaRecorder;
+    //private MediaRecorder mediaRecorder;
+    private MediaRecorder audioRecorder;
     private String outputFile;
 
     private ImageView playbtn;
@@ -54,6 +58,7 @@ public class AddMusic extends AppCompatActivity {
     private EditText pathTextView;
 
     private Uri uri;
+    private Uri audiouri;
 
     private boolean isPlaying = false;
 
@@ -82,15 +87,18 @@ public class AddMusic extends AppCompatActivity {
         playbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                chkPermission();
+                // 녹음 시작
+                startRecording();
+                //chkPermission();
             }
         });
 
         stopbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // 녹음 종료
                 stopRecording();
-                uploadToFirebase();
+                //uploadToFirebase();
             }
         });
         savemenu.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +118,7 @@ public class AddMusic extends AppCompatActivity {
         folderbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 스토리지에서 가져오기
                 chkStoragePermission();
                 getPathFromStorage();
             }
@@ -118,6 +127,7 @@ public class AddMusic extends AppCompatActivity {
         playbtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 쓰레드에서 AudioTrack으로 선택된 uri 재생
                 Runnable r = new AudioTrackRunnable(uri);
                 new Thread(r).start();
             }
@@ -126,6 +136,7 @@ public class AddMusic extends AppCompatActivity {
         uploadbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // firebase에 선택된 uri 업로드
                 uploadToFirebase();
             }
         });
@@ -192,20 +203,63 @@ public class AddMusic extends AppCompatActivity {
     }
 
     private void startRecording(){
-        if (mediaRecorder == null) {
-            mediaRecorder = new MediaRecorder();
-            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-            mediaRecorder.setOutputFile(outputFile);
+        // 권한 체크
+        int permission = ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.RECORD_AUDIO);
 
-            try {
-                mediaRecorder.prepare();
-                mediaRecorder.start();
-            } catch (IOException e) {
-                e.printStackTrace();
-                // 녹음 시작에 실패한 경우 처리할 코드 추가
-            }
+        if (permission == PackageManager.PERMISSION_DENIED) {
+            Log.d("테스트","권한 없음 : READ_MEDIA_IMAGES");
+            requestPermissions(
+                    new String[]{android.Manifest.permission.RECORD_AUDIO},
+                    1000);
+            return;
+        }
+
+        // 이미 녹음 중이면 거부
+        if(audioRecorder != null) {
+            startToast("이미 녹음중 입니다!");
+            return;
+        }
+
+        // MediaStore로 파일 생성
+        String fileName = "record";
+
+        ContentValues values = new ContentValues(4);
+        values.put(MediaStore.Audio.Media.TITLE, fileName);
+        values.put(MediaStore.Audio.Media.DATE_ADDED, (int) (System.currentTimeMillis() / 1000));
+        values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/mp3");
+        values.put(MediaStore.Audio.Media.RELATIVE_PATH, "Music/Recordings/");
+
+        audiouri = getContentResolver().insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values);
+        ParcelFileDescriptor file;
+        try {
+            file = getContentResolver().openFileDescriptor(audiouri, "w");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        // MediaRecorder 로 녹음 시작
+        if(file == null) {
+            Log.e("에러발생", "파일이 null 임");
+            return ;
+        }
+
+        audioRecorder = new MediaRecorder();
+        audioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        audioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        audioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        audioRecorder.setOutputFile(file.getFileDescriptor());
+        audioRecorder.setAudioChannels(1);
+
+        try {
+            audioRecorder.prepare();
+            audioRecorder.start();
+            startToast("녹음 시작!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("에러발생", "audioRecorder prepare 불가능 한 오류");
+            return;
         }
     }
 
@@ -234,11 +288,16 @@ public class AddMusic extends AppCompatActivity {
     }
 
     private void stopRecording(){
-        if (mediaRecorder != null) {
-            mediaRecorder.stop();
-            mediaRecorder.release();
-            mediaRecorder = null;
-        }
+        if(audioRecorder == null) return;
+
+        audioRecorder.stop();
+        audioRecorder.release();
+        audioRecorder = null;
+
+        uri = audiouri;
+        pathTextView.setText(uri.getPath().toString());
+
+        startToast("녹음 종료!");
     }
 
     private void uploadToFirebase(){
