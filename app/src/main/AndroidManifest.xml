@@ -47,9 +47,13 @@
             android:exported="true">
         </activity>
 
+        <activity android:name=".AddMusic"
+            android:exported="true">
+        </activity>
         <activity android:name=".Utils.TestAdd"
             android:exported="true">
         </activity>
+
         <activity android:name=".SettingActivity"
             android:exported="true">
         </activity>

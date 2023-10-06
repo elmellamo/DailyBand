@@ -226,6 +226,27 @@ public class FirebaseMethods {
         mContext.startActivity(intent);
     }
 
+    // Uri 로 파일 업로드
+    public void uploadNewStorage(final String title, Uri fileUri, String postId) {
+        Log.e("로그", "음악 업로드 중...");
+
+        String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        //uploadkey=1;
+        //Uri fileUri = Uri.fromFile(new File(outputFile));
+        StorageReference storageReference = mStorageReference
+                .child("songs/" + postId + "/" + fileUri.getLastPathSegment());
+        storageReference.putFile(fileUri).addOnSuccessListener(taskSnapshot -> {
+            //업로드 시 성공 처리
+            Toast.makeText(mContext, "노래가 성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(e->{
+            //업로드 실패 시 처리
+            Toast.makeText(mContext, "노래 등록에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+        });
+
+        Intent intent = new Intent(mContext, HomeMain.class);
+        mContext.startActivity(intent);
+    }
+
     public String addSongToDatabase(String title){
         Log.e("로그", "addSongToDatabase: 데이터 베이스에 노래 추가");
 
@@ -245,6 +266,8 @@ public class FirebaseMethods {
 
         return newPostKey;
     }
+
+
 
     private String getTimeStamp(){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREA);
