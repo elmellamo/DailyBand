@@ -50,6 +50,9 @@
         <activity android:name=".Utils.TestAdd"
             android:exported="true">
         </activity>
+        <activity android:name=".SettingActivity"
+            android:exported="true">
+        </activity>
         <service
             android:name=".MusicService"
             android:enabled="true"

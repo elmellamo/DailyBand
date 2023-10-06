@@ -40,6 +40,7 @@ public class HomeMain extends AppCompatActivity{
     private DatabaseReference myRef;
     private FirebaseMethods mFirebaseMethods;
     private FirebaseAuth mAuth;
+    private ImageButton setbtn;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +60,11 @@ public class HomeMain extends AppCompatActivity{
             public void onClick(View view) {
                 myStartActivity(TestAdd.class);
             }
+        });
+        setbtn = findViewById(R.id.setbtn);
+        setbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { myStartActivity(SettingActivity.class);    }
         });
     }
 

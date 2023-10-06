@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- colorPrimaryDark 변경 -->
+        <item name="colorPrimaryDark">#DEE5E0</item>
+        <!-- 다른 속성들 ... -->
+    </style>
+
+</resources>

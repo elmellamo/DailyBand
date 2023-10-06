@@ -14,6 +14,8 @@ import com.google.android.material.imageview.ShapeableImageView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 public class StartActivity extends AppCompatActivity {
 
     private Button registerbtn, loginbtn;
@@ -22,6 +24,8 @@ public class StartActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        getWindow().setStatusBarColor(ContextCompat.getColor(StartActivity.this, R.color.primarydark_color));
 
         Intent musicServiceIntent = new Intent(this, MusicService.class);
         startService(musicServiceIntent);
