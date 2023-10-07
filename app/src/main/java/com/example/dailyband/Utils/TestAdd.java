@@ -19,10 +19,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.dailyband.HomeMain;
+import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.R;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestAdd extends AppCompatActivity {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
@@ -34,6 +37,7 @@ public class TestAdd extends AppCompatActivity {
     private FirebaseMethods mFirebaseMethods;
     private String postId;
     private TextView savemenu;
+    private List<ComplexName> parents;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +54,7 @@ public class TestAdd extends AppCompatActivity {
         pausebtn = findViewById(R.id.pausebtn);
         stopbtn = findViewById(R.id.stopbtn);
         savemenu = findViewById(R.id.savemenu);
+        parents = new ArrayList<>();
 
         playbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +85,7 @@ public class TestAdd extends AppCompatActivity {
         final String title = textInputLayout.getEditText().getText().toString();
         if(title.length()>0){
             //여기 아무것도 녹음하지 않았을 때 안 함. 테스트니까..!
-            postId = mFirebaseMethods.addSongToDatabase(title);
+            postId = mFirebaseMethods.addSongToDatabase(title, parents);
             Intent intent = new Intent(this, HomeMain.class);
             startActivity(intent);
         }else{
@@ -143,7 +148,7 @@ public class TestAdd extends AppCompatActivity {
         final String title = textInputLayout.getEditText().getText().toString();
         if(title.length()>0){
             //여기 아무것도 녹음하지 않았을 때 안 함. 테스트니까..!
-            postId = mFirebaseMethods.addSongToDatabase(title);
+            postId = mFirebaseMethods.addSongToDatabase(title, parents);
             mFirebaseMethods.uploadNewStorage(title, outputFile, postId);
         }else{
             startToast("곡명을 정해주세요.");

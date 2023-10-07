@@ -30,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -37,6 +38,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddMusic extends AppCompatActivity {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
@@ -67,6 +70,7 @@ public class AddMusic extends AppCompatActivity {
     int mChannelCount = AudioFormat.CHANNEL_IN_STEREO;
     int mAudioFormat = AudioFormat.ENCODING_PCM_16BIT;
     int mBufferSize = AudioTrack.getMinBufferSize(mSampleRate, mChannelCount, mAudioFormat);
+    private List<ComplexName> parents;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +88,7 @@ public class AddMusic extends AppCompatActivity {
         stopbtn = findViewById(R.id.stopbtn);
         savemenu = findViewById(R.id.savemenu);
 
+        parents = new ArrayList<>();
         playbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -194,7 +199,7 @@ public class AddMusic extends AppCompatActivity {
         final String title = textInputLayout.getEditText().getText().toString();
         if(title.length()>0){
             //여기 아무것도 녹음하지 않았을 때 안 함. 테스트니까..!
-            postId = mFirebaseMethods.addSongToDatabase(title);
+            postId = mFirebaseMethods.addSongToDatabase(title, parents);
             Intent intent = new Intent(this, HomeMain.class);
             startActivity(intent);
         }else{
@@ -312,7 +317,7 @@ public class AddMusic extends AppCompatActivity {
         //여기 아무것도 녹음하지 않았을 때 안 함. 테스트니까..!
         //  : 업로드 할 파일이 없는 예외 처리
 
-        postId = mFirebaseMethods.addSongToDatabase(title);
+        postId = mFirebaseMethods.addSongToDatabase(title, parents);
         mFirebaseMethods.uploadNewStorage(title, uri, postId);
     }
 

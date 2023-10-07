@@ -2,40 +2,32 @@ package com.example.dailyband.Utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
-import android.os.Build;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dailyband.HomeMain;
+import com.example.dailyband.Models.Child;
+import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.Models.TestSong;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.dailyband.PickMusic;
+import com.example.dailyband.adapter.CollabAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -247,7 +239,7 @@ public class FirebaseMethods {
         mContext.startActivity(intent);
     }
 
-    public String addSongToDatabase(String title){
+    public String addSongToDatabase(String title, List<ComplexName> original){
         Log.e("로그", "addSongToDatabase: 데이터 베이스에 노래 추가");
 
         String newPostKey = myRef.child("songs").push().getKey();
@@ -263,11 +255,38 @@ public class FirebaseMethods {
         myRef.child("user_songs").
                 child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(newPostKey).setValue(testSong);
         myRef.child("songs").child(newPostKey).setValue(testSong);
+        
+        if(!original.isEmpty()){
+            //나의 postid 밑에 참고한 original들을 밑으로 리스트 쭉 넣고
+            ComplexName mycomplex = new ComplexName();
+            mycomplex.setSongid(newPostKey);
+            mycomplex.setTitle(title);
+            mycomplex.setWriteruid(userID);
+
+            for(ComplexName ori : original){
+                myRef.child("my_parents").child(newPostKey).child(ori.getSongid()).setValue(ori);
+                myRef.child("my_children").child(ori.getSongid()).child(mycomplex.getSongid()).setValue(mycomplex);
+                //mychildren 밑에는 origianl곡의 postid넣고, 그 밑에 콜라보한 곡의 id넣고, complexname 다 넣고
+                //myparents밑에는 현재 곡의 postid넣고, 그 밑에 원곡되는 부모 곡의 id넣고, complexname 다 넣고
+            }
+            /*Child collab = new Child();
+            collab.setParents(original);
+
+            myRef.child("my_parents").child(newPostKey).child().setValue(collab).addOnSuccessListener(
+                    aVoid->{ //해당 원곡이 되는 original 밑에는 그 곡을 콜라보한 곡들을 밑으로 리스트 쭉 넣고
+                        for(ComplexName parent : original){
+                            ComplexName mycomplex = new ComplexName();
+                            mycomplex.setSongid(newPostKey);
+                            mycomplex.setTitle(title);
+                            mycomplex.setWriteruid(userID);
+                            myRef.child("my_children").child(parent.getSongid()).setValue(mycomplex);
+                        }
+                    }
+            );*/
+        }
 
         return newPostKey;
     }
-
-
 
     private String getTimeStamp(){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREA);

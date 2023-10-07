@@ -58,7 +58,8 @@ public class HomeMain extends AppCompatActivity{
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myStartActivity(AddMusic.class);
+                myStartActivity(TestAdd.class);
+                //myStartActivity(AddMusic.class);
             }
         });
         setbtn = findViewById(R.id.setbtn);
