@@ -1,4 +1,4 @@
-package com.example.dailyband;
+package com.example.dailyband.MusicAdd;
 
 import static android.Manifest.permission;
 
@@ -30,11 +30,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.Models.ComplexName;
+import com.example.dailyband.R;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;

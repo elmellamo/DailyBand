@@ -1,4 +1,4 @@
-package com.example.dailyband;
+package com.example.dailyband.Start;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,8 +9,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.view.View;
 
+import com.example.dailyband.Login.LoginActivity;
+import com.example.dailyband.Login.RegisterActivity;
+import com.example.dailyband.Utils.MusicService;
 import com.example.dailyband.R;
-import com.google.android.material.imageview.ShapeableImageView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;

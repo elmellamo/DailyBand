@@ -1,4 +1,4 @@
-package com.example.dailyband.Utils;
+package com.example.dailyband.MusicAdd;
 
 import static android.Manifest.*;
 
@@ -8,7 +8,6 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,9 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.dailyband.HomeMain;
+import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.R;
+import com.example.dailyband.Utils.FirebaseMethods;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;

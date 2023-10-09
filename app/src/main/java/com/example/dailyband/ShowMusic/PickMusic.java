@@ -1,4 +1,4 @@
-package com.example.dailyband;
+package com.example.dailyband.ShowMusic;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,10 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-
 import com.example.dailyband.Models.ComplexName;
-import com.example.dailyband.Models.TestSong;
+import com.example.dailyband.R;
+import com.example.dailyband.MusicAdd.TestParent;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.CollabAdapter;
 import com.google.firebase.database.DataSnapshot;

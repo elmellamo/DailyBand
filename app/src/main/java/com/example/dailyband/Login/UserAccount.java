@@ -1,4 +1,4 @@
-package com.example.dailyband;
+package com.example.dailyband.Login;
 
 public class UserAccount {
     public UserAccount(){

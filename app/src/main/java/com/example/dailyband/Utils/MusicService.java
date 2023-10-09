@@ -1,4 +1,4 @@
-package com.example.dailyband;
+package com.example.dailyband.Utils;
 
 import android.app.Service;
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.IBinder;
+
+import com.example.dailyband.R;
 
 public class MusicService extends Service {
     private MediaPlayer mediaPlayer;

@@ -1,4 +1,4 @@
-package com.example.dailyband;
+package com.example.dailyband.MusicAdd;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,9 +8,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.Models.ComplexName;
+import com.example.dailyband.R;
 import com.example.dailyband.Utils.FirebaseMethods;
-import com.example.dailyband.Utils.TestAdd;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;

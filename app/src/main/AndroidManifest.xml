@@ -24,7 +24,7 @@
         android:requestLegacyExternalStorage="true">
 
         <activity
-            android:name="com.example.dailyband.StartActivity"
+            android:name="com.example.dailyband.Start.StartActivity"
             android:exported="true"
             >
             <intent-filter>
@@ -33,37 +33,37 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".HomeMain"
+        <activity android:name=".Home.HomeMain"
             android:exported="true">
 
         </activity>
 
-        <activity android:name=".LoginActivity"
+        <activity android:name=".Login.LoginActivity"
             android:exported="true">
         </activity>
-        <activity android:name=".PickMusic"
-            android:exported="true">
-        </activity>
-
-        <activity android:name=".RegisterActivity"
+        <activity android:name=".ShowMusic.PickMusic"
             android:exported="true">
         </activity>
 
-        <activity android:name=".AddMusic"
-            android:exported="true">
-        </activity>
-        <activity android:name=".Utils.TestAdd"
+        <activity android:name=".Login.RegisterActivity"
             android:exported="true">
         </activity>
 
-        <activity android:name=".SettingActivity"
+        <activity android:name=".MusicAdd.AddMusic"
             android:exported="true">
         </activity>
-        <activity android:name=".TestParent"
+        <activity android:name=".MusicAdd.TestAdd"
+            android:exported="true">
+        </activity>
+
+        <activity android:name=".Setting.SettingActivity"
+            android:exported="true">
+        </activity>
+        <activity android:name=".MusicAdd.TestParent"
             android:exported="true">
         </activity>
         <service
-            android:name=".MusicService"
+            android:name=".Utils.MusicService"
             android:enabled="true"
             android:exported="false" />
     </application>
