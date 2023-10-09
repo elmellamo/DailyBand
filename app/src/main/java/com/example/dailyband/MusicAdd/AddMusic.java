@@ -51,6 +51,7 @@ public class AddMusic extends AppCompatActivity {
     private ImageView playbtn;
     private ImageView pausebtn;
     private ImageView stopbtn;
+    private ImageView plusbtn;
 
     private ImageView folderbtn;
     private ImageView playbtn2;
@@ -77,6 +78,7 @@ public class AddMusic extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addmusic);
 
+        chkStoragePermission();
         mFirebaseMethods = new FirebaseMethods(AddMusic.this);
 
         //녹음 파일 경로 저장
@@ -88,8 +90,17 @@ public class AddMusic extends AppCompatActivity {
         pausebtn = findViewById(R.id.pausebtn);
         stopbtn = findViewById(R.id.stopbtn);
         savemenu = findViewById(R.id.savemenu);
+        plusbtn = findViewById(R.id.plusbtn);
 
         parents = new ArrayList<>();
+
+        plusbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddMusic.this, PianoMain.class);
+                startActivity(intent);
+            }
+        });
         playbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,7 +136,7 @@ public class AddMusic extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 스토리지에서 가져오기
-                chkStoragePermission();
+                //chkStoragePermission();
                 getPathFromStorage();
             }
         });
