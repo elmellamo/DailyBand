@@ -17,28 +17,24 @@
 
         <android.widget.Button
             android:id="@+id/bt_record"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/pianotxt"
             android:onClick="record"
-            android:background="@drawable/record_button"
-            app:layout_constraintHorizontal_weight="0.1"/>
+            android:background="@drawable/recordingbtn"/>
         <TextView
             android:layout_marginLeft="20dp"
             android:id="@+id/pianotxt"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Piano"
             android:textStyle="bold"
             android:textSize="30sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/bt_record"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="0.35"/>
+            app:layout_constraintStart_toEndOf="@+id/bt_record"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
