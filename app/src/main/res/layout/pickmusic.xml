@@ -310,7 +310,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/myInfobtn"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/home_new" />
+                app:srcCompat="@drawable/home_last" />
 
             <ImageButton
                 android:id="@+id/myInfobtn"
