@@ -16,4 +16,6 @@
     <color name="btn_color">#85BD71</color>
     <color name="primarydark_color">#7BB068</color>
     <color name="beige_color">#f5f5dc</color>
+
+    <color name="test_main_clolr">#3a5a40</color>
 </resources>
