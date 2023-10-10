@@ -150,7 +150,7 @@
             <ImageButton
                 android:id="@+id/homeBtn"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
+                android:layout_height="45dp"
                 android:adjustViewBounds="true"
                 android:backgroundTint="@color/graygreen"
                 android:contentDescription="홈"
@@ -165,7 +165,7 @@
             <ImageButton
                 android:id="@+id/myInfobtn"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
+                android:layout_height="45dp"
                 android:adjustViewBounds="true"
                 android:backgroundTint="@color/graygreen"
                 android:contentDescription="설정"
@@ -180,7 +180,7 @@
             <ImageButton
                 android:id="@+id/addbtn"
                 android:layout_width="wrap_content"
-                android:layout_height="54dp"
+                android:layout_height="48dp"
                 android:adjustViewBounds="true"
                 android:backgroundTint="@color/graygreen"
                 android:contentDescription="내 음악 추가하기"
@@ -195,7 +195,7 @@
             <ImageButton
                 android:id="@+id/librarybtn"
                 android:layout_width="wrap_content"
-                android:layout_height="52dp"
+                android:layout_height="47dp"
                 android:adjustViewBounds="true"
                 android:backgroundTint="@color/graygreen"
                 android:contentDescription="라이브러리"
@@ -210,7 +210,7 @@
             <ImageButton
                 android:id="@+id/setbtn"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="43dp"
                 android:adjustViewBounds="true"
                 android:backgroundTint="@color/graygreen"
                 android:contentDescription="설정"
