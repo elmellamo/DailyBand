@@ -94,119 +94,157 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/music_select"
+                android:id="@+id/layout_control"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/medicontrol"
-                android:paddingLeft="20dp"
-                android:paddingTop="15dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="15dp"
-                android:layout_marginHorizontal="10dp"
-                app:layout_constraintBottom_toTopOf="@+id/musicplaycontroll"
+                app:layout_constraintBottom_toTopOf="@+id/layout_track"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/playbtn2"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/playbtn"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/folderbtn"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-
-                <ImageButton
-                    android:id="@+id/folderbtn"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/folder_open"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/path_text"
-                    app:layout_constraintLeft_toRightOf="@+id/playbtn2"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:background="@color/btn_color"/>
-
-                <EditText
-                    android:id="@+id/path_text"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/musicplaycontroll"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:text=""
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    app:layout_constraintLeft_toRightOf="@id/folderbtn"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintRight_toLeftOf="@id/uploadbtn"/>
-
-                <ImageButton
-                    android:id="@+id/uploadbtn"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:background="@color/btn_color"
-                    android:src="@drawable/upload"
+                    android:background="@drawable/medicontrol"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="15dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/path_text"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
+                    <ImageView
+                        android:id="@+id/playbtn"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="15dp"
+                        android:src="@drawable/playbtn"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/pausebtn"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <ImageView
+                        android:id="@+id/pausebtn"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="15dp"
+                        android:src="@drawable/pause"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@+id/playbtn"
+                        app:layout_constraintRight_toLeftOf="@+id/stopbtn"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <ImageView
+                        android:id="@+id/stopbtn"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/stop"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@+id/pausebtn"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/medicontrol"
-                android:id="@+id/musicplaycontroll"
-                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/layout_track"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                android:paddingRight="20dp"
-                android:paddingLeft="20dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                >
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_control">
 
-                <ImageView
-                    android:id="@+id/playbtn"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/playbtn"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/tracklist"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toTopOf="@id/addtrackbtn"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/music_select"/>
+
+                <Button
+                    android:id="@+id/addtrackbtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="add track"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/pausebtn"
-                    android:layout_marginEnd="15dp"/>
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tracklist" />
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/music_select"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@drawable/medicontrol"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="15dp"
+                    app:layout_constraintBottom_toTopOf="@+id/tracklist"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/pausebtn"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/pause"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@+id/playbtn"
-                    app:layout_constraintRight_toLeftOf="@+id/stopbtn"
-                    android:layout_marginEnd="15dp"/>
+                    <ImageView
+                        android:id="@+id/playbtn2"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/playbtn"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/folderbtn"
+                        app:layout_constraintTop_toTopOf="parent" />
 
+                    <ImageButton
+                        android:id="@+id/folderbtn"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@color/btn_color"
+                        android:src="@drawable/folder_open"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@+id/playbtn2"
+                        app:layout_constraintRight_toLeftOf="@+id/path_text"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/stopbtn"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/stop"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@+id/pausebtn"
-                    app:layout_constraintRight_toRightOf="parent"/>
+                    <EditText
+                        android:id="@+id/path_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="text"
+                        android:text=""
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@id/folderbtn"
+                        app:layout_constraintRight_toLeftOf="@id/uploadbtn"
+                        app:layout_constraintTop_toTopOf="parent" />
 
+                    <ImageButton
+                        android:id="@+id/uploadbtn"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@color/btn_color"
+                        android:src="@drawable/upload"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/path_text"
+                        app:layout_constraintTop_toTopOf="parent" />
 
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
@@ -214,7 +252,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/plusbtn"
                 android:src="@drawable/plusbtn"
-                app:layout_constraintTop_toBottomOf="@+id/musicplaycontroll"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"/>

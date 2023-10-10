@@ -15,11 +15,11 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,11 +29,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.FirebaseMethods;
+import com.example.dailyband.adapter.MusicTrackAdapter;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.FileNotFoundException;
@@ -43,10 +46,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddMusic extends AppCompatActivity {
+    public class MusicTrack {
+        public Uri uri;
+        public String title = "";
+        public boolean isSpeaking = true;
+    }
+
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     //private MediaRecorder mediaRecorder;
     private MediaRecorder audioRecorder;
-    private String outputFile;
+    //private String outputFile;
 
     private ImageView playbtn;
     private ImageView pausebtn;
@@ -72,6 +81,13 @@ public class AddMusic extends AppCompatActivity {
     int mChannelCount = AudioFormat.CHANNEL_IN_STEREO;
     int mAudioFormat = AudioFormat.ENCODING_PCM_16BIT;
     int mBufferSize = AudioTrack.getMinBufferSize(mSampleRate, mChannelCount, mAudioFormat);
+
+    List<MusicTrack> tracks;
+
+    private RecyclerView musicTrackView;
+    private LinearLayoutManager llm;
+    private RecyclerView.Adapter adapter;
+
     private List<ComplexName> parents;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +98,9 @@ public class AddMusic extends AppCompatActivity {
         mFirebaseMethods = new FirebaseMethods(AddMusic.this);
 
         //녹음 파일 경로 저장
-        String storagePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/record.3gp";
-        outputFile = storagePath;
+//        String storagePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/record.3gp";
+//        outputFile = storagePath;
 
-        //녹음 시작 버튼 클릭
         playbtn = findViewById(R.id.playbtn);
         pausebtn = findViewById(R.id.pausebtn);
         stopbtn = findViewById(R.id.stopbtn);
@@ -94,6 +109,18 @@ public class AddMusic extends AppCompatActivity {
 
         parents = new ArrayList<>();
 
+        //리사이클러 뷰 설정
+        musicTrackView = (RecyclerView) findViewById(R.id.tracklist);
+        llm = new LinearLayoutManager(this);
+        musicTrackView.setLayoutManager(llm);
+
+//        paths = new ArrayList<>();
+//        isSpeaking = new ArrayList<>();
+        tracks = new ArrayList<>();
+
+        adapter = new MusicTrackAdapter(tracks);
+        musicTrackView.setAdapter(adapter);
+
         plusbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,63 +128,101 @@ public class AddMusic extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        playbtn.setOnClickListener(new View.OnClickListener() {
+
+        Button addtrackbtn = findViewById(R.id.addtrackbtn);
+        addtrackbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 녹음 시작
-                startRecording();
-                //chkPermission();
+                // 랭킹?/파일/녹음/가상악기 중에서 고르기
+                makeTrackByStorage();
             }
         });
 
-        stopbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 녹음 종료
-                stopRecording();
-                //uploadToFirebase();
-            }
-        });
-        savemenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                testFirebase();
-            }
-        });
-
-
-        folderbtn = findViewById(R.id.folderbtn);
         playbtn2 = findViewById(R.id.playbtn2);
-        uploadbtn = findViewById(R.id.uploadbtn);
-
-        pathTextView = findViewById(R.id.path_text);
-
-        folderbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 스토리지에서 가져오기
-                //chkStoragePermission();
-                getPathFromStorage();
-            }
-        });
-
         playbtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 쓰레드에서 AudioTrack으로 선택된 uri 재생
-                Runnable r = new AudioTrackRunnable(uri);
-                new Thread(r).start();
+                for(int i=0;i<tracks.size();i++) {
+                    if(tracks.get(i).isSpeaking == false) continue;
+                    Runnable r = new AudioTrackRunnable(tracks.get(i).uri);
+                    new Thread(r).start();
+                }
             }
         });
 
-        uploadbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // firebase에 선택된 uri 업로드
-                uploadToFirebase();
-            }
-        });
+//        playbtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // 녹음 시작
+//                startRecording();
+//                //chkPermission();
+//            }
+//        });
+//
+//        stopbtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // 녹음 종료
+//                stopRecording();
+//                //uploadToFirebase();
+//            }
+//        });
+//        savemenu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                testFirebase();
+//            }
+//        });
+
+
+//        folderbtn = findViewById(R.id.folderbtn);
+//        playbtn2 = findViewById(R.id.playbtn2);
+//        uploadbtn = findViewById(R.id.uploadbtn);
+//
+//        pathTextView = findViewById(R.id.path_text);
+//
+//        folderbtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // 스토리지에서 가져오기
+//                //chkStoragePermission();
+//                getPathFromStorage();
+//            }
+//        });
+//
+//        playbtn2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // 쓰레드에서 AudioTrack으로 선택된 uri 재생
+//                Runnable r = new AudioTrackRunnable(uri);
+//                new Thread(r).start();
+//            }
+//        });
+//
+//        uploadbtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // firebase에 선택된 uri 업로드
+//                uploadToFirebase();
+//            }
+//        });
+
     }
+
+    private void addTrack(Uri uri, String title) {
+        MusicTrack track = new MusicTrack();
+        track.uri = uri;
+        track.title = title;
+        tracks.add(track);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void makeTrackByStorage() {
+        chkStoragePermission();
+        getPathFromStorage();
+    }
+
 
     private void chkStoragePermission() {
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.TIRAMISU) {
@@ -198,8 +263,12 @@ public class AddMusic extends AppCompatActivity {
         if(requestCode == 1){
             if(resultCode == RESULT_OK){
                 // audio 위치
-                uri = data.getData();
-                pathTextView.setText(uri.getPath().toString());
+//                uri = data.getData();
+//                pathTextView.setText(uri.getPath().toString());
+
+                Uri uri = data.getData();
+                String path = uri.getPath();
+                addTrack(uri, path);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
