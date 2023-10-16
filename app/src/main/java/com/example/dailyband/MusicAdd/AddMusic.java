@@ -18,15 +18,18 @@ import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,6 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.Models.ComplexName;
+import com.example.dailyband.MusicFragment.PianoFragment;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.MusicTrackAdapter;
@@ -87,8 +91,10 @@ public class AddMusic extends AppCompatActivity {
     private RecyclerView musicTrackView;
     private LinearLayoutManager llm;
     private RecyclerView.Adapter adapter;
-
+    private ConstraintLayout detail_pickup_layout;
+    private FrameLayout detail_instrument_frame;
     private List<ComplexName> parents;
+    PianoFragment pianoFragment;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +112,9 @@ public class AddMusic extends AppCompatActivity {
         stopbtn = findViewById(R.id.stopbtn);
         savemenu = findViewById(R.id.savemenu);
         plusbtn = findViewById(R.id.plusbtn);
+        detail_pickup_layout = findViewById(R.id.detail_pickup_layout);
+        detail_instrument_frame = findViewById(R.id.detail_instrument_frame);
+        pianoFragment = new PianoFragment();
 
         parents = new ArrayList<>();
 
@@ -120,12 +129,28 @@ public class AddMusic extends AppCompatActivity {
 
         adapter = new MusicTrackAdapter(tracks);
         musicTrackView.setAdapter(adapter);
+        detail_pickup_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (detail_pickup_layout.getVisibility() == View.VISIBLE) {
+                    detail_pickup_layout.setVisibility(View.GONE);
+                }
+            }
+        });
 
         plusbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AddMusic.this, PianoMain.class);
-                startActivity(intent);
+                //Intent intent = new Intent(AddMusic.this, PianoMain.class);
+                //startActivity(intent);
+                //기존 뷰 모두 제거
+                detail_pickup_layout.setVisibility(View.VISIBLE);
+                getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, pianoFragment).commit();
+                //다른 레이아웃 추가하기 위해서
+                //LayoutInflater inflater = LayoutInflater.from(AddMusic.this);
+                //우선은 pianomain 연결
+                //View playPianoView = inflater.inflate(R.layout.piano_main, detail_instrument_frame, false);
+                //detail_instrument_frame.addView(playPianoView); //container에 paino_main 레이아웃 추가
             }
         });
 

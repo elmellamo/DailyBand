@@ -62,9 +62,6 @@
         <activity android:name=".MusicAdd.TestParent"
             android:exported="true">
         </activity>
-        <activity android:name=".MusicAdd.PianoMain"
-            android:exported="true">
-        </activity>
         <activity android:name=".MusicAdd.AddCaption"
             android:exported="true">
         </activity>
