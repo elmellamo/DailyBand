@@ -5,11 +5,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.dailyband.R;
@@ -28,6 +32,11 @@ public class SettingActivity extends AppCompatActivity {
     private ImageView profileImg;
     private Uri selectedImageUri = null;
     private Uri userImage=null;
+    private CardView cardView;
+    private ConstraintLayout setting_user_layout;
+
+    private ConstraintLayout cardview_layout;
+    private boolean isCardViewVisible = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,7 +47,13 @@ public class SettingActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
         profileImg = findViewById(R.id.bird_img);
+        Animation slideUpAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_up);
+        cardView = findViewById(R.id.cardView);
+        setting_user_layout = findViewById(R.id.setting_user_layout);
+        cardview_layout = findViewById(R.id.cardview_layout);
 
+        cardView.setVisibility(View.INVISIBLE);
+        cardview_layout.setVisibility((View.INVISIBLE));
 
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         StorageReference storageRef = storage.getReference().child("profile_images");
@@ -53,6 +68,34 @@ public class SettingActivity extends AppCompatActivity {
                     .into(profileImg); // profileImage는 앱의 이미지뷰 객체
         });
 
+        setting_user_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isCardViewVisible) {
+                    // 카드뷰가 보이지 않으면 스르륵 올라와서 보이게 함
+                    cardView.setVisibility(View.VISIBLE);
+                    cardview_layout.setVisibility(View.VISIBLE);
+                    cardView.startAnimation(slideUpAnimation);
+                    isCardViewVisible = true;
+                } else {
+                    // 카드뷰가 이미 보이면 다시 숨김
+                    cardView.setVisibility(View.INVISIBLE);
+                    cardview_layout.setVisibility(View.INVISIBLE);
+                    isCardViewVisible = false;
+                }
+            }
+        });
+        View rootView = findViewById(android.R.id.content);
+        rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isCardViewVisible) {
+                    cardView.setVisibility(View.INVISIBLE);
+                    cardview_layout.setVisibility(View.INVISIBLE);
+                    isCardViewVisible = false;
+                }
+            }
+        });
         profileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
