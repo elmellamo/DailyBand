@@ -37,6 +37,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.Models.ComplexName;
+import com.example.dailyband.MusicFragment.CategoryAddMusic;
+import com.example.dailyband.MusicFragment.DrumFragment;
 import com.example.dailyband.MusicFragment.PianoFragment;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.FirebaseMethods;
@@ -79,6 +81,7 @@ public class AddMusic extends AppCompatActivity {
     private Uri audiouri;
 
     private boolean isPlaying = false;
+    private FrameLayout addCategoryFrameLayout;
 
     int mAudioSource = MediaRecorder.AudioSource.MIC;
     int mSampleRate = 44100;
@@ -95,6 +98,8 @@ public class AddMusic extends AppCompatActivity {
     private FrameLayout detail_instrument_frame;
     private List<ComplexName> parents;
     PianoFragment pianoFragment;
+    CategoryAddMusic categoryAddMusic;
+    DrumFragment drumFragment;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +119,12 @@ public class AddMusic extends AppCompatActivity {
         plusbtn = findViewById(R.id.plusbtn);
         detail_pickup_layout = findViewById(R.id.detail_pickup_layout);
         detail_instrument_frame = findViewById(R.id.detail_instrument_frame);
+        addCategoryFrameLayout = findViewById(R.id.add_category_framelayout);
         pianoFragment = new PianoFragment();
+        drumFragment = new DrumFragment();
+
+        //CategoryAddMusicFragment 추가
+        getSupportFragmentManager().beginTransaction().replace(R.id.add_category_framelayout, new CategoryAddMusic()).commit();
 
         parents = new ArrayList<>();
 
@@ -144,13 +154,15 @@ public class AddMusic extends AppCompatActivity {
                 //Intent intent = new Intent(AddMusic.this, PianoMain.class);
                 //startActivity(intent);
                 //기존 뷰 모두 제거
-                detail_pickup_layout.setVisibility(View.VISIBLE);
-                getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, pianoFragment).commit();
+                    //detail_pickup_layout.setVisibility(View.VISIBLE);
+                    //getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, pianoFragment).commit();
                 //다른 레이아웃 추가하기 위해서
                 //LayoutInflater inflater = LayoutInflater.from(AddMusic.this);
                 //우선은 pianomain 연결
                 //View playPianoView = inflater.inflate(R.layout.piano_main, detail_instrument_frame, false);
                 //detail_instrument_frame.addView(playPianoView); //container에 paino_main 레이아웃 추가
+                addCategoryFrameLayout.setVisibility(View.VISIBLE);
+
             }
         });
 
@@ -233,6 +245,20 @@ public class AddMusic extends AppCompatActivity {
 //            }
 //        });
 
+    }
+    //피아노 보이게 하기
+    public void showUpPiano(){
+        detail_pickup_layout.setVisibility(View.VISIBLE);
+        getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, pianoFragment).commit();
+    }
+
+    public void showUpDrum(){
+        detail_pickup_layout.setVisibility(View.VISIBLE);
+        getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, drumFragment).commit();
+    }
+    //addCategoryFrameLayout을 숨기는 메서드
+    public void hideAddCategoryFrameLayout(){
+        addCategoryFrameLayout.setVisibility(View.GONE);
     }
 
     private void addTrack(Uri uri, String title) {
