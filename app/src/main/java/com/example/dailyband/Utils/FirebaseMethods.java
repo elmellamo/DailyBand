@@ -51,6 +51,10 @@ public class FirebaseMethods {
         }
     }
 
+    public String getMyUid(){
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
+
 
     //like 카테고리에 해당 Post에 유저가 좋아요 했는지 안했는지 체크하는 함수
     public interface OnLikeCheckListener {
@@ -86,9 +90,13 @@ public class FirebaseMethods {
     }
 
     // 음악을 좋아요 했을 때의 동작을 처리하는 메서드
-    public void addLike(String songId, String writer_uid, final OnLikeActionListener listener) {
+    public void addLike(String title, String songId, String writer_uid, final OnLikeActionListener listener) {
+        ComplexName complexName = new ComplexName();
+        complexName.setSongid(songId);
+        complexName.setTitle(title);
+        complexName.setWriteruid(writer_uid);
         // 1. like 카테고리에서 해당 음악 postId의 child에 현재 사용자 uid를 추가하고 값을 true로 설정
-        myRef.child("user_like").child(userID).child(songId).setValue(true)
+        myRef.child("user_like").child(userID).child(songId).setValue(complexName)
                 .addOnSuccessListener(aVoid -> {
                     // 2. songs 카테고리에서 해당 음악 postId의 love의 수를 하나 늘림
                     myRef.child("songs").child(songId).child("love").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -179,10 +187,10 @@ public class FirebaseMethods {
     }
 
 
-    public void addOrRemoveLike(String songId, boolean isLiked, String writer_uid, OnLikeActionListener listener) {
+    public void addOrRemoveLike(String title, String songId, boolean isLiked, String writer_uid, OnLikeActionListener listener) {
         if (isLiked) {
             // 사용자가 좋아요를 누르지 않은 상태에서 눌렀을 때는 좋아요를 추가합니다.
-            addLike(songId, writer_uid, listener);
+            addLike(title, songId, writer_uid, listener);
         } else {
             // 사용자가 이미 좋아요를 누른 상태에서 또 눌렀을 때는 좋아요를 취소합니다.
             removeLike(songId, writer_uid, listener);

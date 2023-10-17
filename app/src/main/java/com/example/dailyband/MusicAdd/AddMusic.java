@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +42,7 @@ import com.example.dailyband.MusicFragment.CategoryAddMusic;
 import com.example.dailyband.MusicFragment.DrumFragment;
 import com.example.dailyband.MusicFragment.PianoFragment;
 import com.example.dailyband.R;
+import com.example.dailyband.Setting.SettingActivity;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.MusicTrackAdapter;
 import com.google.android.material.textfield.TextInputLayout;
@@ -63,9 +65,6 @@ public class AddMusic extends AppCompatActivity {
     private MediaRecorder audioRecorder;
     //private String outputFile;
 
-    private ImageView playbtn;
-    private ImageView pausebtn;
-    private ImageView stopbtn;
     private ImageView plusbtn;
 
     private ImageView folderbtn;
@@ -100,6 +99,7 @@ public class AddMusic extends AppCompatActivity {
     PianoFragment pianoFragment;
     CategoryAddMusic categoryAddMusic;
     DrumFragment drumFragment;
+    private ImageButton homeBtn, setbtn;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,14 +112,13 @@ public class AddMusic extends AppCompatActivity {
 //        String storagePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/record.3gp";
 //        outputFile = storagePath;
 
-        playbtn = findViewById(R.id.playbtn);
-        pausebtn = findViewById(R.id.pausebtn);
-        stopbtn = findViewById(R.id.stopbtn);
         savemenu = findViewById(R.id.savemenu);
         plusbtn = findViewById(R.id.plusbtn);
         detail_pickup_layout = findViewById(R.id.detail_pickup_layout);
         detail_instrument_frame = findViewById(R.id.detail_instrument_frame);
         addCategoryFrameLayout = findViewById(R.id.add_category_framelayout);
+        homeBtn = findViewById(R.id.homeBtn);
+        setbtn = findViewById(R.id.setbtn);
         pianoFragment = new PianoFragment();
         drumFragment = new DrumFragment();
 
@@ -139,6 +138,18 @@ public class AddMusic extends AppCompatActivity {
 
         adapter = new MusicTrackAdapter(tracks);
         musicTrackView.setAdapter(adapter);
+        setbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(SettingActivity.class);
+            }
+        });
+        homeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(HomeMain.class);
+            }
+        });
         detail_pickup_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -520,6 +531,12 @@ public class AddMusic extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void myStartActivity(Class c){
+        Intent intent = new Intent(this, c);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
 }

@@ -32,6 +32,7 @@
         android:layout_height="wrap_content"
         android:text="텍스트"
         android:textSize="20sp"
+        android:ellipsize="marquee"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ranking"
         app:layout_constraintBottom_toBottomOf="parent"/>

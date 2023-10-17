@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dailyband.Library.MyLove;
 import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
@@ -29,7 +30,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class HomeMain extends AppCompatActivity{
-    private ImageButton addbtn;
+    private ImageButton addbtn, setbtn, librarybtn;
     private RecyclerView recyclerView;
     private RankingSongAdapter adapter;
     private List<TestSong> songs;
@@ -38,7 +39,6 @@ public class HomeMain extends AppCompatActivity{
     private DatabaseReference myRef;
     private FirebaseMethods mFirebaseMethods;
     private FirebaseAuth mAuth;
-    private ImageButton setbtn;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,13 +46,20 @@ public class HomeMain extends AppCompatActivity{
 
         mFirebaseMethods = new FirebaseMethods(HomeMain.this);
 //
+        addbtn = findViewById(R.id.addbtn);
+        librarybtn = findViewById(R.id.librarybtn);
         recyclerView = findViewById(R.id.popularlist);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         songs = new ArrayList<>();
 
         getSongs();
 
-        addbtn = findViewById(R.id.addbtn);
+        librarybtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(MyLove.class);
+            }
+        });
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

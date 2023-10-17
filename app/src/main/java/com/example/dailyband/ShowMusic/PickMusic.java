@@ -103,7 +103,7 @@ public class PickMusic extends AppCompatActivity {
                 // isLiked 값 반전해야 함
                 isLiked = !isLiked;
                 // 여기서 해당 postId를 사용자의 좋아요 리스트에 추가 또는 삭제하기
-                mFirebaseMethods.addOrRemoveLike(postId, isLiked, writer_uid, new FirebaseMethods.OnLikeActionListener() {
+                mFirebaseMethods.addOrRemoveLike(title, postId, isLiked, writer_uid, new FirebaseMethods.OnLikeActionListener() {
                     @Override
                     public void onLikeAdded() {
                         // 좋아요가 추가되었을 때의 처리
