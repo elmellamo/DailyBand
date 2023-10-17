@@ -166,15 +166,6 @@ public class AddMusic extends AppCompatActivity {
             }
         });
 
-        Button addtrackbtn = findViewById(R.id.addtrackbtn);
-        addtrackbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 랭킹?/파일/녹음/가상악기 중에서 고르기
-                makeTrackByStorage();
-            }
-        });
-
         playbtn2 = findViewById(R.id.playbtn2);
         playbtn2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -269,7 +260,7 @@ public class AddMusic extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    private void makeTrackByStorage() {
+    public void makeTrackByStorage() {
         chkStoragePermission();
         getPathFromStorage();
     }

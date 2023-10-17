@@ -168,27 +168,17 @@
                     android:id="@+id/tracklist"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    app:layout_constraintBottom_toTopOf="@id/addtrackbtn"
+                    app:layout_constraintBottom_toTopOf="@id/plusbtn"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/music_select"/>
 
-                <Button
-                    android:id="@+id/addtrackbtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="add track"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/plusbtn"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tracklist" />
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/plusbtn"
                     android:src="@drawable/plusbtn"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@+id/addtrackbtn"
                     app:layout_constraintRight_toRightOf="parent"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
