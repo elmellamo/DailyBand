@@ -24,13 +24,19 @@
         android:requestLegacyExternalStorage="true">
 
         <activity
-            android:name="com.example.dailyband.Start.StartActivity"
+            android:name="com.example.dailyband.Start.SplashActivity"
             android:exported="true"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.example.dailyband.Start.StartActivity"
+            android:exported="true">
+
         </activity>
 
         <activity android:name=".Home.HomeMain"

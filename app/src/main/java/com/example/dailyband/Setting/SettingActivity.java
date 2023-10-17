@@ -141,7 +141,7 @@ public class SettingActivity extends AppCompatActivity {
                     email_cardview_edittext.setText(EMAIL_SET_TEXT);
                     isCardViewVisible = true;
                     setting_user_layout.setClickable(false);
-                    //touchable_cardview_layout.bringToFront();
+                    cardView.bringToFront();
                 } else {
                     // 카드뷰가 이미 보이면 다시 숨김
                     cardView_email.setVisibility(View.INVISIBLE);
@@ -151,8 +151,15 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        View rootView2 = findViewById(R.id.cardView);
-        rootView2.setOnTouchListener(new View.OnTouchListener() {
+
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 카드뷰를 터치해도 아무 동작 없음
+            }
+        });
+
+        cardView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 // 포커스를 잃으면 키보드를 숨깁니다.
@@ -161,7 +168,7 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        View rootView = findViewById(R.id.else_layout);
+        View rootView = findViewById(R.id.topscreen_setting);
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
