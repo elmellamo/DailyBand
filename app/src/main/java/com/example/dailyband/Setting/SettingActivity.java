@@ -22,8 +22,15 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
+import com.example.dailyband.Login.LoginActivity;
+import com.example.dailyband.Login.RegisterActivity;
 import com.example.dailyband.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,10 +60,12 @@ public class SettingActivity extends AppCompatActivity {
     private boolean isCardViewVisible = false;
     private EditText name_cardview_edittext;
     private EditText email_cardview_edittext;
+    private EditText email_pw_cardview_edittext;
     private String NAME_SET_TEXT;
     private ConstraintLayout touchable_cardview_layout;
     private Button change_name_btn;
-    private String EMAIL_SET_TEXT;
+    private Button change_email_btn;
+    public String EMAIL_SET_TEXT;
 
 
     @Override
@@ -83,6 +92,8 @@ public class SettingActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         touchable_cardview_layout = findViewById(R.id.touchable_cardview_layout);
         email_cardview_edittext = findViewById(R.id.email_cardview_edittext);
+        change_email_btn = findViewById(R.id.change_email_btn);
+        email_pw_cardview_edittext = findViewById(R.id.email_pw_cardview_edittext);
 
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         StorageReference storageRef = storage.getReference().child("profile_images");
@@ -141,7 +152,7 @@ public class SettingActivity extends AppCompatActivity {
                     email_cardview_edittext.setText(EMAIL_SET_TEXT);
                     isCardViewVisible = true;
                     setting_user_layout.setClickable(false);
-                    cardView.bringToFront();
+                    //cardView.bringToFront();
                 } else {
                     // 카드뷰가 이미 보이면 다시 숨김
                     cardView_email.setVisibility(View.INVISIBLE);
@@ -150,15 +161,12 @@ public class SettingActivity extends AppCompatActivity {
                 }
             }
         });
-
-
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 카드뷰를 터치해도 아무 동작 없음
             }
         });
-
         cardView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -168,6 +176,20 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+        cardView_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 카드뷰를 터치해도 아무 동작 없음
+            }
+        });
+        cardView_email.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // 포커스를 잃으면 키보드를 숨깁니다.
+                hideKeyboard();
+                return false;
+            }
+        });
         View rootView = findViewById(R.id.topscreen_setting);
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,6 +219,13 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+        change_email_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeEmail();
+            }
+        });
+
         profileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,12 +234,72 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void changeEmail(){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+        String newEmail = email_cardview_edittext.getText().toString(); // 새로운 이메일
+        String password = email_pw_cardview_edittext.getText().toString(); // 현재 비밀번호
+
+        AuthCredential credential = EmailAuthProvider.getCredential(EMAIL_SET_TEXT, password);
+        FirebaseUser user = mAuth.getCurrentUser();
+        /*
+        user.updateEmail(newEmail).addOnCompleteListener(task -> {
+           if(task.isSuccessful())
+               Toast.makeText(SettingActivity.this, "수정", Toast.LENGTH_SHORT).show();
+            else
+               Toast.makeText(SettingActivity.this, user.getEmail().toString(), Toast.LENGTH_SHORT).show();
+        });
+        */
+
+        user.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            if (!isValidEmail(newEmail)) {
+                                Toast.makeText(SettingActivity.this, "이메일 주소가 유효하지 않습니다.", Toast.LENGTH_SHORT).show();
+                                hideKeyboard();
+                                return;
+                            }
+                            // 이메일 업데이트
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            user.updateEmail(newEmail)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(SettingActivity.this, "이메일 수정에 성공하였습니다.", Toast.LENGTH_SHORT).show();
+                                                realtime_change_email(newEmail);
+
+                                            } else {
+                                                Toast.makeText(SettingActivity.this, EMAIL_SET_TEXT, Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        }
+                                    });
+                        } else {
+                            Toast.makeText(SettingActivity.this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                            hideKeyboard();
+                        }
+                    }
+                });
+
+    }
+
+    private void realtime_change_email(String newEmail){
+        String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mDatabase.child(userUID).child("emailId").setValue(newEmail);
+    }
     private void openGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         galleryIntent.setType("image/*");
         startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST);
     }
-
+    private boolean isValidEmail(String email) {
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        return email.matches(emailPattern);
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
