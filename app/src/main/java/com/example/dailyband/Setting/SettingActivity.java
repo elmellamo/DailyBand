@@ -99,7 +99,7 @@ public class SettingActivity extends AppCompatActivity {
         StorageReference storageRef = storage.getReference().child("profile_images");
         StorageReference imageRef = storageRef.child(userUID+".jpg");
         change_name_btn = findViewById(R.id.change_name_btn);
-        mDatabase.child(userUID).addValueEventListener(new ValueEventListener() {
+        mDatabase.child("UserAccount").child(userUID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 NAME_SET_TEXT = snapshot.child("name").getValue().toString();
@@ -210,7 +210,7 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String tmpstr = name_cardview_edittext.getText().toString();
-                mDatabase.child(userId).child("name").setValue(tmpstr);
+                mDatabase.child("UserAccount").child(userId).child("name").setValue(tmpstr);
                 NAME_SET_TEXT = tmpstr;
                 cardView.setVisibility(View.INVISIBLE);
                 cardview_layout.setVisibility(View.INVISIBLE);
@@ -289,7 +289,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private void realtime_change_email(String newEmail){
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        mDatabase.child(userUID).child("emailId").setValue(newEmail);
+        mDatabase.child("UserAccount").child(userUID).child("emailId").setValue(newEmail);
     }
     private void openGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
