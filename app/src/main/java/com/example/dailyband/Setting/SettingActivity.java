@@ -1,10 +1,13 @@
 package com.example.dailyband.Setting;
 
+import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -57,6 +60,8 @@ public class SettingActivity extends AppCompatActivity {
     private ConstraintLayout cardview_email_layout;
 
     private ConstraintLayout cardview_layout;
+    private ConstraintLayout setting_withdrawal_layout;
+    private ConstraintLayout setting_logout_layout;
     private boolean isCardViewVisible = false;
     private EditText name_cardview_edittext;
     private EditText email_cardview_edittext;
@@ -94,6 +99,8 @@ public class SettingActivity extends AppCompatActivity {
         email_cardview_edittext = findViewById(R.id.email_cardview_edittext);
         change_email_btn = findViewById(R.id.change_email_btn);
         email_pw_cardview_edittext = findViewById(R.id.email_pw_cardview_edittext);
+        setting_withdrawal_layout = findViewById(R.id.setting_withdrawal_layout);
+        setting_logout_layout = findViewById(R.id.setting_logout_layout);
 
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         StorageReference storageRef = storage.getReference().child("profile_images");
@@ -233,6 +240,56 @@ public class SettingActivity extends AppCompatActivity {
                 openGallery();
             }
         });
+
+        setting_logout_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LOGOUT();
+            }
+        });
+
+        //탈퇴하는거 구현해야함
+        setting_withdrawal_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                WITHDRAW();
+            }
+        });
+    }
+
+
+    private void WITHDRAW(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference rootRef = database.getReference();
+        DatabaseReference dataRef = rootRef.child("UserAccount");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        String uidToDelete = user.getUid();
+        dataRef.child(uidToDelete).removeValue()
+                .addOnSuccessListener(aVoid -> {
+                    // 삭제 성공 시 실행할 코드
+                })
+                .addOnFailureListener(e -> {
+                    // 삭제 실패 시 실행할 코드
+                });
+        //user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user.delete()//계정 삭제 시키기
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User account deleted.");
+                        }
+                    }
+                });
+
+        FirebaseAuth.getInstance().signOut();
+        myStartActivity(LoginActivity.class);
+    }
+    private void LOGOUT(){
+        FirebaseAuth.getInstance().signOut();
+        myStartActivity(LoginActivity.class);
     }
 
     private void changeEmail(){
@@ -241,16 +298,8 @@ public class SettingActivity extends AppCompatActivity {
         String newEmail = email_cardview_edittext.getText().toString(); // 새로운 이메일
         String password = email_pw_cardview_edittext.getText().toString(); // 현재 비밀번호
 
-        AuthCredential credential = EmailAuthProvider.getCredential(EMAIL_SET_TEXT, password);
+        AuthCredential credential = EmailAuthProvider.getCredential(mAuth.getCurrentUser().getEmail(), password);
         FirebaseUser user = mAuth.getCurrentUser();
-        /*
-        user.updateEmail(newEmail).addOnCompleteListener(task -> {
-           if(task.isSuccessful())
-               Toast.makeText(SettingActivity.this, "수정", Toast.LENGTH_SHORT).show();
-            else
-               Toast.makeText(SettingActivity.this, user.getEmail().toString(), Toast.LENGTH_SHORT).show();
-        });
-        */
 
         user.reauthenticate(credential)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -262,8 +311,10 @@ public class SettingActivity extends AppCompatActivity {
                                 hideKeyboard();
                                 return;
                             }
+                            Toast.makeText(SettingActivity.this, "유효한 이메일 주소입니다.",Toast.LENGTH_SHORT).show();
+                            //여기까지 작동 정상적
+
                             // 이메일 업데이트
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             user.updateEmail(newEmail)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
@@ -273,6 +324,8 @@ public class SettingActivity extends AppCompatActivity {
                                                 realtime_change_email(newEmail);
 
                                             } else {
+                                                Exception e = task.getException();
+                                                Log.e("EmailUpdateError", e.getMessage());
                                                 Toast.makeText(SettingActivity.this, EMAIL_SET_TEXT, Toast.LENGTH_SHORT).show();
 
                                             }
@@ -354,5 +407,11 @@ public class SettingActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    private void myStartActivity(Class c){
+        Intent intent = new Intent(this, c);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }
