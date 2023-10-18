@@ -223,6 +223,11 @@ public class FirebaseMethods {
 
     // Uri 로 파일 업로드
     public void uploadNewStorage(final String title, Uri fileUri, String postId) {
+        if (fileUri == null) {
+            Log.e("로그", "File URI is null");
+            // 적절한 예외 처리 또는 오류 메시지를 사용하여 사용자에게 알림
+            return;
+        }
         Log.e("로그", "음악 업로드 중...");
 
         String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();

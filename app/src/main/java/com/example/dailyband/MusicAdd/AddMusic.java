@@ -65,19 +65,13 @@ public class AddMusic extends AppCompatActivity {
     private MediaRecorder audioRecorder;
     //private String outputFile;
 
-    private ImageView plusbtn;
-
-    private ImageView folderbtn;
-    private ImageView playbtn2;
-    private ImageView uploadbtn;
-
+    private ImageView plusbtn, playbtn2, uploadbtn;
     private FirebaseMethods mFirebaseMethods;
     private String postId;
-    private TextView savemenu;
+    private TextView nextmenu;
     private EditText pathTextView;
 
-    private Uri uri;
-    private Uri audiouri;
+    private Uri uri, audiouri;
 
     private boolean isPlaying = false;
     private FrameLayout addCategoryFrameLayout;
@@ -112,13 +106,14 @@ public class AddMusic extends AppCompatActivity {
 //        String storagePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/record.3gp";
 //        outputFile = storagePath;
 
-        savemenu = findViewById(R.id.savemenu);
+        nextmenu = findViewById(R.id.nextmenu);
         plusbtn = findViewById(R.id.plusbtn);
         detail_pickup_layout = findViewById(R.id.detail_pickup_layout);
         detail_instrument_frame = findViewById(R.id.detail_instrument_frame);
         addCategoryFrameLayout = findViewById(R.id.add_category_framelayout);
         homeBtn = findViewById(R.id.homeBtn);
         setbtn = findViewById(R.id.setbtn);
+        playbtn2 = findViewById(R.id.playbtn2);
         pianoFragment = new PianoFragment();
         drumFragment = new DrumFragment();
 
@@ -138,6 +133,14 @@ public class AddMusic extends AppCompatActivity {
 
         adapter = new MusicTrackAdapter(tracks);
         musicTrackView.setAdapter(adapter);
+
+        nextmenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadToFirebase();
+                //myStartActivity(AddCaption.class);
+            }
+        });
         setbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,26 +161,12 @@ public class AddMusic extends AppCompatActivity {
                 }
             }
         });
-
         plusbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(AddMusic.this, PianoMain.class);
-                //startActivity(intent);
-                //기존 뷰 모두 제거
-                    //detail_pickup_layout.setVisibility(View.VISIBLE);
-                    //getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, pianoFragment).commit();
-                //다른 레이아웃 추가하기 위해서
-                //LayoutInflater inflater = LayoutInflater.from(AddMusic.this);
-                //우선은 pianomain 연결
-                //View playPianoView = inflater.inflate(R.layout.piano_main, detail_instrument_frame, false);
-                //detail_instrument_frame.addView(playPianoView); //container에 paino_main 레이아웃 추가
                 addCategoryFrameLayout.setVisibility(View.VISIBLE);
-
             }
         });
-
-        playbtn2 = findViewById(R.id.playbtn2);
         playbtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,54 +179,6 @@ public class AddMusic extends AppCompatActivity {
             }
         });
 
-//        playbtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // 녹음 시작
-//                startRecording();
-//                //chkPermission();
-//            }
-//        });
-//
-//        stopbtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // 녹음 종료
-//                stopRecording();
-//                //uploadToFirebase();
-//            }
-//        });
-//        savemenu.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                testFirebase();
-//            }
-//        });
-
-
-//        folderbtn = findViewById(R.id.folderbtn);
-//        playbtn2 = findViewById(R.id.playbtn2);
-//        uploadbtn = findViewById(R.id.uploadbtn);
-//
-//        pathTextView = findViewById(R.id.path_text);
-//
-//        folderbtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // 스토리지에서 가져오기
-//                //chkStoragePermission();
-//                getPathFromStorage();
-//            }
-//        });
-//
-//        playbtn2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // 쓰레드에서 AudioTrack으로 선택된 uri 재생
-//                Runnable r = new AudioTrackRunnable(uri);
-//                new Thread(r).start();
-//            }
-//        });
 //
 //        uploadbtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -253,7 +194,7 @@ public class AddMusic extends AppCompatActivity {
         detail_pickup_layout.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, pianoFragment).commit();
     }
-
+    //드럼 보이게 하기
     public void showUpDrum(){
         detail_pickup_layout.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, drumFragment).commit();
@@ -262,7 +203,6 @@ public class AddMusic extends AppCompatActivity {
     public void hideAddCategoryFrameLayout(){
         addCategoryFrameLayout.setVisibility(View.GONE);
     }
-
     private void addTrack(Uri uri, String title) {
         MusicTrack track = new MusicTrack();
         track.uri = uri;
@@ -270,12 +210,6 @@ public class AddMusic extends AppCompatActivity {
         tracks.add(track);
         adapter.notifyDataSetChanged();
     }
-
-    public void makeTrackByStorage() {
-        chkStoragePermission();
-        getPathFromStorage();
-    }
-
 
     private void chkStoragePermission() {
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.TIRAMISU) {
@@ -301,8 +235,7 @@ public class AddMusic extends AppCompatActivity {
             }
         }
     }
-
-    private void getPathFromStorage() {
+    public void getPathFromStorage() {
         Intent intent_upload = new Intent();
         intent_upload.setType("audio/x-wav"); // wav파일만
         // intent_upload.setType("audio/*");
@@ -326,21 +259,6 @@ public class AddMusic extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-    //녹음 없이 그저 타이틀만 보낼 때! 실험용
-    private void testFirebase(){
-        TextInputLayout textInputLayout = findViewById(R.id.songname_edit_layout);
-        final String title = textInputLayout.getEditText().getText().toString();
-        if(title.length()>0){
-            //여기 아무것도 녹음하지 않았을 때 안 함. 테스트니까..!
-            postId = mFirebaseMethods.addSongToDatabase(title, parents);
-            Intent intent = new Intent(this, HomeMain.class);
-            startActivity(intent);
-        }else{
-            startToast("곡명을 정해주세요.");
-        }
-    }
-
     private void startRecording(){
         // 권한 체크
         int permission = ContextCompat.checkSelfPermission(this,
@@ -402,6 +320,7 @@ public class AddMusic extends AppCompatActivity {
         }
     }
 
+    //권한 확인하고 startRecording()으로
     private void chkPermission(){
         if (ContextCompat.checkSelfPermission(this, permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -425,20 +344,6 @@ public class AddMusic extends AppCompatActivity {
             }
         }
     }
-
-    private void stopRecording(){
-        if(audioRecorder == null) return;
-
-        audioRecorder.stop();
-        audioRecorder.release();
-        audioRecorder = null;
-
-        uri = audiouri;
-        pathTextView.setText(uri.getPath().toString());
-
-        startToast("녹음 종료!");
-    }
-
     private void uploadToFirebase(){
         TextInputLayout textInputLayout = findViewById(R.id.songname_edit_layout);
         final String title = textInputLayout.getEditText().getText().toString();
@@ -455,9 +360,6 @@ public class AddMusic extends AppCompatActivity {
         mFirebaseMethods.uploadNewStorage(title, uri, postId);
     }
 
-    private void startToast(String msg){
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-    }
 
     public class AudioTrackRunnable implements Runnable {
         //int position;
@@ -532,11 +434,12 @@ public class AddMusic extends AppCompatActivity {
             }
         }
     }
-
     private void myStartActivity(Class c){
         Intent intent = new Intent(this, c);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
-
+    private void startToast(String msg){
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
 }

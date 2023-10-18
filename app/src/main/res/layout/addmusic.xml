@@ -52,7 +52,7 @@
                 android:layout_marginStart="10dp"
                 android:theme="@style/EditTextGreyStyle"
                 app:layout_constraintHorizontal_weight="0.8"
-                app:layout_constraintRight_toLeftOf="@+id/savemenu"
+                app:layout_constraintRight_toLeftOf="@+id/nextmenu"
                 app:boxStrokeColor="@android:color/transparent"
                 app:hintEnabled="true">
 
@@ -66,7 +66,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/savemenu"
+                android:id="@+id/nextmenu"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 app:layout_constraintTop_toTopOf="parent"
