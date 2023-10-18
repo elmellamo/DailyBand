@@ -356,6 +356,8 @@ public class AddMusic extends AppCompatActivity {
         //여기 아무것도 녹음하지 않았을 때 안 함. 테스트니까..!
         //  : 업로드 할 파일이 없는 예외 처리
 
+        uri = tracks.get(0).uri;
+
         postId = mFirebaseMethods.addSongToDatabase(title, parents);
         mFirebaseMethods.uploadNewStorage(title, uri, postId);
     }
