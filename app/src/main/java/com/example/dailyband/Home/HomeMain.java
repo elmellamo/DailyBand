@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dailyband.Library.LibraryMain;
+import com.example.dailyband.Library.MyCollect;
 import com.example.dailyband.Library.MyLove;
 import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.MusicAdd.AddMusic;
@@ -30,7 +32,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class HomeMain extends AppCompatActivity{
-    private ImageButton addbtn, setbtn, librarybtn;
+    private ImageButton addbtn, setbtn, librarybtn, myInfobtn;
     private RecyclerView recyclerView;
     private RankingSongAdapter adapter;
     private List<TestSong> songs;
@@ -49,6 +51,7 @@ public class HomeMain extends AppCompatActivity{
         addbtn = findViewById(R.id.addbtn);
         librarybtn = findViewById(R.id.librarybtn);
         recyclerView = findViewById(R.id.popularlist);
+        myInfobtn = findViewById(R.id.myInfobtn);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         songs = new ArrayList<>();
 
@@ -57,7 +60,7 @@ public class HomeMain extends AppCompatActivity{
         librarybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myStartActivity(MyLove.class);
+                myStartActivity(LibraryMain.class);
             }
         });
         addbtn.setOnClickListener(new View.OnClickListener() {

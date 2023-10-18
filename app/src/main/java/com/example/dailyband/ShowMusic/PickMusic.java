@@ -43,10 +43,10 @@ public class PickMusic extends AppCompatActivity {
     private void updateHeartButton(boolean like) {
         heartbtn = findViewById(R.id.heartbtn);
         if (like) {
-            heartbtn.setImageResource(R.drawable.full_heart);
+            heartbtn.setImageResource(R.drawable.heart_full);
             isLiked = true;
         } else {
-            heartbtn.setImageResource(R.drawable.empty_heart);
+            heartbtn.setImageResource(R.drawable.heart_outline_new);
             isLiked = false;
         }
     }

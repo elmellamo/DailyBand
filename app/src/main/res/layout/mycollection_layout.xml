@@ -14,7 +14,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_weight="0.9"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,7 +49,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:text="좋아요 표시한 음악"
+                android:text="내가 만든 음악"
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:id="@+id/username"
@@ -64,7 +63,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:text="내가 좋아요 표시한 음악이 여기에 표시됩니다."
+                android:text="내가 만든 음악이 여기에 표시됩니다."
                 android:gravity="center"
                 android:textSize="12sp"
                 android:id="@+id/gomakeyourmusic"
@@ -97,7 +96,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 app:layout_constraintVertical_weight="0.8"
-                android:id="@+id/lovelist"
+                android:id="@+id/mycollectionlist"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -120,12 +119,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="좋아요 표시한 음악이 없습니다."
+                    android:text="아직 내가 만든 음악이 없습니다."
                     android:textSize="20sp"/>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <ImageView
         android:id="@+id/top_circle"

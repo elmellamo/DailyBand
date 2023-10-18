@@ -24,6 +24,7 @@ import com.example.dailyband.R;
 import com.example.dailyband.Setting.SettingActivity;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.LoveAdapter;
+import com.example.dailyband.adapter.MySongAdapter;
 import com.example.dailyband.adapter.RankingSongAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -39,14 +40,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MyLove extends Fragment {
+public class MyCollect extends Fragment {
     private View view;
     private RecyclerView recyclerView;
-    private LoveAdapter adapter;
-    private List<ComplexName> songs;
+    private MySongAdapter adapter;
+    private List<TestSong> songs;
     private FirebaseMethods mFirebaseMethods;
     private LinearLayout emptytxt;
-    public MyLove() {
+
+    public MyCollect() {
     }
 
     @Override
@@ -56,38 +58,39 @@ public class MyLove extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.mylovemusic, container, false);
-
+        view = inflater.inflate(R.layout.mycollection_layout, container, false);
 
         mFirebaseMethods = new FirebaseMethods(getActivity());
-        recyclerView = view.findViewById(R.id.lovelist);
+        recyclerView = view.findViewById(R.id.mycollectionlist);
         emptytxt = view.findViewById(R.id.emptytxt);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         songs = new ArrayList<>();
-        getLove();
+        getMySong();
 
         return view;
     }
 
-    private void getLove(){
+    private void getMySong(){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         String myUID = mFirebaseMethods.getMyUid();
-        DatabaseReference loveRef = databaseReference.child("user_like").child(myUID);
-        loveRef.addValueEventListener(new ValueEventListener() {
+        DatabaseReference mysongRef = databaseReference.child("user_songs").child(myUID);
+        mysongRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     songs.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Map<String, Object> objectMap = (HashMap<String, Object>) snapshot.getValue();
-                        ComplexName song = new ComplexName();
-                        song.setWriteruid(objectMap.get("writeruid").toString());
+                        TestSong song = new TestSong();
+                        song.setLove(Integer.parseInt(objectMap.get("love").toString()));
+                        song.setDate_created(objectMap.get("date_created").toString());
                         song.setTitle(objectMap.get("title").toString());
-                        song.setSongid(objectMap.get("songid").toString());
+                        song.setPost_id(objectMap.get("post_id").toString());
+                        song.setUser_id(objectMap.get("user_id").toString());
                         songs.add(song);
                     }
 
-                    adapter = new LoveAdapter(getActivity(), songs);
+                    adapter = new MySongAdapter(getActivity(), songs);
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                     checkEmpty();
