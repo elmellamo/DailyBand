@@ -149,7 +149,7 @@ public class TestAdd extends AppCompatActivity {
         if(title.length()>0){
             //여기 아무것도 녹음하지 않았을 때 안 함. 테스트니까..!
             postId = mFirebaseMethods.addSongToDatabase(title, parents);
-            mFirebaseMethods.uploadNewStorage(title, outputFile, postId);
+            //mFirebaseMethods.uploadNewStorage(title, outputFile, postId);
         }else{
             startToast("곡명을 정해주세요.");
         }

@@ -2,7 +2,10 @@ package com.example.dailyband.Utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -11,6 +14,8 @@ import androidx.annotation.NonNull;
 import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.Models.TestSong;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,8 +24,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StreamDownloadTask;
 
 import java.io.File;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -55,19 +62,32 @@ public class FirebaseMethods {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
+    public void getSongUrl(String postId, final OnSongUrlListener listener) {
+        StorageReference songRef = mStorageReference.child("songs/"+postId+"/song");
+        songRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                String downloadUrl = uri.toString();
+                listener.onSuccess(downloadUrl);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onFailure("fail");
+            }
+        });
+    }
 
     //like 카테고리에 해당 Post에 유저가 좋아요 했는지 안했는지 체크하는 함수
     public interface OnLikeCheckListener {
         void onLikeChecked(boolean isLiked);
         void onLikeCheckFailed(String errorMessage);
     }
-
     public interface OnLikeActionListener {
         void onLikeAdded();
         void onLikeRemoved();
         void onFailed(String errorMessage);
     }
-
     public void chkIsLiked(String songId, final OnLikeCheckListener listener) {
         DatabaseReference likeRef = myRef.child("user_like").child(userID).child(songId);
         likeRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -88,7 +108,6 @@ public class FirebaseMethods {
             }
         });
     }
-
     // 음악을 좋아요 했을 때의 동작을 처리하는 메서드
     public void addLike(String title, String songId, String writer_uid, final OnLikeActionListener listener) {
         ComplexName complexName = new ComplexName();
@@ -137,7 +156,6 @@ public class FirebaseMethods {
                     listener.onFailed("Failed to add like: " + e.getMessage());
                 });
     }
-
     public void removeLike(String songId, String writer_uid, final OnLikeActionListener listener) {
         // 1. like 카테고리에서 해당 음악 postId의 child에 현재 사용자 uid를 제거
         myRef.child("user_like").child(userID).child(songId).removeValue()
@@ -185,8 +203,6 @@ public class FirebaseMethods {
                     listener.onFailed("Failed to remove like: " + e.getMessage());
                 });
     }
-
-
     public void addOrRemoveLike(String title, String songId, boolean isLiked, String writer_uid, OnLikeActionListener listener) {
         if (isLiked) {
             // 사용자가 좋아요를 누르지 않은 상태에서 눌렀을 때는 좋아요를 추가합니다.
@@ -196,8 +212,6 @@ public class FirebaseMethods {
             removeLike(songId, writer_uid, listener);
         }
     }
-
-
     //부모, 자식 없이 우선 타이틀, 녹음만 스토리지에 올리기
     //흑흑 녹음 왜 오류나는 거임 >> 타이틀만 우선해서 하트순> 최신순 실험해보자
     public void uploadNewStorage(final String title, String outputFile, String postId) {
@@ -221,6 +235,30 @@ public class FirebaseMethods {
         mContext.startActivity(intent);
     }
 
+//    public void uploadNewStorage(final String title, Uri fileUri, String postId) {
+//        if (fileUri == null) {
+//            Log.e("로그", "File URI is null");
+//            // 적절한 예외 처리 또는 오류 메시지를 사용하여 사용자에게 알림
+//            return;
+//        }
+//        Log.e("로그", "음악 업로드 중...");
+//
+//        String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        //uploadkey=1;
+//        //Uri fileUri = Uri.fromFile(new File(outputFile));
+//        StorageReference storageReference = mStorageReference
+//                .child("songs/" + postId + "/" + fileUri.getLastPathSegment());
+//        storageReference.putFile(fileUri).addOnSuccessListener(taskSnapshot -> {
+//            //업로드 시 성공 처리
+//            Toast.makeText(mContext, "노래가 성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show();
+//        }).addOnFailureListener(e->{
+//            //업로드 실패 시 처리
+//            Toast.makeText(mContext, "노래 등록에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+//        });
+//
+//        Intent intent = new Intent(mContext, HomeMain.class);
+//        mContext.startActivity(intent);
+//    }
     // Uri 로 파일 업로드
     public void uploadNewStorage(final String title, Uri fileUri, String postId) {
         if (fileUri == null) {
@@ -233,8 +271,12 @@ public class FirebaseMethods {
         String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         //uploadkey=1;
         //Uri fileUri = Uri.fromFile(new File(outputFile));
+
+        // 업로드 경로 설정: "songs/{postId}/{fileName}"
+        String uploadPath = "songs/" + postId + "/song";
+
         StorageReference storageReference = mStorageReference
-                .child("songs/" + postId + "/" + fileUri.getLastPathSegment());
+                .child(uploadPath);
         storageReference.putFile(fileUri).addOnSuccessListener(taskSnapshot -> {
             //업로드 시 성공 처리
             Toast.makeText(mContext, "노래가 성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show();

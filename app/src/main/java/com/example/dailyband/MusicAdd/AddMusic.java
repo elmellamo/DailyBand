@@ -43,6 +43,7 @@ import com.example.dailyband.MusicFragment.DrumFragment;
 import com.example.dailyband.MusicFragment.PianoFragment;
 import com.example.dailyband.R;
 import com.example.dailyband.Setting.SettingActivity;
+import com.example.dailyband.ShowMusic.PickMusic;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.MusicTrackAdapter;
 import com.google.android.material.textfield.TextInputLayout;
@@ -117,7 +118,6 @@ public class AddMusic extends AppCompatActivity {
         pianoFragment = new PianoFragment();
         drumFragment = new DrumFragment();
 
-        //CategoryAddMusicFragment 추가
         getSupportFragmentManager().beginTransaction().replace(R.id.add_category_framelayout, new CategoryAddMusic()).commit();
 
         parents = new ArrayList<>();
@@ -353,13 +353,18 @@ public class AddMusic extends AppCompatActivity {
             return ;
         }
 
-        //여기 아무것도 녹음하지 않았을 때 안 함. 테스트니까..!
-        //  : 업로드 할 파일이 없는 예외 처리
-
         uri = tracks.get(0).uri;
+        if(uri==null){
+            startToast("음악을 만들어주세요.");
+            return;
+        }
+        //postId = mFirebaseMethods.addSongToDatabase(title, parents);
+        //mFirebaseMethods.uploadNewStorage(title, uri, postId);
 
-        postId = mFirebaseMethods.addSongToDatabase(title, parents);
-        mFirebaseMethods.uploadNewStorage(title, uri, postId);
+        Intent intent = new Intent(this, AddCaption.class);
+        intent.putExtra("title", title);
+        intent.putExtra("uri", uri.toString());
+        startActivity(intent);
     }
 
 
