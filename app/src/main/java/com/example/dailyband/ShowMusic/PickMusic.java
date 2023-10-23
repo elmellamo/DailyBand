@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,17 +38,16 @@ import java.util.List;
 import java.util.Map;
 
 public class PickMusic extends AppCompatActivity {
-    private ImageView heartbtn, playbtn, stopbtn;
+    private ImageView heartbtn, playbtn, stopbtn, optionmenu;
     private boolean isLiked = false;
-    private ImageView optionmenu;
     private TextView picksongname;
     private FirebaseMethods mFirebaseMethods;
-    private String postId;
-    private String title;
-    private String writer_uid;
+    private String postId, title, writer_uid;
     private RecyclerView recyclerView;
+    private ConstraintLayout detail_info_layout, gray_screen;
     private LinearLayout emptytxt;
     private MediaPlayer mediaPlayer;
+    private FrameLayout detail_info_frame;
     private void updateHeartButton(boolean like) {
         heartbtn = findViewById(R.id.heartbtn);
         if (like) {
@@ -76,7 +78,9 @@ public class PickMusic extends AppCompatActivity {
         heartbtn = findViewById(R.id.heartbtn);
         optionmenu = findViewById(R.id.optionmenu);
         emptytxt = findViewById(R.id.emptytxt);
-
+        gray_screen = findViewById(R.id.gray_screen);
+        detail_info_layout = findViewById(R.id.detail_info_layout);
+        detail_info_frame = findViewById(R.id.detail_info_frame);
         recyclerView = findViewById(R.id.collaborationlist);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         getCollab(postId);
@@ -84,11 +88,28 @@ public class PickMusic extends AppCompatActivity {
         optionmenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent2 = new Intent(PickMusic.this, TestParent.class);
-                intent2.putExtra("parent_Id", postId);
-                intent2.putExtra("parent_title", title);
-                intent2.putExtra("writer_uid", writer_uid); //해당 노래를 작곡한 사람
-                startActivity(intent2);
+                //Intent intent2 = new Intent(PickMusic.this, TestParent.class);
+                //intent2.putExtra("parent_Id", postId);
+                //intent2.putExtra("parent_title", title);
+                //intent2.putExtra("writer_uid", writer_uid); //해당 노래를 작곡한 사람
+                //startActivity(intent2);
+
+                // detail_info_layout을 보이도록 변경합니다.
+                detail_info_layout.setVisibility(View.VISIBLE);
+
+                // detail_info_frame에 detail_info.xml에서 시작하는 뷰를 추가합니다.
+                LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+                View detailInfoView = inflater.inflate(R.layout.detail_info, null);
+                detail_info_frame.addView(detailInfoView);
+            }
+        });
+
+        gray_screen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (detail_info_layout.getVisibility() == View.VISIBLE) {
+                    detail_info_layout.setVisibility(View.GONE);
+                }
             }
         });
 

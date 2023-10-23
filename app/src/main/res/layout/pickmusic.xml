@@ -274,11 +274,22 @@
         android:background="#91646464"
         android:visibility="gone">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/gray_screen"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/detail_cardview"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:paddingBottom="10dp"/>
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:cardCornerRadius="15dp"
+            android:id="@+id/detail_cardview"
             >
             <FrameLayout
                 android:layout_width="match_parent"

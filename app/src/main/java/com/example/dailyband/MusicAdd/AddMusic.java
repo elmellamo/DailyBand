@@ -88,7 +88,7 @@ public class AddMusic extends AppCompatActivity {
     private RecyclerView musicTrackView;
     private LinearLayoutManager llm;
     private RecyclerView.Adapter adapter;
-    private ConstraintLayout detail_pickup_layout;
+    private ConstraintLayout detail_pickup_layout, gray_screen;
     private FrameLayout detail_instrument_frame;
     private List<ComplexName> parents;
     PianoFragment pianoFragment;
@@ -117,6 +117,7 @@ public class AddMusic extends AppCompatActivity {
         playbtn2 = findViewById(R.id.playbtn2);
         pianoFragment = new PianoFragment();
         drumFragment = new DrumFragment();
+        gray_screen = findViewById(R.id.gray_screen);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.add_category_framelayout, new CategoryAddMusic()).commit();
 
@@ -134,6 +135,14 @@ public class AddMusic extends AppCompatActivity {
         adapter = new MusicTrackAdapter(tracks);
         musicTrackView.setAdapter(adapter);
 
+        gray_screen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (detail_pickup_layout.getVisibility() == View.VISIBLE) {
+                    detail_pickup_layout.setVisibility(View.GONE);
+                }
+            }
+        });
         nextmenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,14 +160,6 @@ public class AddMusic extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 myStartActivity(HomeMain.class);
-            }
-        });
-        detail_pickup_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (detail_pickup_layout.getVisibility() == View.VISIBLE) {
-                    detail_pickup_layout.setVisibility(View.GONE);
-                }
             }
         });
         plusbtn.setOnClickListener(new View.OnClickListener() {
