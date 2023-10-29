@@ -1,8 +1,8 @@
 package com.example.dailyband.MusicAdd;
 
 import static android.Manifest.permission;
-
 import android.Manifest;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -345,6 +345,7 @@ public class AddMusic extends AppCompatActivity {
             }
         }
     }
+
     private void uploadToFirebase(){
         TextInputLayout textInputLayout = findViewById(R.id.songname_edit_layout);
         final String title = textInputLayout.getEditText().getText().toString();

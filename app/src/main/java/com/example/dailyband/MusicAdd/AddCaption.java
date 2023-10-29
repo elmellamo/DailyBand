@@ -54,29 +54,24 @@ public class AddCaption extends AppCompatActivity {
 
     private  void goUpload(){
         String writer, play, singer, explain;
-
-        if (play_explain.getText() == null) {
+        explain = play_explain.getText().toString();
+        singer = play_singer.getText().toString();
+        play = play_content.getText().toString();
+        writer = writer_content.getText().toString();
+        if (explain.isEmpty()) {
             explain = "음악 소개가 없습니다";
-        } else {
-            explain = play_explain.getText().toString();
         }
-        if (play_singer.getText() == null) {
+        if (singer.isEmpty()) {
             singer = "노래를 부른 사람에 대한 설명이 없습니다";
-        } else {
-            singer = play_singer.getText().toString();
         }
-        if (play_content.getText() == null) {
+        if (play.isEmpty()) {
             play = "사용한 연주에 대한 설명이 없습니다";
-        } else {
-            play = play_content.getText().toString();
         }
-        if (writer_content.getText() == null) {
+        if (writer.isEmpty()) {
             writer = "작곡한 사람에 대한 설명이 없습니다";
-        } else {
-            writer = writer_content.getText().toString();
         }
 
-        postId = mFirebaseMethods.addSongToDatabase(title, parents);
+        postId = mFirebaseMethods.addSongToDatabase(title, explain, singer, play, writer, parents);
         mFirebaseMethods.uploadNewStorage(title, uri, postId);
         myStartActivity(HomeMain.class);
     }

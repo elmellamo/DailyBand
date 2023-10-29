@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/graygreen"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/top_musicinfo_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_weight="0.2"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="15dp">
+        <ImageView
+            android:id="@+id/clearimg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/clear_green"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/title_musicinfo"
+            android:textStyle="bold"
+            android:text="음악 소개"
+            android:textSize="25sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/infolayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_musicinfo_layout"
+        app:layout_constraintVertical_weight="0.1"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아티스트"
+            android:textColor="#99A98F"
+            android:textSize="15sp"
+            android:id="@+id/artistbtn"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/writerbtn"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아티스트 이름"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:id="@+id/artisttxt"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/artistbtn"/>
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="작곡"
+            android:textColor="#99A98F"
+            android:textSize="15sp"
+            android:id="@+id/writerbtn"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/artistbtn"
+            app:layout_constraintBottom_toTopOf="@+id/playbtn"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="작곡가 이름 들어가야 합니다."
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:scrollHorizontally="true"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:id="@+id/writertxt"
+            app:layout_constraintTop_toBottomOf="@+id/artisttxt"
+            app:layout_constraintBottom_toTopOf="@+id/playtxt"
+            app:layout_constraintLeft_toLeftOf="@+id/artisttxt"/>
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="연주"
+            android:textColor="#99A98F"
+            android:textSize="15sp"
+            android:id="@+id/playbtn"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/writerbtn"
+            app:layout_constraintBottom_toTopOf="@+id/singbtn"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="연주하는 악기"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:id="@+id/playtxt"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:scrollHorizontally="true"
+            app:layout_constraintTop_toBottomOf="@+id/writertxt"
+            app:layout_constraintLeft_toLeftOf="@+id/writertxt"/>
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="노래"
+            android:textColor="#99A98F"
+            android:textSize="15sp"
+            android:id="@+id/singbtn"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/playbtn"
+            app:layout_constraintBottom_toTopOf="@+id/infobtn"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="노래한 사람 이름이 들어가야 합니다."
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:scrollHorizontally="true"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:id="@+id/singtxt"
+            app:layout_constraintTop_toBottomOf="@+id/playtxt"
+            app:layout_constraintLeft_toLeftOf="@+id/playtxt"/>
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="음악 설명"
+            android:textColor="#99A98F"
+            android:textSize="15sp"
+            android:id="@+id/infobtn"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/singbtn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/infolayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="15dp">
+
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="음악 소개 설명이 없습니다."
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:id="@+id/infotxt"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/infobtn"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:scrollHorizontally="true"
+            />
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -57,7 +57,7 @@ public class TestParent extends AppCompatActivity {
         final String title = textInputLayout.getEditText().getText().toString();
         if(title.length()>0){
             //여기 아무것도 녹음하지 않았을 때 안 함. 테스트니까..!
-            postId = mFirebaseMethods.addSongToDatabase(title, parents);
+            //postId = mFirebaseMethods.addSongToDatabase(title, parents);
             Intent intent = new Intent(this, HomeMain.class);
             startActivity(intent);
         }else{

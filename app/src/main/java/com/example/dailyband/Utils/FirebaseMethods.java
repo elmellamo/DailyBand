@@ -212,54 +212,6 @@ public class FirebaseMethods {
             removeLike(songId, writer_uid, listener);
         }
     }
-    //부모, 자식 없이 우선 타이틀, 녹음만 스토리지에 올리기
-    //흑흑 녹음 왜 오류나는 거임 >> 타이틀만 우선해서 하트순> 최신순 실험해보자
-    public void uploadNewStorage(final String title, String outputFile, String postId) {
-        Log.e("로그", "음악 업로드 중...");
-
-        String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        //uploadkey=1;
-        Uri fileUri = Uri.fromFile(new File(outputFile));
-        StorageReference storageReference = mStorageReference
-                .child("songs/" + postId + "/" + fileUri.getLastPathSegment());
-        storageReference.putFile(fileUri).addOnSuccessListener(taskSnapshot -> {
-           //업로드 시 성공 처리
-            Toast.makeText(mContext, "노래가 성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show();
-        }).addOnFailureListener(e->{
-            //업로드 실패 시 처리
-            Toast.makeText(mContext, "노래 등록에 실패하였습니다.", Toast.LENGTH_SHORT).show();
-        });
-
-
-        Intent intent = new Intent(mContext, HomeMain.class);
-        mContext.startActivity(intent);
-    }
-
-//    public void uploadNewStorage(final String title, Uri fileUri, String postId) {
-//        if (fileUri == null) {
-//            Log.e("로그", "File URI is null");
-//            // 적절한 예외 처리 또는 오류 메시지를 사용하여 사용자에게 알림
-//            return;
-//        }
-//        Log.e("로그", "음악 업로드 중...");
-//
-//        String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        //uploadkey=1;
-//        //Uri fileUri = Uri.fromFile(new File(outputFile));
-//        StorageReference storageReference = mStorageReference
-//                .child("songs/" + postId + "/" + fileUri.getLastPathSegment());
-//        storageReference.putFile(fileUri).addOnSuccessListener(taskSnapshot -> {
-//            //업로드 시 성공 처리
-//            Toast.makeText(mContext, "노래가 성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show();
-//        }).addOnFailureListener(e->{
-//            //업로드 실패 시 처리
-//            Toast.makeText(mContext, "노래 등록에 실패하였습니다.", Toast.LENGTH_SHORT).show();
-//        });
-//
-//        Intent intent = new Intent(mContext, HomeMain.class);
-//        mContext.startActivity(intent);
-//    }
-    // Uri 로 파일 업로드
     public void uploadNewStorage(final String title, Uri fileUri, String postId) {
         if (fileUri == null) {
             Log.e("로그", "File URI is null");
@@ -289,7 +241,7 @@ public class FirebaseMethods {
         mContext.startActivity(intent);
     }
 
-    public String addSongToDatabase(String title, List<ComplexName> original){
+    public String addSongToDatabase(String title, String explain, String singer, String play, String writer, List<ComplexName> original){
         Log.e("로그", "addSongToDatabase: 데이터 베이스에 노래 추가");
 
         String newPostKey = myRef.child("songs").push().getKey();
@@ -299,6 +251,10 @@ public class FirebaseMethods {
         testSong.setUser_id(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
         testSong.setPost_id(newPostKey);
         testSong.setLove(1);
+        testSong.setPlay(play);
+        testSong.setExplain(explain);
+        testSong.setSinger(singer);
+        testSong.setWriter(writer);
 
         // 데이터베이스에 넣기
         assert newPostKey != null;
@@ -319,20 +275,6 @@ public class FirebaseMethods {
                 //mychildren 밑에는 origianl곡의 postid넣고, 그 밑에 콜라보한 곡의 id넣고, complexname 다 넣고
                 //myparents밑에는 현재 곡의 postid넣고, 그 밑에 원곡되는 부모 곡의 id넣고, complexname 다 넣고
             }
-            /*Child collab = new Child();
-            collab.setParents(original);
-
-            myRef.child("my_parents").child(newPostKey).child().setValue(collab).addOnSuccessListener(
-                    aVoid->{ //해당 원곡이 되는 original 밑에는 그 곡을 콜라보한 곡들을 밑으로 리스트 쭉 넣고
-                        for(ComplexName parent : original){
-                            ComplexName mycomplex = new ComplexName();
-                            mycomplex.setSongid(newPostKey);
-                            mycomplex.setTitle(title);
-                            mycomplex.setWriteruid(userID);
-                            myRef.child("my_children").child(parent.getSongid()).setValue(mycomplex);
-                        }
-                    }
-            );*/
         }
 
         return newPostKey;

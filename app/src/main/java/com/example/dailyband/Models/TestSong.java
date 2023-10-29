@@ -11,18 +11,27 @@ public class TestSong implements Parcelable {
     private String post_id;
     private String user_id;
     private String title;
+    private String writer;
+    private String explain;
+    private String singer;
+    private String play;
     private int love;
 
     public TestSong() {
     }
 
     public TestSong(String title, String date_created, String post_id,
-                String user_id, int love) {
+                String user_id, int love, String writer, String explain, String singer,
+                    String play) {
         this.date_created = date_created;
         this.post_id = post_id;
         this.user_id = user_id;
         this.title = title;
         this.love = love;
+        this.writer = writer;
+        this.explain = explain;
+        this.singer = singer;
+        this.play = play;
     }
 
     protected TestSong(Parcel in) {
@@ -31,6 +40,10 @@ public class TestSong implements Parcelable {
         user_id = in.readString();
         title = in.readString();
         love = in.readInt();
+        writer = in.readString();
+        explain = in.readString();
+        singer = in.readString();
+        play = in.readString();
     }
 
     @Override
@@ -40,6 +53,10 @@ public class TestSong implements Parcelable {
         dest.writeString(user_id);
         dest.writeString(title);
         dest.writeInt(love);
+        dest.writeString(writer);
+        dest.writeString(explain);
+        dest.writeString(singer);
+        dest.writeString(play);
     }
 
     @Override
@@ -62,6 +79,16 @@ public class TestSong implements Parcelable {
     public static Creator<TestSong> getCREATOR() {
         return CREATOR;
     }
+
+    public String getWriter(){return  writer;}
+    public  void setWriter(String writer){this.writer = writer;}
+    public  String getExplain(){return  explain;}
+    public  void setExplain(String explain){this.explain = explain;}
+    public  String getSinger(){return singer;}
+    public  void setSinger(String singer){this.singer = singer;}
+    public String getPlay(){return  play;}
+    public  void setPlay(String play){this.play = play;}
+
     public String getTitle(){
         return title;
     }
@@ -107,6 +134,10 @@ public class TestSong implements Parcelable {
                 ", date_created='" + date_created + '\'' +
                 ", post_id='" + post_id + '\'' +
                 ", love='" + love + '\'' +
+                ", writer='" + writer + '\''+
+                ", explain='" + explain + '\'' +
+                ", singer='" + singer + '\'' +
+                ", play='" + play + '\'' +
                 ", user_id='" + user_id +
                 '}';
     }

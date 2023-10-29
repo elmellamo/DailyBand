@@ -50,6 +50,10 @@ public class DetailInfoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //해당 액티비티 관련 인포 뜨게 만들어야 한다.
+                if(getActivity() instanceof PickMusic){
+                    PickMusic pickMusic = (PickMusic) getActivity();
+                    pickMusic.showUpInfo();
+                }
             }
         });
         return view;

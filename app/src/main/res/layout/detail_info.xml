@@ -141,9 +141,9 @@
 
             <ImageView
                 android:id="@+id/creditbtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/info_ppl"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/musicnote"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -154,7 +154,7 @@
                 android:id="@+id/credittxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="노래 크레딧 보기"
+                android:text="노래 소개 보기"
                 android:textSize="20sp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/creditbtn"

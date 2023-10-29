@@ -2,13 +2,16 @@ package com.example.dailyband.ShowMusic;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,19 +22,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.R;
-import com.example.dailyband.MusicAdd.TestParent;
 import com.example.dailyband.Utils.FirebaseMethods;
-import com.example.dailyband.Utils.OnSongUrlListener;
 import com.example.dailyband.adapter.CollabAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +51,15 @@ public class PickMusic extends AppCompatActivity {
     private LinearLayout emptytxt;
     private MediaPlayer mediaPlayer;
     private FrameLayout detail_info_frame;
+    private ShowMusicInfoFragment showMusicInfoFragment;
+    private DetailInfoFragment detailInfoFragment;
+    private StorageReference songRef;
+    SeekBar seekBar;
+    Runnable runnable;
+    Handler handler;
+    private boolean isPlaying = false;
+    // MediaPlayer 일시정지된 지점을 저장하는 변수
+    private int pausedPosition = 0;
     private void updateHeartButton(boolean like) {
         heartbtn = findViewById(R.id.heartbtn);
         if (like) {
@@ -70,7 +82,10 @@ public class PickMusic extends AppCompatActivity {
 
         mFirebaseMethods = new FirebaseMethods(PickMusic.this);
         mediaPlayer = new MediaPlayer();
-
+        detailInfoFragment = new DetailInfoFragment();
+        showMusicInfoFragment = new ShowMusicInfoFragment();
+        handler = new Handler();
+        seekBar = findViewById(R.id.seek_bar);
         playbtn = findViewById(R.id.playbtn);
         stopbtn = findViewById(R.id.stopbtn);
         picksongname = findViewById(R.id.pick_songname);
@@ -84,16 +99,28 @@ public class PickMusic extends AppCompatActivity {
         recyclerView = findViewById(R.id.collaborationlist);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         getCollab(postId);
+        getInfo();
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if(b){
+                    mediaPlayer.seekTo(i);
+                    seekBar.setProgress(i);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
 
         optionmenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent2 = new Intent(PickMusic.this, TestParent.class);
-                //intent2.putExtra("parent_Id", postId);
-                //intent2.putExtra("parent_title", title);
-                //intent2.putExtra("writer_uid", writer_uid); //해당 노래를 작곡한 사람
-                //startActivity(intent2);
-
                 // detail_info_layout을 보이도록 변경합니다.
                 detail_info_layout.setVisibility(View.VISIBLE);
 
@@ -101,6 +128,8 @@ public class PickMusic extends AppCompatActivity {
                 LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
                 View detailInfoView = inflater.inflate(R.layout.detail_info, null);
                 detail_info_frame.addView(detailInfoView);
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, detailInfoFragment).commit();
             }
         });
 
@@ -155,15 +184,82 @@ public class PickMusic extends AppCompatActivity {
                 });
             }
         });
+        // playBtn 클릭 이벤트 처리
         playbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mediaPlayer == null){
-                    mpgetReady();
-                    playbtn.setImageResource(R.drawable.pause);
-                }else{
-                    mediaPlayer.pause();
-                    playbtn.setImageResource(R.drawable.playbtn);
+                // 현재 MediaPlayer가 null이거나 재생 중이지 않은 경우
+                if (mediaPlayer == null || !mediaPlayer.isPlaying()) {
+                    // Firebase Storage에서 WAV 파일 다운로드 및 재생 코드
+                    StorageReference songRef = FirebaseStorage.getInstance().getReference().child("songs/"+postId+"/song");
+                    songRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String downloadUrl = uri.toString();
+
+                            mediaPlayer = new MediaPlayer();
+                            try {
+                                mediaPlayer.setDataSource(downloadUrl);
+                                mediaPlayer.prepareAsync(); //비동기로 준비
+                                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                    @Override
+                                    public void onPrepared(MediaPlayer mediaPlayer) {
+                                        mediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+                                            @Override
+                                            public void onBufferingUpdate(MediaPlayer mp, int i) {
+                                                double ratio = i/100.0;
+                                                int bufferingLevel = (int)(mp.getDuration()*ratio);
+                                                seekBar.setSecondaryProgress(bufferingLevel);
+                                            }
+                                        });
+
+                                        // 일시정지된 지점부터 재생
+                                        seekBar.setMax(mediaPlayer.getDuration());
+                                        mediaPlayer.seekTo(pausedPosition);
+                                        mediaPlayer.start();
+                                        isPlaying = true;
+                                        updateSeekbar();
+                                        // 재생 중인 경우 Play 버튼 이미지를 Pause로 변경
+                                        playbtn.setImageResource(R.drawable.pause);
+                                    }
+                                });
+
+                                // 재생이 끝날 때의 콜백 처리
+                                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                    @Override
+                                    public void onCompletion(MediaPlayer mp) {
+                                        // 재생이 끝나면 seekBar를 초기 위치로 이동하고 playbtn 이미지를 다시 Play 이미지로 변경
+                                        seekBar.setProgress(0);
+                                        playbtn.setImageResource(R.drawable.playbtn);
+                                    }
+                                });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // 다운로드 실패 시 처리
+                        }
+                    });
+                } else {
+                    // MediaPlayer가 재생 중인 경우 일시정지
+                    if (isPlaying) {
+                        // 일시정지된 지점을 저장
+                        pausedPosition = mediaPlayer.getCurrentPosition();
+                        mediaPlayer.pause();
+                        isPlaying = false;
+                        // Pause 버튼 이미지를 Play로 변경
+                        playbtn.setImageResource(R.drawable.playbtn);
+                    } else {
+                        // 일시정지된 지점부터 재생
+                        mediaPlayer.seekTo(pausedPosition);
+                        mediaPlayer.start();
+                        isPlaying = true;
+                        // 재생 중인 경우 Play 버튼 이미지를 Pause로 변경
+                        playbtn.setImageResource(R.drawable.pause);
+                    }
                 }
             }
         });
@@ -171,98 +267,83 @@ public class PickMusic extends AppCompatActivity {
         stopbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mediaPlayer.isPlaying()) {
+                if (mediaPlayer != null) {
                     mediaPlayer.stop();
-                    mediaPlayer.reset();
+                    mediaPlayer.release();
+                    mediaPlayer = null;
+                    pausedPosition = 0;
+                    seekBar.setProgress(0); // seekBar를 맨 처음 위치로 되돌립니다.
+
+                    playbtn.setImageResource(R.drawable.playbtn);
                 }
             }
         });
-
-/*
-        mFirebaseMethods.streamWavFile(postId, new FirebaseMethods.StreamCallback() {
-            @Override
-            public void onStreamReady(InputStream inputStream) {
-                try {
-                    // 스트림을 설정하고 MediaPlayer를 재생합니다.
-                    FileInputStream fis = new FileInputStream(inputStream);
-                    mediaPlayer.setDataSource(inputStream.getFD());
-                    mediaPlayer.prepareAsync();
-
-                    // MediaPlayer 준비가 완료되면 재생
-                    mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                        @Override
-                        public void onPrepared(MediaPlayer mp) {
-                            mp.start();
-                            playbtn.setImageResource(R.drawable.pause);
-                        }
-                    });
-
-                    // Play 버튼 클릭 시 음악 일시 정지 또는 재생
-                    playbtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (mediaPlayer.isPlaying()) {
-                                mediaPlayer.pause();
-                                playbtn.setImageResource(R.drawable.playbtn);
-                            } else {
-                                mediaPlayer.start();
-                                playbtn.setImageResource(R.drawable.pause);
-                            }
-                        }
-                    });
-
-                    // Stop 버튼 클릭 시 음악 중지
-                    stopbtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (mediaPlayer.isPlaying()) {
-                                mediaPlayer.stop();
-                                mediaPlayer.reset();
-                                playbtn.setImageResource(R.drawable.playbtn);
-                            }
-                        }
-                    });
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    // 재생 중 오류가 발생한 경우 처리
+    }
+    public void updateSeekbar() {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            int curPos = mediaPlayer.getCurrentPosition();
+            seekBar.setProgress(curPos);
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    updateSeekbar();
                 }
-            }
-
-            @Override
-            public void onStreamFailed(String errorMessage) {
-                // 스트림 다운로드 실패 시 처리
-            }
-        });*/
-
+            };
+            handler.postDelayed(runnable, 1000);
+        }
     }
 
-    private void mpgetReady(){
-        mFirebaseMethods.getSongUrl(postId, new OnSongUrlListener() {
-            @Override
-            public void onSuccess(String songUrl) {
-                // 성공적으로 URL을 가져왔을 때의 처리를 여기에 작성합니다.
-                try{
-                    mediaPlayer.setDataSource(songUrl);
-                    mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                        @Override
-                        public void onPrepared(MediaPlayer mp) {
-                            mp.start();
-                        }
-                    });
+    @Override
+    protected void onPause() {
+        super.onPause();
+        /* 액티비티가 일시정지될 때 MediaPlayer를 중지하고 해제합니다.
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        */
+    }
 
-                    mediaPlayer.prepare();
-                }catch (IOException e){
-                    e.printStackTrace();
+    public void showUpInfo(){
+        getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, showMusicInfoFragment).commit();
+    }
+    public void blindFrame(){
+        if (detail_info_layout.getVisibility() == View.VISIBLE) {
+            detail_info_layout.setVisibility(View.GONE);
+        }
+    }
+
+    private void getInfo(){
+        DatabaseReference songsRef = FirebaseDatabase.getInstance().getReference().child("songs").child(postId);
+
+        songsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // dataSnapshot은 postId에 해당하는 데이터를 나타냅니다.
+                if (dataSnapshot.exists()) {
+                    // 데이터가 존재하는 경우에 대한 처리
+                    // dataSnapshot을 이용하여 필요한 데이터를 가져올 수 있습니다.
+                    String writer = dataSnapshot.child("writer").getValue(String.class);
+                    String artist = dataSnapshot.child("user_id").getValue(String.class);
+                    String play = dataSnapshot.child("play").getValue(String.class);
+                    String singer = dataSnapshot.child("singer").getValue(String.class);
+                    String explain = dataSnapshot.child("explain").getValue(String.class);
+
+
+                    showMusicInfoFragment.setSongInfo(artist, writer, play, singer, explain);
+                } else {
+                    // 데이터가 존재하지 않는 경우에 대한 처리
                 }
             }
 
             @Override
-            public void onFailure(String errorMessage) {
-                // URL 가져오기가 실패한 경우의 처리를 여기에 작성합니다.
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // 데이터 가져오기가 실패한 경우에 대한 처리
             }
         });
     }
+
     private void getCollab(String postId){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
