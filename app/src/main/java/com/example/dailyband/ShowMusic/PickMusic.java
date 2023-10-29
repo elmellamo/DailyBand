@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dailyband.Models.ComplexName;
+import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.CollabAdapter;
@@ -60,6 +61,8 @@ public class PickMusic extends AppCompatActivity {
     private boolean isPlaying = false;
     // MediaPlayer 일시정지된 지점을 저장하는 변수
     private int pausedPosition = 0;
+    private String writer, explain, singer, play, artist;
+
     private void updateHeartButton(boolean like) {
         heartbtn = findViewById(R.id.heartbtn);
         if (like) {
@@ -76,9 +79,15 @@ public class PickMusic extends AppCompatActivity {
         setContentView(R.layout.pickmusic);
 
         Intent intent = getIntent();
-        postId = intent.getStringExtra("postId");
-        title = intent.getStringExtra("title");
-        writer_uid = intent.getStringExtra("user_id");
+        TestSong selectedSong = (TestSong) intent.getParcelableExtra("selectedSong");
+        postId = selectedSong.getPost_id();
+        title = selectedSong.getTitle();
+        writer_uid = selectedSong.getUser_id();
+        writer = selectedSong.getWriter();
+        explain = selectedSong.getExplain();
+        singer = selectedSong.getSinger();
+        play = selectedSong.getPlay();
+        artist = selectedSong.getUser_id();
 
         mFirebaseMethods = new FirebaseMethods(PickMusic.this);
         mediaPlayer = new MediaPlayer();
@@ -100,6 +109,8 @@ public class PickMusic extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         getCollab(postId);
         getInfo();
+        setInfo();
+        setDetail();
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -123,12 +134,6 @@ public class PickMusic extends AppCompatActivity {
             public void onClick(View view) {
                 // detail_info_layout을 보이도록 변경합니다.
                 detail_info_layout.setVisibility(View.VISIBLE);
-
-                // detail_info_frame에 detail_info.xml에서 시작하는 뷰를 추가합니다.
-                LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-                View detailInfoView = inflater.inflate(R.layout.detail_info, null);
-                detail_info_frame.addView(detailInfoView);
-
                 getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, detailInfoFragment).commit();
             }
         });
@@ -315,25 +320,18 @@ public class PickMusic extends AppCompatActivity {
     }
 
     private void getInfo(){
-        DatabaseReference songsRef = FirebaseDatabase.getInstance().getReference().child("songs").child(postId);
-
-        songsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference userAccountRef = FirebaseDatabase.getInstance().getReference().child("UserAccount").child(writer_uid);
+        userAccountRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // dataSnapshot은 postId에 해당하는 데이터를 나타냅니다.
-                if (dataSnapshot.exists()) {
-                    // 데이터가 존재하는 경우에 대한 처리
-                    // dataSnapshot을 이용하여 필요한 데이터를 가져올 수 있습니다.
-                    String writer = dataSnapshot.child("writer").getValue(String.class);
-                    String artist = dataSnapshot.child("user_id").getValue(String.class);
-                    String play = dataSnapshot.child("play").getValue(String.class);
-                    String singer = dataSnapshot.child("singer").getValue(String.class);
-                    String explain = dataSnapshot.child("explain").getValue(String.class);
-
-
-                    showMusicInfoFragment.setSongInfo(artist, writer, play, singer, explain);
+            public void onDataChange(@NonNull DataSnapshot userAccountDataSnapshot) {
+                if (userAccountDataSnapshot.exists()) {
+                    // UserAccount 카테고리에서 name 값을 가져와서 사용하거나 처리할 수 있습니다.
+                    artist = userAccountDataSnapshot.child("name").getValue(String.class);
+                    setDetail();
+                    setInfo();
+                    // 가져온 데이터를 사용하거나 처리할 수 있습니다.
                 } else {
-                    // 데이터가 존재하지 않는 경우에 대한 처리
+                    // "UserAccount" 카테고리에서 해당 데이터가 없는 경우에 대한 처리
                 }
             }
 
@@ -342,6 +340,13 @@ public class PickMusic extends AppCompatActivity {
                 // 데이터 가져오기가 실패한 경우에 대한 처리
             }
         });
+    }
+
+    public void setDetail(){
+        detailInfoFragment.setDetailInfo(isLiked, title, artist);
+    }
+    public void setInfo(){
+        showMusicInfoFragment.setSongInfo(artist, writer, play, singer, explain);
     }
 
     private void getCollab(String postId){
