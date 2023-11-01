@@ -29,9 +29,6 @@ public class StartActivity extends AppCompatActivity {
 
         getWindow().setStatusBarColor(ContextCompat.getColor(StartActivity.this, R.color.primarydark_color));
 
-        Intent musicServiceIntent = new Intent(this, MusicService.class);
-        startService(musicServiceIntent);
-
         View rootView = findViewById(R.id.background_layout);
         rootView.setOnTouchListener(new View.OnTouchListener() {
             @Override

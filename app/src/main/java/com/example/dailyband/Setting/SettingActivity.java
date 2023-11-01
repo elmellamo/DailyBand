@@ -4,8 +4,11 @@ import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -28,7 +31,10 @@ import com.bumptech.glide.Glide;
 import com.example.dailyband.Login.LoginActivity;
 import com.example.dailyband.Login.RegisterActivity;
 import com.example.dailyband.R;
+import com.example.dailyband.Utils.SharedData;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -39,9 +45,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
 
 public class SettingActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -51,6 +60,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private StorageReference storageRef;
     private ImageView profileImg;
+    private ImageView tmpImg;
     private Uri selectedImageUri = null;
     private Uri userImage=null;
     private CardView cardView;
@@ -118,6 +128,29 @@ public class SettingActivity extends AppCompatActivity {
 
             }
         });
+
+
+
+
+        String localFilePath = getApplicationContext().getFilesDir() + "/local_image.jpg"; // 로컬에 저장할 파일 경로
+        File localFile = new File(localFilePath); // 이미지 파일의 로컬 경로
+        if (localFile.exists()) {
+            ImageView imageView7 = findViewById(R.id.imageView7);
+
+            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+            if (imageView7 != null) {
+
+                imageView7.setImageBitmap(bitmap);
+                imageView7.bringToFront();
+                Toast.makeText(SettingActivity.this, "로컬 파일 존재", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            // 파일이 존재하지 않는 경우
+            // 사용자에게 알림을 표시하거나 다른 조치를 취할 수 있습니다.
+        }
+
+
+
 
         imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
             String imageUrl = uri.toString();

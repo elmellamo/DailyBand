@@ -1,33 +1,95 @@
 package com.example.dailyband.Start;
+import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
+
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.UiThread;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.R;
+import com.example.dailyband.Setting.SettingActivity;
+import com.example.dailyband.Utils.MusicService;
+import com.example.dailyband.Utils.SharedData;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.example.dailyband.Start.StartActivity;
 import com.example.dailyband.Login.RegisterActivity;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 public class SplashActivity extends AppCompatActivity{
 
-    private static final long SPLASH_DELAY = 650; // 스플래시 화면 표시 시간 (2 초)
+    private static final long SPLASH_DELAY = 650;
     private boolean AUTO_LOGIN = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        final TextView splashText = findViewById(R.id.splashTextView);
+        final ImageView splashImage = findViewById(R.id.splashImage);
+        Intent musicServiceIntent = new Intent(this, MusicService.class);
+        startService(musicServiceIntent);
+
+        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("profile_images/" + userUid + ".jpg");
+        //String imagePath = Environment.getExternalStorageDirectory() + "/" + userUid + ".jpg";
+        String localFilePath = getApplicationContext().getFilesDir() + "/local_image.jpg"; // 로컬에 저장할 파일 경로
+        File localFile = new File(localFilePath);
+        if (localFile.exists()) {
+            localFile.delete();
+        }
+        storageRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+            // 다운로드 성공
+            // localFilePath에 이미지가 저장됨
+            // 여기서 UI 업데이트 등을 수행할 수 있습니다.
+            Toast.makeText(SplashActivity.this, "이미지 다운로드", Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(exception -> {
+            // 다운로드 실패
+        }).addOnProgressListener(taskSnapshot -> {
+            // 다운로드 진행 중
+        });
+
+        //storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+          //  String imageUrl = uri.toString();
+            //Toast.makeText(SplashActivity.this, "imageUrl 다운로드", Toast.LENGTH_SHORT).show();
+
+            //Glide.with(this)
+              //      .load(imageUrl)
+                //    .into(splashImage); // profileImage는 앱의 이미지뷰 객체
+        //});
+
+
+
+
+
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -39,8 +101,7 @@ public class SplashActivity extends AppCompatActivity{
             AUTO_LOGIN=false;
 
 
-        final TextView splashText = findViewById(R.id.splashTextView);
-        final ImageView splashImage = findViewById(R.id.splashImage);
+
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_splash_textview);
         Animation animation1 = AnimationUtils.loadAnimation(this,R.anim.anim_splash_imageview);
         splashImage.setVisibility(View.VISIBLE);
@@ -48,7 +109,6 @@ public class SplashActivity extends AppCompatActivity{
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {}
-
             @Override
             public void onAnimationEnd(Animation animation) {
                 // 애니메이션 종료 후, 메인 액티비티를 시작하고 현재 액티비티를 종료합니다.
@@ -124,5 +184,37 @@ public class SplashActivity extends AppCompatActivity{
             public void onAnimationRepeat(Animation animation) {
             }
         });
+    }
+
+
+    public class MyOuterClass {
+        // 바깥 클래스에서 정적 멤버 선언
+        public class MyInnerClass {
+            // 내부 클래스에서 정적 멤버를 사용할 수 있음
+            public void downloadImage(String userUid) {
+                // Firebase Storage에서 이미지를 가져와 어플리케이션 내부 저장소에 저장하는 코드
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference storageRef = storage.getReference().child("images/" + userUid + ".jpg");
+
+                storageRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(bytes -> {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+                    // 저장할 경로 설정 (내부 저장소)
+                    String imagePath = Environment.getExternalStorageDirectory() + "/" + userUid + ".jpg";
+
+                    try {
+                        // 이미지를 내부 저장소에 저장
+                        FileOutputStream fos = new FileOutputStream(imagePath);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                        fos.close();
+                        Log.d(TAG, "Image downloaded and saved to " + imagePath);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Error saving image: " + e.getMessage());
+                    }
+                }).addOnFailureListener(exception -> {
+                    Log.e(TAG, "Error downloading image: " + exception.getMessage());
+                });
+            }
+        }
     }
 }
