@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -51,6 +53,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.IOException;
 
 public class SettingActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -135,13 +138,40 @@ public class SettingActivity extends AppCompatActivity {
         String localFilePath = getApplicationContext().getFilesDir() + "/local_image.jpg"; // 로컬에 저장할 파일 경로
         File localFile = new File(localFilePath); // 이미지 파일의 로컬 경로
         if (localFile.exists()) {
-            ImageView imageView7 = findViewById(R.id.imageView7);
+            //ImageView imageView7 = findViewById(R.id.imageView7);
 
             Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-            if (imageView7 != null) {
 
-                imageView7.setImageBitmap(bitmap);
-                imageView7.bringToFront();
+
+            int rotation = 0;
+            try {
+                ExifInterface exif = new ExifInterface(localFilePath);
+                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+                switch (orientation) {
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        rotation = 90;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        rotation = 180;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        rotation = 270;
+                        break;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Bitmap rotatedBitmap = rotateImage(bitmap, rotation);
+
+
+            if (profileImg != null) {
+
+                profileImg.setImageBitmap(rotatedBitmap);
+                //imageView7.setImageBitmap(rotatedBitmap);
+
+                //imageView7.bringToFront();
                 Toast.makeText(SettingActivity.this, "로컬 파일 존재", Toast.LENGTH_SHORT).show();
             }
         } else {
@@ -156,8 +186,8 @@ public class SettingActivity extends AppCompatActivity {
             String imageUrl = uri.toString();
             Glide.with(this)
                     .load(imageUrl)
-                    .placeholder(R.drawable.brid_second_img)
-                    .error(R.drawable.brid_second_img)
+                    //.placeholder(R.drawable.brid_second_img)
+                    //.error(R.drawable.brid_second_img)
                     .into(profileImg); // profileImage는 앱의 이미지뷰 객체
         });
 
@@ -449,6 +479,12 @@ public class SettingActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    private Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
     private void myStartActivity(Class c){
