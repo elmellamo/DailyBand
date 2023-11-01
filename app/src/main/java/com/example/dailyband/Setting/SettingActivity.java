@@ -58,10 +58,10 @@ public class SettingActivity extends AppCompatActivity {
     private ConstraintLayout setting_user_layout;
     private ConstraintLayout setting_email_layout;
     private ConstraintLayout cardview_email_layout;
-
     private ConstraintLayout cardview_layout;
     private ConstraintLayout setting_withdrawal_layout;
     private ConstraintLayout setting_logout_layout;
+    private ConstraintLayout setting_contact_layout;
     private boolean isCardViewVisible = false;
     private EditText name_cardview_edittext;
     private EditText email_cardview_edittext;
@@ -101,6 +101,7 @@ public class SettingActivity extends AppCompatActivity {
         email_pw_cardview_edittext = findViewById(R.id.email_pw_cardview_edittext);
         setting_withdrawal_layout = findViewById(R.id.setting_withdrawal_layout);
         setting_logout_layout = findViewById(R.id.setting_logout_layout);
+        setting_contact_layout = findViewById(R.id.setting_contact_layout);
 
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         StorageReference storageRef = storage.getReference().child("profile_images");
@@ -255,6 +256,19 @@ public class SettingActivity extends AppCompatActivity {
                 WITHDRAW();
             }
         });
+
+        setting_contact_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent email = new Intent(Intent.ACTION_SEND);
+                email.setType("plain/text");
+                String[] address = {"dobbydavid1@naver.com"};
+                email.putExtra(Intent.EXTRA_EMAIL, address);
+                email.putExtra(Intent.EXTRA_SUBJECT, "데일리밴드 1대1 문의");
+                email.putExtra(Intent.EXTRA_TEXT, "아이디 : \n\n문의사항 : ");
+                startActivity(email);
+            }
+        });
     }
 
 
@@ -301,8 +315,7 @@ public class SettingActivity extends AppCompatActivity {
         AuthCredential credential = EmailAuthProvider.getCredential(mAuth.getCurrentUser().getEmail(), password);
         FirebaseUser user = mAuth.getCurrentUser();
 
-        user.reauthenticate(credential)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+        user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -315,19 +328,18 @@ public class SettingActivity extends AppCompatActivity {
                             //여기까지 작동 정상적
 
                             // 이메일 업데이트
-                            user.updateEmail(newEmail)
+                            user.updateEmail(newEmail.toString())
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(SettingActivity.this, "이메일 수정에 성공하였습니다.", Toast.LENGTH_SHORT).show();
-                                                realtime_change_email(newEmail);
+                                                realtime_change_email(newEmail.toString());
 
                                             } else {
                                                 Exception e = task.getException();
                                                 Log.e("EmailUpdateError", e.getMessage());
                                                 Toast.makeText(SettingActivity.this, EMAIL_SET_TEXT, Toast.LENGTH_SHORT).show();
-
                                             }
                                         }
                                     });
@@ -373,7 +385,6 @@ public class SettingActivity extends AppCompatActivity {
         if (imageUri != null) {
             StorageReference storageRef = storage.getReference().child("profile_images");
             StorageReference imageRef = storageRef.child(userId+".jpg"); // 저장될 파일 이름
-
             UploadTask uploadTask = imageRef.putFile(imageUri);
 
             uploadTask.addOnSuccessListener(taskSnapshot -> {
@@ -381,8 +392,6 @@ public class SettingActivity extends AppCompatActivity {
                 imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     String imageUrl = uri.toString();
                     Toast.makeText(SettingActivity.this, "이미지 수정 성공", Toast.LENGTH_SHORT).show();
-
-                    // TODO: imageUrl을 사용하여 데이터베이스에 저장하거나 다른 작업 수행
 
                     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
                     databaseRef.child("user_photo").child(userId).child("profileImageUrl").setValue(imageUrl)
