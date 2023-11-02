@@ -11,8 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dailyband.Models.TestSong;
+import com.example.dailyband.ShowMusic.NewPickMusic;
 import com.example.dailyband.ShowMusic.PickMusic;
 import com.example.dailyband.R;
+import com.example.dailyband.ShowMusic.TestPickMusic;
 
 import java.util.List;
 
@@ -45,7 +47,7 @@ public class RankingSongAdapter extends RecyclerView.Adapter<RankingSongAdapter.
                 int adapterPosition = holder.getAbsoluteAdapterPosition();
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     TestSong selectedSong = songs.get(adapterPosition);
-                    Intent intent = new Intent(context, PickMusic.class);
+                    Intent intent = new Intent(context, NewPickMusic.class);
                     intent.putExtra("selectedSong", selectedSong);
 
                     context.startActivity(intent);

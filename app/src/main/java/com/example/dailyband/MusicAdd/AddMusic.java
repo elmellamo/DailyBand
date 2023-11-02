@@ -87,7 +87,6 @@ public class AddMusic extends AppCompatActivity {
     private boolean isPlaying = false;
     private FrameLayout addCategoryFrameLayout;
 
-    int mAudioSource = MediaRecorder.AudioSource.MIC;
     int mSampleRate = 44100;
     int mChannelCount = AudioFormat.CHANNEL_IN_STEREO;
     int mAudioFormat = AudioFormat.ENCODING_PCM_16BIT;
