@@ -57,9 +57,9 @@ public class ShowMusicInfoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //해당 프레임 다 안 보이게 해야 함.
-                if(getActivity() instanceof PickMusic){
-                    PickMusic pickMusic = (PickMusic) getActivity();
-                    pickMusic.blindFrame();
+                if(getActivity() instanceof NewPickMusic){
+                    NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                    newPickMusic.blindFrame();
                 }
             }
         });
