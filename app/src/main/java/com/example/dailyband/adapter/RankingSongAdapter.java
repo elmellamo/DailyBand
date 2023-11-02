@@ -11,10 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dailyband.Models.TestSong;
-import com.example.dailyband.ShowMusic.NewPickMusic;
-import com.example.dailyband.ShowMusic.PickMusic;
 import com.example.dailyband.R;
-import com.example.dailyband.ShowMusic.TestPickMusic;
+import com.example.dailyband.ShowMusic.NewPickMusic;
 
 import java.util.List;
 
