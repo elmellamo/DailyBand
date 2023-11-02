@@ -105,6 +105,7 @@ public class RecordingMain extends Fragment {
         filePath = new File(internalStorageDir, fileName).getAbsolutePath();
 
         waveRecorder = new WaveRecorder(filePath);
+        waveRecorder.setNoiseSuppressorActive(true);
         waveRecorder.startRecording();
         isRecording = true;
         isPaused = false;
@@ -118,6 +119,9 @@ public class RecordingMain extends Fragment {
             waveRecorder.stopRecording();
             isRecording = false;
             isPaused = false;
+
+
+            Toast.makeText(requireContext(), "녹음을 멈추고 저장합니다.", Toast.LENGTH_LONG).show();
 
             long currentTimeMillis = System.currentTimeMillis();
             // 시간을 원하는 포맷으로 변환합니다.

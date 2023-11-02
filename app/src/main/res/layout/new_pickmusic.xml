@@ -18,24 +18,38 @@
         android:paddingBottom="10dp"
         app:layout_constraintVertical_weight="0.9">
 
+        <com.gauravk.audiovisualizer.visualizer.WaveVisualizer
+            android:id="@+id/wave"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            custom:avColor="@color/test_main_clolr"
+            custom:avDensity="0.175"
+            custom:avSpeed="normal"
+            android:paddingHorizontal="20dp"
+            custom:avType="fill"
+            custom:layout_constraintBottom_toTopOf="@+id/ingmusic"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/picktop"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/iconlayout"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintVertical_weight="0.01"
             android:paddingLeft="20dp"
+            android:paddingVertical="20dp"
             android:paddingRight="20dp">
 
 
             <ImageView
-                android:id="@+id/backcontext"
+                android:id="@+id/heartbtn"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/back_arrow"
+                android:layout_height="35dp"
+                android:src="@drawable/heart_outline_new"
                 app:layout_constraintHorizontal_weight="0.1"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -52,9 +66,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:textStyle="bold"
                 android:textSize="25sp"
-                app:layout_constraintLeft_toRightOf="@+id/backcontext"
+                app:layout_constraintLeft_toRightOf="@+id/heartbtn"
                 app:layout_constraintRight_toLeftOf="@+id/optionmenu"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="20dp"
                 />
 
             <ImageView
@@ -75,61 +89,37 @@
             android:id="@+id/iconlayout"
             android:paddingHorizontal="20dp"
             app:layout_constraintTop_toBottomOf="@+id/picktop"
-            app:layout_constraintBottom_toTopOf="@+id/wavelayout"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintVertical_weight="0.01">
-
-            <ImageView
-                android:id="@+id/heartbtn"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:src="@drawable/heart_outline_new"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginEnd="15dp"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:id="@+id/wavelayout"
-            android:paddingHorizontal="20dp"
-            app:layout_constraintTop_toBottomOf="@+id/iconlayout"
             app:layout_constraintBottom_toTopOf="@+id/ingmusic"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintVertical_weight="0.01"
-            android:paddingVertical="15dp">
+            app:layout_constraintVertical_weight="0.2">
 
-            <com.gauravk.audiovisualizer.visualizer.WaveVisualizer
-                android:id="@+id/wave"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                custom:avColor="@color/test_main_clolr"
-                custom:avDensity="0.175"
-                custom:avSpeed="normal"
-                custom:avType="fill"
-                app:layout_constraintBottom_toBottomOf="parent"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/birdimg"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="10dp"
+                android:src="@drawable/new_icon"
+                app:civ_border_color="#000000"
+                app:civ_border_overlay="true"
+                app:civ_border_width="0dp"
+                custom:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/ingmusic"
-            android:background="@drawable/medicontrol"
-            app:layout_constraintTop_toBottomOf="@+id/wavelayout"
+            app:layout_constraintTop_toBottomOf="@+id/iconlayout"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintVertical_weight="0.01"
+            app:layout_constraintVertical_weight="0.07"
             android:layout_marginBottom="20dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
             android:layout_marginHorizontal="20dp"
             android:paddingRight="15dp"
             android:paddingLeft="20dp">
