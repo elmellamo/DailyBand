@@ -294,7 +294,7 @@ public class PickMusic extends AppCompatActivity {
                     updateSeekbar();
                 }
             };
-            handler.postDelayed(runnable, 1000);
+            handler.postDelayed(runnable, 100);
         }
     }
 

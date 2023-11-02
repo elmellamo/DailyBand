@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +35,7 @@ import java.util.List;
 
 public class HomeMain extends AppCompatActivity{
     private ImageButton addbtn, setbtn, librarybtn, myInfobtn;
+    private TextView username;
     private RecyclerView recyclerView;
     private RankingSongAdapter adapter;
     private List<TestSong> songs;
@@ -41,6 +44,7 @@ public class HomeMain extends AppCompatActivity{
     private DatabaseReference myRef;
     private FirebaseMethods mFirebaseMethods;
     private FirebaseAuth mAuth;
+    private String nickname;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,14 +52,17 @@ public class HomeMain extends AppCompatActivity{
 
         mFirebaseMethods = new FirebaseMethods(HomeMain.this);
 //
+        nickname = "사용자";
         addbtn = findViewById(R.id.addbtn);
         librarybtn = findViewById(R.id.librarybtn);
         recyclerView = findViewById(R.id.popularlist);
         myInfobtn = findViewById(R.id.myInfobtn);
+        username = findViewById(R.id.username);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         songs = new ArrayList<>();
-
+        getInfo();
         getSongs();
+        username.setText(nickname);
 
         librarybtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +127,28 @@ public class HomeMain extends AppCompatActivity{
             }
         });
 
+    }
+
+    private void getInfo(){
+        String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference userAccountRef = FirebaseDatabase.getInstance().getReference().child("UserAccount").child(userUID);
+        userAccountRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot userAccountDataSnapshot) {
+                if (userAccountDataSnapshot.exists()) {
+                    // UserAccount 카테고리에서 name 값을 가져와서 사용하거나 처리할 수 있습니다.
+                    nickname = userAccountDataSnapshot.child("name").getValue(String.class);
+                    username.setText(nickname);
+                } else {
+                    // "UserAccount" 카테고리에서 해당 데이터가 없는 경우에 대한 처리
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // 데이터 가져오기가 실패한 경우에 대한 처리
+            }
+        });
     }
 
     private void myStartActivity(Class c){

@@ -5,6 +5,7 @@ import android.Manifest;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioAttributes;
@@ -28,7 +29,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -41,18 +45,24 @@ import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.MusicFragment.CategoryAddMusic;
 import com.example.dailyband.MusicFragment.DrumFragment;
 import com.example.dailyband.MusicFragment.PianoFragment;
+import com.example.dailyband.MusicFragment.RecordingMain;
 import com.example.dailyband.R;
 import com.example.dailyband.Setting.SettingActivity;
 import com.example.dailyband.ShowMusic.PickMusic;
 import com.example.dailyband.Utils.FirebaseMethods;
+import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.example.dailyband.adapter.MusicTrackAdapter;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 
 public class AddMusic extends AppCompatActivity {
     public class MusicTrack {
@@ -60,7 +70,7 @@ public class AddMusic extends AppCompatActivity {
         public String title = "";
         public boolean isSpeaking = true;
     }
-
+    private static final int REQUEST_PERMISSION_CODE = 1000;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     //private MediaRecorder mediaRecorder;
     private MediaRecorder audioRecorder;
@@ -94,14 +104,18 @@ public class AddMusic extends AppCompatActivity {
     PianoFragment pianoFragment;
     CategoryAddMusic categoryAddMusic;
     DrumFragment drumFragment;
+    RecordingMain recordingMain;
     private ImageButton homeBtn, setbtn;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addmusic);
 
-        chkStoragePermission();
+
+        //chkAllPermissions();
+        //chkStoragePermission();
         mFirebaseMethods = new FirebaseMethods(AddMusic.this);
+        myPermissions();
 
         //녹음 파일 경로 저장
 //        String storagePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/record.3gp";
@@ -117,6 +131,7 @@ public class AddMusic extends AppCompatActivity {
         playbtn2 = findViewById(R.id.playbtn2);
         pianoFragment = new PianoFragment();
         drumFragment = new DrumFragment();
+        recordingMain = new RecordingMain();
         gray_screen = findViewById(R.id.gray_screen);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.add_category_framelayout, new CategoryAddMusic()).commit();
@@ -135,6 +150,18 @@ public class AddMusic extends AppCompatActivity {
         adapter = new MusicTrackAdapter(tracks);
         musicTrackView.setAdapter(adapter);
 
+        recordingMain.setOnRecordingCompletedListener(new OnRecordingCompletedListener() {
+            @Override
+            public void onRecordingCompleted(Uri recordingUri) {
+                // 현재 시간을 얻어옵니다.
+                long currentTimeMillis = System.currentTimeMillis();
+                // 시간을 원하는 포맷으로 변환합니다.
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                String formattedTime = sdf.format(new Date(currentTimeMillis));
+
+                addTrack(recordingUri, formattedTime);
+            }
+        });
         gray_screen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -179,16 +206,10 @@ public class AddMusic extends AppCompatActivity {
                 }
             }
         });
-
-//
-//        uploadbtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // firebase에 선택된 uri 업로드
-//                uploadToFirebase();
-//            }
-//        });
-
+    }
+    public void showUpRecording(){
+        detail_pickup_layout.setVisibility(View.VISIBLE);
+        getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, recordingMain).commit();
     }
     //피아노 보이게 하기
     public void showUpPiano(){
@@ -204,6 +225,7 @@ public class AddMusic extends AppCompatActivity {
     public void hideAddCategoryFrameLayout(){
         addCategoryFrameLayout.setVisibility(View.GONE);
     }
+
     private void addTrack(Uri uri, String title) {
         MusicTrack track = new MusicTrack();
         track.uri = uri;
@@ -212,30 +234,6 @@ public class AddMusic extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    private void chkStoragePermission() {
-        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.TIRAMISU) {
-            int permission = ContextCompat.checkSelfPermission(this,
-                    android.Manifest.permission.READ_MEDIA_AUDIO);
-
-            if (permission == PackageManager.PERMISSION_DENIED) {
-                Log.d("테스트","권한 없음 : READ_MEDIA_IMAGES");
-                requestPermissions(
-                        new String[]{android.Manifest.permission.READ_MEDIA_AUDIO},
-                        1000);
-            }
-        } else{
-            int permission = ContextCompat.checkSelfPermission(this,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            int permission2 = ContextCompat.checkSelfPermission(this,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE);
-            if (permission == PackageManager.PERMISSION_DENIED || permission2 == PackageManager.PERMISSION_DENIED ) {
-                Log.d("테스트","권한 없음 : WRITE_EXTERNAL_STORAGE || READ_EXTERNAL_STORAGE");
-                requestPermissions(
-                        new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
-                        1000);
-            }
-        }
-    }
     public void getPathFromStorage() {
         Intent intent_upload = new Intent();
         intent_upload.setType("audio/x-wav"); // wav파일만
@@ -260,91 +258,159 @@ public class AddMusic extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-    private void startRecording(){
-        // 권한 체크
-        int permission = ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.RECORD_AUDIO);
-
-        if (permission == PackageManager.PERMISSION_DENIED) {
-            Log.d("테스트","권한 없음 : READ_MEDIA_IMAGES");
-            requestPermissions(
-                    new String[]{android.Manifest.permission.RECORD_AUDIO},
-                    1000);
-            return;
-        }
-
-        // 이미 녹음 중이면 거부
-        if(audioRecorder != null) {
-            startToast("이미 녹음중 입니다!");
-            return;
-        }
-
-        // MediaStore로 파일 생성
-        String fileName = "record";
-
-        ContentValues values = new ContentValues(4);
-        values.put(MediaStore.Audio.Media.TITLE, fileName);
-        values.put(MediaStore.Audio.Media.DATE_ADDED, (int) (System.currentTimeMillis() / 1000));
-        values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/mp3");
-        values.put(MediaStore.Audio.Media.RELATIVE_PATH, "Music/Recordings/");
-
-        audiouri = getContentResolver().insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values);
-        ParcelFileDescriptor file;
-        try {
-            file = getContentResolver().openFileDescriptor(audiouri, "w");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        // MediaRecorder 로 녹음 시작
-        if(file == null) {
-            Log.e("에러발생", "파일이 null 임");
-            return ;
-        }
-
-        audioRecorder = new MediaRecorder();
-        audioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        audioRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        audioRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        audioRecorder.setOutputFile(file.getFileDescriptor());
-        audioRecorder.setAudioChannels(1);
-
-        try {
-            audioRecorder.prepare();
-            audioRecorder.start();
-            startToast("녹음 시작!");
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("에러발생", "audioRecorder prepare 불가능 한 오류");
-            return;
-        }
-    }
-
-    //권한 확인하고 startRecording()으로
-    private void chkPermission(){
-        if (ContextCompat.checkSelfPermission(this, permission.RECORD_AUDIO)
-                != PackageManager.PERMISSION_GRANTED) {
-            // 녹음 권한이 허용되지 않은 경우 런타임 권한 요청
-            ActivityCompat.requestPermissions(this, new String[]{permission.RECORD_AUDIO},
-                    REQUEST_RECORD_AUDIO_PERMISSION);
-        } else {
-            startRecording();
-        }
-    }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQUEST_RECORD_AUDIO_PERMISSION){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                //녹음 권한이 허용된 경우 녹음 시작 코드 실행
-                chkPermission();
-            }else{
-                //녹음 권한이 거부된 경우 사용자에게 설명하기 혹은 다시 요청하기
+        if (requestCode == REQUEST_PERMISSION_CODE) {
+            boolean allPermissionsGranted = true;
+            int j=0;
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    allPermissionsGranted = false;
+
+                    //권한을 하나라도 허용하지 않는다면 앱 종료
+                    Toast.makeText(getApplicationContext(), permissions[j] + " 권한을 설정하세요", Toast.LENGTH_LONG).show();
+                    myPermissions();
+                    break;
+                }
+                j++;
+            }
+
+            if (allPermissionsGranted) {
+                // 모든 권한이 허용된 경우 원하는 작업 수행
+                // 예: 녹음 시작 또는 다른 작업 수행
+            } else {
+                // 사용자에게 알림을 표시하거나 적절한 조치를 취하세요.
+                //Toast.makeText(getApplicationContext(), "모든 권한을 허용해야 사용할 수 있습니다.", Toast.LENGTH_LONG).show();
             }
         }
     }
+
+    private void myPermissions(){
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            List<String> permissionsTORequest = new ArrayList<>();
+            String[] permissions = new String[]{
+                    permission.READ_MEDIA_AUDIO,
+                    permission.READ_MEDIA_VIDEO,
+                    permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.MODIFY_AUDIO_SETTINGS
+            };
+            for (String permission : permissions){
+                if (ContextCompat.checkSelfPermission(this,permission) != PackageManager.PERMISSION_GRANTED){
+                    permissionsTORequest.add(permission);
+                    //startToast("여기 이상해요."+permission);
+                }
+            }
+
+            if (permissionsTORequest.isEmpty()){
+                // All permissions are already granted
+                //Toast.makeText(this, "All permissions are already granted", Toast.LENGTH_SHORT).show();
+
+
+            } else {
+                String[] permissionsArray = permissionsTORequest.toArray(new String[0]);
+                boolean shouldShowRationale = false;
+
+                for (String permission : permissionsArray){
+                    if (shouldShowRequestPermissionRationale(permission)){
+                        shouldShowRationale = true;
+                        break;
+                    }
+                }
+
+                if (shouldShowRationale){
+                    new AlertDialog.Builder(this)
+                            .setMessage("Please allow all permissions")
+                            .setCancelable(false)
+                            .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    //requestPermissionLauncher.launch(permissionsArray);
+                                    ActivityCompat.requestPermissions(AddMusic.this, permissionsArray, REQUEST_PERMISSION_CODE);
+                                }
+                            })
+
+                            .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            })
+                            .show();
+
+                } else {
+                    //requestPermissionLauncher.launch(permissionsArray);
+
+                    ActivityCompat.requestPermissions(AddMusic.this, permissionsArray, REQUEST_PERMISSION_CODE);
+                }
+
+
+            }
+
+
+        } else{
+            String[] allPermissions = {
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.MODIFY_AUDIO_SETTINGS
+            };
+
+            List<String> permissionsTORequest = new ArrayList<>();
+            for (String permission : allPermissions){
+                if (ContextCompat.checkSelfPermission(this,permission) != PackageManager.PERMISSION_GRANTED){
+                    permissionsTORequest.add(permission);
+                }
+            }
+
+            if (permissionsTORequest.isEmpty()){
+                // All permissions are already granted
+                //Toast.makeText(this, "All permissions are already granted", Toast.LENGTH_SHORT).show();
+
+
+            } else {
+                String[] permissionsArray = permissionsTORequest.toArray(new String[0]);
+                boolean shouldShowRationale = false;
+
+                for (String permission : permissionsArray){
+                    if (shouldShowRequestPermissionRationale(permission)){
+                        shouldShowRationale = true;
+                        break;
+                    }
+                }
+
+                if (shouldShowRationale){
+                    new AlertDialog.Builder(this)
+                            .setMessage("Please allow all permissions")
+                            .setCancelable(false)
+                            .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    //requestPermissionLauncher.launch(permissionsArray);
+
+                                    ActivityCompat.requestPermissions(AddMusic.this, permissionsArray, REQUEST_PERMISSION_CODE);
+                                }
+                            })
+
+                            .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            })
+                            .show();
+
+                } else {
+                    //requestPermissionLauncher.launch(permissionsArray);
+                    ActivityCompat.requestPermissions(AddMusic.this, permissionsArray, REQUEST_PERMISSION_CODE);
+                }
+            }
+        }
+    }
+
 
     private void uploadToFirebase(){
         TextInputLayout textInputLayout = findViewById(R.id.songname_edit_layout);
@@ -360,8 +426,6 @@ public class AddMusic extends AppCompatActivity {
             startToast("음악을 만들어주세요.");
             return;
         }
-        //postId = mFirebaseMethods.addSongToDatabase(title, parents);
-        //mFirebaseMethods.uploadNewStorage(title, uri, postId);
 
         Intent intent = new Intent(this, AddCaption.class);
         intent.putExtra("title", title);
