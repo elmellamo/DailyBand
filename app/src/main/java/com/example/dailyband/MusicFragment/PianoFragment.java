@@ -2,10 +2,15 @@ package com.example.dailyband.MusicFragment;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.media.MediaRecorder;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +25,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.dailyband.R;
+import com.example.dailyband.Utils.OnRecordingCompletedListener;
+import com.github.squti.androidwaverecorder.WaveRecorder;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class PianoFragment extends Fragment implements View.OnClickListener {
     // 여기에 필요한 모든 변수 및 상수 선언
@@ -50,103 +63,14 @@ public class PianoFragment extends Fragment implements View.OnClickListener {
 
     private HorizontalScrollView scrollView;
 
-    private Button buttonC3;
-    private Button buttonC3black;
-
-    private Button buttonD3;
-    private Button buttonD3black;
-
-    private Button buttonE3;
-
-    private Button buttonF3;
-    private Button buttonF3black;
-
-    private Button buttonG3;
-    private Button buttonG3black;
-
-    private Button buttonA3;
-    private Button buttonA3black;
-
-    private Button buttonB3;
-
-    private Button buttonC4;
-    private Button buttonC4black;
-
-    private Button buttonD4;
-    private Button buttonD4black;
-
-    private Button buttonE4;
-
-    private Button buttonF4;
-    private Button buttonF4black;
-
-    private Button buttonG4;
-    private Button buttonG4black;
-
-    private Button buttonA4;
-    private Button buttonA4black;
-
-    private Button buttonB4;
-
-
-    private Button buttonC5;
-    private Button buttonC5black;
-
-    private Button buttonD5;
-    private Button buttonD5black;
-
-    private Button buttonE5;
-
-    private Button buttonF5;
-    private Button buttonF5black;
-
-    private Button buttonG5;
-    private Button buttonG5black;
-
-    private Button buttonA5;
-    private Button buttonA5black;
-
-    private Button buttonB5;
-
-    private Button buttonC6;
-    private Button buttonC6black;
-
-    private Button buttonD6;
-    private Button buttonD6black;
-
-    private Button buttonE6;
-
-    private Button buttonF6;
-    private Button buttonF6black;
-
-    private Button buttonG6;
-    private Button buttonG6black;
-
-    private Button buttonA6;
-    private Button buttonA6black;
-
-    private Button buttonB6;
-
-    private Button buttonC7;
-    private Button buttonC7black;
-
-    private Button buttonD7;
-    private Button buttonD7black;
-
-    private Button buttonE7;
-
-    private Button buttonF7;
-    private Button buttonF7black;
-
-    private Button buttonG7;
-    private Button buttonG7black;
-
-    private Button buttonA7;
-    private Button buttonA7black;
-
-    private Button buttonB7;
-
-    // variables for TextViews
+    private Button buttonC3, buttonC3black, buttonD3, buttonD3black, buttonE3, buttonF3,
+            buttonF3black, buttonG3, buttonG3black, buttonA3, buttonA3black, buttonB3,
+            buttonC4, buttonC4black, buttonD4, buttonD4black, buttonE4, buttonF4, buttonF4black,
+            buttonG4, buttonG4black, buttonA4, buttonA4black, buttonB4, buttonC5, buttonC5black, buttonD5,
+            buttonD5black, buttonE5, buttonF5, buttonF5black, buttonG5, buttonG5black, buttonA5, buttonA5black,
+            buttonB5, buttonC6,buttonC6black, buttonD6, buttonD6black, buttonE6, buttonF6, buttonF6black,
+            buttonG6, buttonG6black, buttonA6, buttonA6black, buttonB6, buttonC7, buttonC7black, buttonD7,
+            buttonD7black,  buttonE7,  buttonF7, buttonF7black, buttonG7, buttonG7black, buttonA7, buttonA7black, buttonB7;
 
     private TextView tc3;
     private TextView td3;
@@ -187,7 +111,23 @@ public class PianoFragment extends Fragment implements View.OnClickListener {
     private TextView tg7;
     private TextView ta7;
     private TextView tb7;
+
+
+    private Button bt_record, stop_record;
+    private WaveRecorder waveRecorder;
+    private OnRecordingCompletedListener recordingCompletedListener;
+
+    private String directory_name = "dailyband";
+    private File externalDir;
+    private boolean isRecording = false;
+    private boolean isPaused = false;
+    private String filePath; // 녹음된 파일의 경로를 저장할 변수
+
+    public void setOnRecordingCompletedListener(OnRecordingCompletedListener listener) {
+        this.recordingCompletedListener = listener;
+    }
     public PianoFragment() {
+        filePath = Environment.getExternalStorageDirectory().getPath() + "/audioFile.wav";
     }
 
     @Override
@@ -285,26 +225,24 @@ public class PianoFragment extends Fragment implements View.OnClickListener {
         b7 = soundPool.load(requireContext(), R.raw.b7, 1);
 
 
-        // The recording code for the piano keys
+        bt_record = view.findViewById(R.id.bt_record);
+        stop_record = view.findViewById(R.id.stop_record);
+        waveRecorder = new WaveRecorder(filePath);
+        externalDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC), directory_name);
+        if (!externalDir.exists()) {
+            externalDir.mkdirs();
+        }
+        filePath = new File(externalDir, "audioFile.wav").getAbsolutePath();
 
-        mFileName1 = getActivity().getExternalCacheDir().getAbsolutePath();
-        mFileName1 += "/audiorecordtest1.3gp";
-        mFileName2 = getActivity().getExternalCacheDir().getAbsolutePath();
-        mFileName2 += "/audiorecordtest2.3gp";
-        mFileName3 = getActivity().getExternalCacheDir().getAbsolutePath();
-        mFileName3 += "/audiorecordtest3.3gp";
-        mFileName4 = getActivity().getExternalCacheDir().getAbsolutePath();
-        mFileName4 += "/audiorecordtest4.3gp";
-        mFileName5 = getActivity().getExternalCacheDir().getAbsolutePath();
-        mFileName5 += "/audiorecordtest5.3gp";
-        mFileName6 = getActivity().getExternalCacheDir().getAbsolutePath();
-        mFileName6 += "/audiorecordtest6.3gp";
+        bt_record.setOnClickListener(v -> {
+            if(!isRecording){
+                startRecording();
+            }
+        });
 
-        SharedPreferences prefs = getActivity().getSharedPreferences("FILENO", MODE_PRIVATE);
-        recordingno = prefs.getInt("fileno", 1);
-
-        // Initialize the Record button,Play Button and navigation button
-        recordbutton = (Button) view.findViewById(R.id.bt_record);
+        stop_record.setOnClickListener(v -> {
+            stopRecording();
+        });
 
         return view;
     }
@@ -644,97 +582,81 @@ public class PianoFragment extends Fragment implements View.OnClickListener {
             soundPool.play(b7, 1, 1, 0, 0, 1);
         }
     }
-    public void record(View view) {
-        onRecord(mStartRecording);
-        if (mStartRecording) {
-            recordbutton.setText("Finish");
-        }else {
-            recordbutton.setText("Record");
-        }
-        mStartRecording = !mStartRecording;
+
+    // 녹음 시작 상태로 UI 업데이트
+    private void startRecording() {
+        String fileName = "audioFile.wav";
+        File internalStorageDir = requireContext().getFilesDir();
+        filePath = new File(internalStorageDir, fileName).getAbsolutePath();
+
+        waveRecorder = new WaveRecorder(filePath);
+        waveRecorder.setNoiseSuppressorActive(true);
+        waveRecorder.startRecording();
+        isRecording = true;
+        isPaused = false;
+
+        Toast.makeText(requireContext(), "녹음을 시작합니다!", Toast.LENGTH_LONG).show();
     }
 
-    public void startRecording() {
-        mediaRecorder = new MediaRecorder();
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        switch (recordingno) {
-            case 1:
-                mediaRecorder.setOutputFile(mFileName1);
-                recordingno++;
-                if (recordingno == 7)
-                    recordingno = 1;
-                break;
-            case 2:
-                mediaRecorder.setOutputFile(mFileName2);
-                recordingno++;
-                if (recordingno == 7)
-                    recordingno = 1;
-                break;
-            case 3:
-                mediaRecorder.setOutputFile(mFileName3);
-                recordingno++;
-                if (recordingno == 7)
-                    recordingno = 1;
-                break;
-            case 4:
-                mediaRecorder.setOutputFile(mFileName4);
-                recordingno++;
-                if (recordingno == 7)
-                    recordingno = 1;
-                break;
-            case 5:
-                mediaRecorder.setOutputFile(mFileName5);
-                recordingno++;
-                if (recordingno == 7)
-                    recordingno = 1;
-                break;
-            case 6:
-                mediaRecorder.setOutputFile(mFileName6);
-                recordingno++;
-                if (recordingno == 7)
-                    recordingno = 1;
-                break;
-        }
-
-        SharedPreferences.Editor editor = getActivity().getSharedPreferences("FILENO", MODE_PRIVATE).edit();
-        editor.putInt("fileno", recordingno);
-        editor.commit();
-        // mediaRecorder.setOutputFile(mFileName);
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
-        try {
-            mediaRecorder.prepare();
-        } catch (IOException e) {
-            Log.e("prepare fail", "prepare() failed");
-        }
-        Log.d("recorder has started", "recorder has started");
-        mediaRecorder.start();
-    }
+    // 녹음 중지 상태로 UI 업데이트
+    private void stopRecording() {
+        if (isRecording) {
+            waveRecorder.stopRecording();
+            isRecording = false;
+            isPaused = false;
 
 
-    public void stopRecording() {
-        mediaRecorder.stop();
-        mediaRecorder.release();
-        mediaRecorder = null;
-    }
+            Toast.makeText(requireContext(), "녹음을 멈추고 저장합니다.", Toast.LENGTH_LONG).show();
 
-    public void onRecord(boolean start) {
-        if (start) {
-            startRecording();
-        } else {
-            stopRecording();
-            if (recordingno == 1) {
-                Toast recordingmsg = Toast.makeText(requireContext(),
-                        "Song " + 6 + " saved", Toast.LENGTH_SHORT);
+            long currentTimeMillis = System.currentTimeMillis();
+            // 시간을 원하는 포맷으로 변환합니다.
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            String formattedTime = sdf.format(new Date(currentTimeMillis));
+            String fileName = formattedTime + ".wav";
 
-                recordingmsg.show();
-            } else {
-                int temprecordingno = recordingno - 1;
-                Toast recordingmsg = Toast.makeText(requireContext(),
-                        "Song " + temprecordingno + " Saved", Toast.LENGTH_LONG);
-                recordingmsg.show();
+            //MediaStore를 이용해서 녹음 팡리 미디어 데이터베이스에 추가
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Audio.Media.DISPLAY_NAME, fileName);
+            values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/wav");
+            values.put(MediaStore.Audio.Media.RELATIVE_PATH, Environment.DIRECTORY_MUSIC+"/"+directory_name);
+            values.put(MediaStore.Audio.Media.IS_PENDING, 1);
+
+            Uri contentUri = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+            Uri itemUri = requireContext().getContentResolver().insert(contentUri, values);
+
+            if (itemUri != null) {
+                try {
+                    // 파일 복사 또는 이동 작업 수행 (이 코드에서는 파일을 복사함)
+                    try (ParcelFileDescriptor descriptor = requireContext().getContentResolver().openFileDescriptor(itemUri, "w")) {
+                        if (descriptor != null) {
+                            FileInputStream inputStream = new FileInputStream(filePath);
+                            FileOutputStream outputStream = new FileOutputStream(descriptor.getFileDescriptor());
+                            byte[] buffer = new byte[1024];
+                            int bytesRead;
+                            while ((bytesRead = inputStream.read(buffer)) > 0) {
+                                outputStream.write(buffer, 0, bytesRead);
+                            }
+                            inputStream.close();
+                            outputStream.close();
+                        }
+                    }
+
+                    // MediaStore에 파일 정보 업데이트
+                    ContentValues value = new ContentValues();
+                    value.put(MediaStore.Audio.Media.IS_PENDING, 0); // 파일이 완전히 쓰여짐을 표시
+                    requireContext().getContentResolver().update(itemUri, value, null, null);
+
+                    Uri recordingUri = Uri.parse("file://" + filePath);
+                    if (recordingCompletedListener != null) {
+                        recordingCompletedListener.onRecordingCompleted(recordingUri);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+        } else {
+            Toast.makeText(requireContext(), "아직 녹음을 시작하지 않았습니다.", Toast.LENGTH_SHORT).show();
         }
     }
 }

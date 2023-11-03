@@ -149,6 +149,19 @@ public class AddMusic extends AppCompatActivity {
         adapter = new MusicTrackAdapter(tracks);
         musicTrackView.setAdapter(adapter);
 
+        pianoFragment.setOnRecordingCompletedListener(new OnRecordingCompletedListener() {
+            @Override
+            public void onRecordingCompleted(Uri recordingUri) {
+                // 현재 시간을 얻어옵니다.
+                long currentTimeMillis = System.currentTimeMillis();
+                // 시간을 원하는 포맷으로 변환합니다.
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                String formattedTime = sdf.format(new Date(currentTimeMillis));
+
+                addTrack(recordingUri, formattedTime);
+            }
+        });
+
         drumFragment.setOnRecordingCompletedListener(new OnRecordingCompletedListener() {
             @Override
             public void onRecordingCompleted(Uri recordingUri) {

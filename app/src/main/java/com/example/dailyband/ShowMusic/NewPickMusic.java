@@ -24,6 +24,7 @@ import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.CollabAdapter;
+import com.gauravk.audiovisualizer.visualizer.CircleLineVisualizer;
 import com.gauravk.audiovisualizer.visualizer.WaveVisualizer;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -63,10 +64,11 @@ public class NewPickMusic extends AppCompatActivity {
     private int pausedPosition = 0;
     private String writer, explain, singer, play, artist;
     private WaveVisualizer waveVisualizer;
+    private CircleLineVisualizer visualizer;
 
     protected void onDestroy(){
-        if(waveVisualizer != null){
-            waveVisualizer.release();
+        if(visualizer != null){
+            visualizer.release();
         }
         super.onDestroy();
     }
@@ -112,7 +114,9 @@ public class NewPickMusic extends AppCompatActivity {
         gray_screen = findViewById(R.id.gray_screen);
         detail_info_layout = findViewById(R.id.detail_info_layout);
         detail_info_frame = findViewById(R.id.detail_info_frame);
-        waveVisualizer = findViewById(R.id.wave);
+        //waveVisualizer = findViewById(R.id.wave);
+        visualizer = findViewById(R.id.blob);
+        visualizer.setDrawLine(true);
 
         getInfo();
         setInfo();
@@ -234,7 +238,8 @@ public class NewPickMusic extends AppCompatActivity {
                                         //}
                                         int audioSessionId = mediaPlayer.getAudioSessionId();
                                         if(audioSessionId != -1){
-                                            waveVisualizer.setAudioSessionId(audioSessionId);
+                                            //waveVisualizer.setAudioSessionId(audioSessionId);
+                                            visualizer.setAudioSessionId(audioSessionId);
                                         }
 
                                         isPlaying = true;
