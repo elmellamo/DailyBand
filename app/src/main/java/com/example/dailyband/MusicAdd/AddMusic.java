@@ -50,6 +50,7 @@ import com.example.dailyband.R;
 import com.example.dailyband.Setting.SettingActivity;
 import com.example.dailyband.ShowMusic.PickMusic;
 import com.example.dailyband.Utils.FirebaseMethods;
+import com.example.dailyband.Utils.MergeWav;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.example.dailyband.adapter.MusicTrackAdapter;
 import com.google.android.material.textfield.TextInputLayout;
@@ -446,17 +447,41 @@ public class AddMusic extends AppCompatActivity {
             return ;
         }
 
-        uri = tracks.get(0).uri;
-        if(uri==null){
+        if(tracks.size()<=0){
             startToast("음악을 만들어주세요.");
             return;
         }
+
+        uri = mergeTracks();
 
         Intent intent = new Intent(this, AddCaption.class);
         intent.putExtra("title", title);
         intent.putExtra("uri", uri.toString());
         startActivity(intent);
     }
+
+    private Uri mergeTracks() {
+        ContentValues values = new ContentValues();
+
+        values.put(MediaStore.Audio.Media.TITLE, "result.wav");
+        values.put(MediaStore.Audio.Media.DISPLAY_NAME, "result.wav");
+        values.put(MediaStore.Audio.Media.DATE_ADDED, (int) (System.currentTimeMillis() / 1000));
+        values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/x-wav");
+        values.put(MediaStore.Audio.Media.RELATIVE_PATH, "Music/Daily Band/Result/");
+
+        Uri result_uri = getContentResolver().insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values);
+
+        ArrayList<Uri> uris = new ArrayList<>();
+        for(int i=0;i<tracks.size();i++) {
+            uris.add(tracks.get(i).uri);
+        }
+
+        MergeWav mw = new MergeWav(this);
+        mw.mergeWavToWav(result_uri, uris);
+
+        return result_uri;
+    }
+
 
 
     public class AudioTrackRunnable implements Runnable {

@@ -151,6 +151,24 @@ public class wavClass {
         }
     }
 
+    public void createWavFile(FileInputStream fileInputStream, FileOutputStream fileOutputStream) {
+        try {
+            byte[] data = new byte[bufferSize];
+            int channels = 2;
+            long byteRate = bpp * sampleRate * channels / 8;
+            long totalAudioLen = fileInputStream.getChannel().size();
+            long totalDataLen = totalAudioLen + 36;
+            wavHeader(fileOutputStream, totalAudioLen, totalDataLen, channels, byteRate);
+            while (fileInputStream.read(data) != -1) {
+                fileOutputStream.write(data);
+            }
+            fileInputStream.close();
+            fileOutputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             boolean allPermissionsGranted = true;
