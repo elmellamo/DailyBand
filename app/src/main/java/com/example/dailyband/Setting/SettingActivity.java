@@ -33,6 +33,7 @@ import com.bumptech.glide.Glide;
 import com.example.dailyband.Login.LoginActivity;
 import com.example.dailyband.Login.RegisterActivity;
 import com.example.dailyband.R;
+import com.example.dailyband.Start.SplashActivity;
 import com.example.dailyband.Utils.SharedData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -141,7 +142,6 @@ public class SettingActivity extends AppCompatActivity {
             //ImageView imageView7 = findViewById(R.id.imageView7);
 
             Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-
 
             int rotation = 0;
             try {
@@ -454,15 +454,30 @@ public class SettingActivity extends AppCompatActivity {
                 // 업로드 성공 시 이미지 URL을 얻어올 수 있음
                 imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     String imageUrl = uri.toString();
-                    Toast.makeText(SettingActivity.this, "이미지 수정 성공", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingActivity.this, "이미지 변경중입니다", Toast.LENGTH_SHORT).show();
 
                     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
                     databaseRef.child("user_photo").child(userId).child("profileImageUrl").setValue(imageUrl)
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(SettingActivity.this, "이미지 수정 완료", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SettingActivity.this, "프로필 이미지 변경 완료", Toast.LENGTH_SHORT).show();
+                                    String localFilePath = getApplicationContext().getFilesDir() + "/local_image.jpg"; // 로컬에 저장할 파일 경로
+                                    File localFile = new File(localFilePath);
+                                    if (localFile.exists()) {
+                                        localFile.delete();
+                                    }
+                                    imageRef.getFile(localFile).addOnSuccessListener(taskSnapshot2 -> {
+                                        // 다운로드 성공
+                                        // localFilePath에 이미지가 저장됨
+                                        // 여기서 UI 업데이트 등을 수행할 수 있습니다.
+                                        Toast.makeText(SettingActivity.this, "이미지 내부 저장 완료", Toast.LENGTH_SHORT).show();
+                                    }).addOnFailureListener(exception -> {
+                                        // 다운로드 실패
+                                    }).addOnProgressListener(taskSnapshot2 -> {
+                                        // 다운로드 진행 중
+                                    });
                                 } else {
-                                    Toast.makeText(SettingActivity.this, "이미지 수정 실패", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SettingActivity.this, "프로필 이미지 변경 실패", Toast.LENGTH_SHORT).show();
                                 }
                             });
                 });
