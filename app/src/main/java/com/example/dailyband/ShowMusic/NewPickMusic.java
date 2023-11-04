@@ -26,6 +26,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
 import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.Models.TestSong;
@@ -76,6 +77,9 @@ public class NewPickMusic extends AppCompatActivity {
     private WaveVisualizer waveVisualizer;
     private CircleLineVisualizer visualizer;
     private BlobVisualizer blobVisualizer;
+    private AnimatedVectorDrawableCompat avd;
+    private AnimatedVectorDrawable avd2;
+    private int switchnum = 0;
 
     protected void onDestroy(){
         if(blobVisualizer != null){
@@ -143,7 +147,6 @@ public class NewPickMusic extends AppCompatActivity {
         getInfo();
         setInfo();
         setDetail();
-
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -274,7 +277,16 @@ public class NewPickMusic extends AppCompatActivity {
                                         isPlaying = true;
                                         updateSeekbar();
                                         // 재생 중인 경우 Play 버튼 이미지를 Pause로 변경
-                                        playbtn.setImageResource(R.drawable.pause);
+                                        //playbtn.setImageResource(R.drawable.pause);
+                                        playbtn.setImageDrawable(getResources().getDrawable(R.drawable.my_basic_pause));
+                                        Drawable drawable = playbtn.getDrawable();
+                                        if(drawable instanceof AnimatedVectorDrawableCompat){
+                                            avd = (AnimatedVectorDrawableCompat) drawable;
+                                            avd.start();
+                                        }else if(drawable instanceof AnimatedVectorDrawable){
+                                            avd2 = (AnimatedVectorDrawable) drawable;
+                                            avd2.start();
+                                        }
                                     }
                                 });
 
@@ -284,7 +296,16 @@ public class NewPickMusic extends AppCompatActivity {
                                     public void onCompletion(MediaPlayer mp) {
                                         // 재생이 끝나면 seekBar를 초기 위치로 이동하고 playbtn 이미지를 다시 Play 이미지로 변경
                                         seekBar.setProgress(0);
-                                        playbtn.setImageResource(R.drawable.playbtn);
+                                        //playbtn.setImageResource(R.drawable.playbtn);
+                                        playbtn.setImageDrawable(getResources().getDrawable(R.drawable.my_basic_play));
+                                        Drawable drawable = playbtn.getDrawable();
+                                        if(drawable instanceof AnimatedVectorDrawableCompat){
+                                            avd = (AnimatedVectorDrawableCompat) drawable;
+                                            avd.start();
+                                        }else if(drawable instanceof AnimatedVectorDrawable){
+                                            avd2 = (AnimatedVectorDrawable) drawable;
+                                            avd2.start();
+                                        }
                                     }
                                 });
                             } catch (IOException e) {
@@ -306,7 +327,16 @@ public class NewPickMusic extends AppCompatActivity {
                         isPlaying = false;
                         // Pause 버튼 이미지를 Play로 변경
 
-                        playbtn.setImageResource(R.drawable.playbtn);
+                        //playbtn.setImageResource(R.drawable.playbtn);
+                        playbtn.setImageDrawable(getResources().getDrawable(R.drawable.my_basic_play));
+                        Drawable drawable = playbtn.getDrawable();
+                        if(drawable instanceof AnimatedVectorDrawableCompat){
+                            avd = (AnimatedVectorDrawableCompat) drawable;
+                            avd.start();
+                        }else if(drawable instanceof AnimatedVectorDrawable){
+                            avd2 = (AnimatedVectorDrawable) drawable;
+                            avd2.start();
+                        }
                     } else {
                         // 일시정지된 지점부터 재생
                         mediaPlayer.seekTo(pausedPosition);
@@ -317,8 +347,16 @@ public class NewPickMusic extends AppCompatActivity {
                         mediaPlayer.start();
                         isPlaying = true;
                         // 재생 중인 경우 Play 버튼 이미지를 Pause로 변경
-                        playbtn.setImageResource(R.drawable.pause);
-
+                        //playbtn.setImageResource(R.drawable.pause);
+                        playbtn.setImageDrawable(getResources().getDrawable(R.drawable.my_basic_pause));
+                        Drawable drawable = playbtn.getDrawable();
+                        if(drawable instanceof AnimatedVectorDrawableCompat){
+                            avd = (AnimatedVectorDrawableCompat) drawable;
+                            avd.start();
+                        }else if(drawable instanceof AnimatedVectorDrawable){
+                            avd2 = (AnimatedVectorDrawable) drawable;
+                            avd2.start();
+                        }
                     }
                 }
             }
@@ -334,7 +372,16 @@ public class NewPickMusic extends AppCompatActivity {
                     pausedPosition = 0;
                     seekBar.setProgress(0); // seekBar를 맨 처음 위치로 되돌립니다.
 
-                    playbtn.setImageResource(R.drawable.playbtn);
+                    //playbtn.setImageResource(R.drawable.playbtn);
+                    playbtn.setImageDrawable(getResources().getDrawable(R.drawable.my_basic_play));
+                    Drawable drawable = playbtn.getDrawable();
+                    if(drawable instanceof AnimatedVectorDrawableCompat){
+                        avd = (AnimatedVectorDrawableCompat) drawable;
+                        avd.start();
+                    }else if(drawable instanceof AnimatedVectorDrawable){
+                        avd2 = (AnimatedVectorDrawable) drawable;
+                        avd2.start();
+                    }
                 }
             }
         });
