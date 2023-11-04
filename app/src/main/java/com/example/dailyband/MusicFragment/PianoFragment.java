@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.ContentValues;
 import android.content.SharedPreferences;
+import android.media.AudioFormat;
 import android.media.MediaRecorder;
 import android.media.SoundPool;
 import android.net.Uri;
@@ -27,6 +28,7 @@ import androidx.fragment.app.Fragment;
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
+import com.github.squti.androidwaverecorder.WaveConfig;
 import com.github.squti.androidwaverecorder.WaveRecorder;
 
 import java.io.File;
@@ -40,14 +42,6 @@ import java.util.Locale;
 public class PianoFragment extends Fragment implements View.OnClickListener {
     // 여기에 필요한 모든 변수 및 상수 선언
     private View view;
-    private MediaRecorder mediaRecorder;
-    public static String mFileName1 = null;
-    public static String mFileName2 = null;
-    public static String mFileName3 = null;
-    public static String mFileName4 = null;
-    public static String mFileName5 = null;
-    public static String mFileName6 = null;
-
     boolean mStartRecording = true;
     public int recordingno;
 
@@ -591,8 +585,10 @@ public class PianoFragment extends Fragment implements View.OnClickListener {
         filePath = new File(internalStorageDir, fileName).getAbsolutePath();
 
         waveRecorder = new WaveRecorder(filePath);
+        waveRecorder.setWaveConfig(new WaveConfig(44100, AudioFormat.CHANNEL_IN_STEREO,  AudioFormat.ENCODING_PCM_8BIT));
         waveRecorder.setNoiseSuppressorActive(true);
         waveRecorder.startRecording();
+
         isRecording = true;
         isPaused = false;
 

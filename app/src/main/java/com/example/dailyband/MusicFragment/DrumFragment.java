@@ -2,6 +2,7 @@ package com.example.dailyband.MusicFragment;
 
 import android.content.ContentValues;
 import android.graphics.Color;
+import android.media.AudioFormat;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
+import com.github.squti.androidwaverecorder.WaveConfig;
 import com.github.squti.androidwaverecorder.WaveRecorder;
 
 import java.io.File;
@@ -120,6 +122,7 @@ public class DrumFragment extends Fragment implements View.OnClickListener{
         filePath = new File(internalStorageDir, fileName).getAbsolutePath();
 
         waveRecorder = new WaveRecorder(filePath);
+        waveRecorder.setWaveConfig(new WaveConfig(44100, AudioFormat.CHANNEL_IN_STEREO,  AudioFormat.ENCODING_PCM_8BIT));
         waveRecorder.setNoiseSuppressorActive(true);
         waveRecorder.startRecording();
         isRecording = true;
