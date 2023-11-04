@@ -1,12 +1,19 @@
 package com.example.dailyband.ShowMusic;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.ScaleAnimation;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,6 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,7 +52,8 @@ import java.util.List;
 import java.util.Map;
 
 public class NewPickMusic extends AppCompatActivity {
-    private ImageView heartbtn, playbtn, stopbtn, optionmenu;
+    private ImageView playbtn, stopbtn, optionmenu;
+    private CompoundButton heartbtn;
     private boolean isLiked = false;
     private TextView picksongname;
     private FirebaseMethods mFirebaseMethods;
@@ -75,14 +84,19 @@ public class NewPickMusic extends AppCompatActivity {
         super.onDestroy();
     }
 
+    //이건 맨 처음 체크할 때만, 그냥 애니메이션 효과 없이 할 것!
     private void updateHeartButton(boolean like) {
-        heartbtn = findViewById(R.id.heartbtn);
         if (like) {
-            heartbtn.setImageResource(R.drawable.heart_full);
+            //heartbtn.setImageResource(R.drawable.heart_full);
+            //heartbtn.setBackgroundResource( R.drawable.heart_full);
             isLiked = true;
+            heartbtn.setChecked(true);
         } else {
-            heartbtn.setImageResource(R.drawable.heart_outline_new);
+            //animateHeartButton(false);
+            //heartbtn.setImageResource(R.drawable.heart_outline_new);
+            //heartbtn.setBackgroundResource( R.drawable.heart_outline_new);
             isLiked = false;
+            heartbtn.setChecked(false);
         }
     }
     @Override
@@ -120,10 +134,16 @@ public class NewPickMusic extends AppCompatActivity {
         //visualizer = findViewById(R.id.blob);
         blobVisualizer = findViewById(R.id.blob);
         //visualizer.setDrawLine(true);
+        ScaleAnimation scaleAnimation = new ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f,
+                Animation.RELATIVE_TO_SELF, 0.7f, Animation.RELATIVE_TO_SELF, 0.7f);
+        scaleAnimation.setDuration(500);
+        BounceInterpolator bounceInterpolator = new BounceInterpolator();
+        scaleAnimation.setInterpolator(bounceInterpolator);
 
         getInfo();
         setInfo();
         setDetail();
+
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -165,7 +185,8 @@ public class NewPickMusic extends AppCompatActivity {
             @Override
             public void onLikeChecked(boolean isLiked) {
                 // 좋아요 상태를 받아왔을 때의 처리
-                updateHeartButton(isLiked);
+                //updateHeartButton(isLiked);
+                heartbtn.setChecked(isLiked);
             }
 
             @Override
@@ -174,8 +195,36 @@ public class NewPickMusic extends AppCompatActivity {
                 Log.e("로그", "좋아요 확인 실패: " + errorMessage);
             }
         });
+        heartbtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                compoundButton.startAnimation(scaleAnimation);
+                isLiked = !isLiked;
+                // 여기서 해당 postId를 사용자의 좋아요 리스트에 추가 또는 삭제하기
+                mFirebaseMethods.addOrRemoveLike(title, postId, isLiked, writer_uid, new FirebaseMethods.OnLikeActionListener() {
+                    @Override
+                    public void onLikeAdded() {
+                        // 좋아요가 추가되었을 때의 처리
+                        updateHeartButton(true);
+                    }
 
-        heartbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onLikeRemoved() {
+                        // 좋아요가 제거되었을 때의 처리
+                        updateHeartButton(false);
+                    }
+
+                    @Override
+                    public void onFailed(String errorMessage) {
+                        // 좋아요 추가 또는 제거에 실패한 경우의 처리
+                        // errorMessage를 이용하여 실패 이유를 확인할 수 있음
+                        Log.e("로그", "좋아요 처리 실패: " + errorMessage);
+                    }
+                });
+            }
+        });
+
+        /*heartbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // isLiked 값 반전해야 함
@@ -202,7 +251,7 @@ public class NewPickMusic extends AppCompatActivity {
                     }
                 });
             }
-        });
+        });*/
         // playBtn 클릭 이벤트 처리
         playbtn.setOnClickListener(new View.OnClickListener() {
             @Override
