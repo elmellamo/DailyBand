@@ -109,8 +109,13 @@ public class MergeWav {
         int fileSize = 0;
 
         // 루프 시작
-        boolean endOfFile = false;
-        while (!endOfFile) {
+        // boolean endOfFile = false;
+
+        boolean[] endOfFile = new boolean[trackSize];
+        for(int i=0;i<trackSize;i++)
+            endOfFile[i] = false;
+
+        while (true) {
             try {
                 for(int j=0;j<mBufferSize/2;j++) {
                     readInt[j] = 0;
@@ -118,8 +123,10 @@ public class MergeWav {
 
                 int ret=0;
                 for(int i=0;i<trackSize;i++) {
+                    if(endOfFile[i]) continue;
+
                     int tmp = is[i].read(readData, 0, mBufferSize);
-                    if(tmp <= 0) endOfFile = true;
+                    if(tmp <= 0) endOfFile[i] = true;
                     ret = Math.max(ret, tmp);
 
                     // 읽어온 바이트들을 little endian으로 short로 변환
@@ -129,6 +136,7 @@ public class MergeWav {
                         readInt[j] += readShorts[j];
                     }
                 }
+                if(ret <= 0) break;
 
                 // short 범위 내의 값으로 바꾼 후에 다시 little endian으로 변환
                 for(int j=0;j<mBufferSize/2;j++) {
