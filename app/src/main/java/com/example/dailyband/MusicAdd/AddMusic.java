@@ -111,15 +111,8 @@ public class AddMusic extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addmusic);
 
-
-        //chkAllPermissions();
-        //chkStoragePermission();
         mFirebaseMethods = new FirebaseMethods(AddMusic.this);
         myPermissions();
-
-        //녹음 파일 경로 저장
-//        String storagePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/record.3gp";
-//        outputFile = storagePath;
 
         nextmenu = findViewById(R.id.nextmenu);
         plusbtn = findViewById(R.id.plusbtn);
@@ -144,7 +137,6 @@ public class AddMusic extends AppCompatActivity {
         musicTrackView.setLayoutManager(llm);
 
 //        paths = new ArrayList<>();
-//        isSpeaking = new ArrayList<>();
         tracks = new ArrayList<>();
 
         adapter = new MusicTrackAdapter(tracks);
@@ -188,6 +180,7 @@ public class AddMusic extends AppCompatActivity {
                 addTrack(recordingUri, formattedTime);
             }
         });
+
         gray_screen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -250,6 +243,9 @@ public class AddMusic extends AppCompatActivity {
     //addCategoryFrameLayout을 숨기는 메서드
     public void hideAddCategoryFrameLayout(){
         addCategoryFrameLayout.setVisibility(View.GONE);
+    }
+    public void hideDetailPickupLayout(){
+        detail_pickup_layout.setVisibility(View.GONE);
     }
 
     private void addTrack(Uri uri, String title) {
@@ -314,7 +310,6 @@ public class AddMusic extends AppCompatActivity {
     }
 
     private void myPermissions(){
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
             List<String> permissionsTORequest = new ArrayList<>();
             String[] permissions = new String[]{

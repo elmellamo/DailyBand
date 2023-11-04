@@ -24,6 +24,7 @@ import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.CollabAdapter;
+import com.gauravk.audiovisualizer.visualizer.BlobVisualizer;
 import com.gauravk.audiovisualizer.visualizer.CircleLineVisualizer;
 import com.gauravk.audiovisualizer.visualizer.WaveVisualizer;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -65,10 +66,11 @@ public class NewPickMusic extends AppCompatActivity {
     private String writer, explain, singer, play, artist;
     private WaveVisualizer waveVisualizer;
     private CircleLineVisualizer visualizer;
+    private BlobVisualizer blobVisualizer;
 
     protected void onDestroy(){
-        if(visualizer != null){
-            visualizer.release();
+        if(blobVisualizer != null){
+            blobVisualizer.release();
         }
         super.onDestroy();
     }
@@ -115,8 +117,9 @@ public class NewPickMusic extends AppCompatActivity {
         detail_info_layout = findViewById(R.id.detail_info_layout);
         detail_info_frame = findViewById(R.id.detail_info_frame);
         //waveVisualizer = findViewById(R.id.wave);
-        visualizer = findViewById(R.id.blob);
-        visualizer.setDrawLine(true);
+        //visualizer = findViewById(R.id.blob);
+        blobVisualizer = findViewById(R.id.blob);
+        //visualizer.setDrawLine(true);
 
         getInfo();
         setInfo();
@@ -239,7 +242,8 @@ public class NewPickMusic extends AppCompatActivity {
                                         int audioSessionId = mediaPlayer.getAudioSessionId();
                                         if(audioSessionId != -1){
                                             //waveVisualizer.setAudioSessionId(audioSessionId);
-                                            visualizer.setAudioSessionId(audioSessionId);
+                                            //visualizer.setAudioSessionId(audioSessionId);
+                                            blobVisualizer.setAudioSessionId(audioSessionId);
                                         }
 
                                         isPlaying = true;

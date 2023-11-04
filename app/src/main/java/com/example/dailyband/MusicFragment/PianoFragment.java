@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.github.squti.androidwaverecorder.WaveRecorder;
@@ -649,6 +650,10 @@ public class PianoFragment extends Fragment implements View.OnClickListener {
                     Uri recordingUri = Uri.parse("file://" + filePath);
                     if (recordingCompletedListener != null) {
                         recordingCompletedListener.onRecordingCompleted(recordingUri);
+                        if(getActivity() instanceof AddMusic){
+                            AddMusic addmusic = (AddMusic) getActivity();
+                            addmusic.hideDetailPickupLayout();
+                        }
                     }
 
                 } catch (IOException e) {

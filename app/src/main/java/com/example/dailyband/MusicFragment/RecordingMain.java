@@ -164,6 +164,10 @@ public class RecordingMain extends Fragment {
                     Uri recordingUri = Uri.parse("file://" + filePath);
                     if (recordingCompletedListener != null) {
                         recordingCompletedListener.onRecordingCompleted(recordingUri);
+                        if(getActivity() instanceof AddMusic){
+                            AddMusic addmusic = (AddMusic) getActivity();
+                            addmusic.hideDetailPickupLayout();
+                        }
                     }
 
                 } catch (IOException e) {

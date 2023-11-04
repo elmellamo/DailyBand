@@ -18,18 +18,19 @@
         android:paddingBottom="10dp"
         app:layout_constraintVertical_weight="0.9">
 
-        <com.gauravk.audiovisualizer.visualizer.CircleLineVisualizer xmlns:custom="http://schemas.android.com/apk/res-auto"
+
+        <com.gauravk.audiovisualizer.visualizer.BlobVisualizer xmlns:custom="http://schemas.android.com/apk/res-auto"
             android:id="@+id/blob"
-            android:layout_width="320dp"
-            android:layout_height="320dp"
+            android:layout_width="400dp"
+            android:layout_height="400dp"
             custom:avColor="#687D54"
-            custom:avDensity="0.6"
-            custom:avSpeed="fast"
+            custom:avDensity="0.5"
+            custom:avSpeed="medium"
             custom:avType="fill"
             custom:layout_constraintTop_toBottomOf="@+id/picktop"
             custom:layout_constraintBottom_toTopOf="@+id/seek_layout"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
