@@ -107,7 +107,7 @@ public class RecordingMain extends Fragment {
         filePath = new File(internalStorageDir, fileName).getAbsolutePath();
 
         waveRecorder = new WaveRecorder(filePath);
-        waveRecorder.setWaveConfig(new WaveConfig(44100, AudioFormat.CHANNEL_IN_STEREO,  AudioFormat.ENCODING_PCM_8BIT));
+        waveRecorder.setWaveConfig(new WaveConfig(44100, AudioFormat.CHANNEL_IN_STEREO,  AudioFormat.ENCODING_PCM_16BIT));
         waveRecorder.setNoiseSuppressorActive(true);
         waveRecorder.startRecording();
         isRecording = true;
