@@ -2,6 +2,7 @@ package com.example.dailyband.Setting;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -336,37 +338,87 @@ public class SettingActivity extends AppCompatActivity {
 
 
     private void WITHDRAW(){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference rootRef = database.getReference();
-        DatabaseReference dataRef = rootRef.child("UserAccount");
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        Dialog customDialog = new Dialog(this);
+        customDialog.setContentView(R.layout.withdraw_dialog);
+        customDialog.setCancelable(true);
 
-        String uidToDelete = user.getUid();
-        dataRef.child(uidToDelete).removeValue()
-                .addOnSuccessListener(aVoid -> {
-                    // 삭제 성공 시 실행할 코드
-                })
-                .addOnFailureListener(e -> {
-                    // 삭제 실패 시 실행할 코드
-                });
-        //user = FirebaseAuth.getInstance().getCurrentUser();
+        TextView dialogMessage = customDialog.findViewById(R.id.confirmTextView);
+        Button dialogWithdraw = customDialog.findViewById(R.id.yesButton);
+        Button dialogCancel = customDialog.findViewById(R.id.noButton);
 
-        user.delete()//계정 삭제 시키기
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User account deleted.");
-                        }
-                    }
-                });
+        dialogWithdraw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                customDialog.dismiss();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference rootRef = database.getReference();
+                DatabaseReference dataRef = rootRef.child("UserAccount");
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        FirebaseAuth.getInstance().signOut();
-        myStartActivity(LoginActivity.class);
+                String uidToDelete = user.getUid();
+                dataRef.child(uidToDelete).removeValue()
+                        .addOnSuccessListener(aVoid -> {
+                            // 삭제 성공 시 실행할 코드
+                        })
+                        .addOnFailureListener(e -> {
+                            // 삭제 실패 시 실행할 코드
+                        });
+                //user = FirebaseAuth.getInstance().getCurrentUser();
+
+                user.delete()//계정 삭제 시키기
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(SettingActivity.this, "탈퇴되었습니다.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                FirebaseAuth.getInstance().signOut();
+                myStartActivity(LoginActivity.class);
+
+            }
+        });
+
+        dialogCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                customDialog.dismiss();
+            }
+        });
+
+        customDialog.show();
+
     }
     private void LOGOUT(){
-        FirebaseAuth.getInstance().signOut();
-        myStartActivity(LoginActivity.class);
+        Dialog customDialog = new Dialog(this);
+        customDialog.setContentView(R.layout.custom_dialog);
+        customDialog.setCancelable(true);
+
+        TextView dialogMessage = customDialog.findViewById(R.id.confirmTextView);
+        Button dialogLogout = customDialog.findViewById(R.id.yesButton);
+        Button dialogCancel = customDialog.findViewById(R.id.noButton);
+
+        dialogLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 로그아웃 처리
+                // 여기에서 로그아웃 코드를 추가하세요
+                customDialog.dismiss();
+                FirebaseAuth.getInstance().signOut();
+                myStartActivity(LoginActivity.class);
+            }
+        });
+
+        dialogCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                customDialog.dismiss();
+            }
+        });
+
+        customDialog.show();
     }
 
     private void changeEmail(){
@@ -454,13 +506,13 @@ public class SettingActivity extends AppCompatActivity {
                 // 업로드 성공 시 이미지 URL을 얻어올 수 있음
                 imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     String imageUrl = uri.toString();
-                    Toast.makeText(SettingActivity.this, "이미지 변경중입니다", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingActivity.this, "이미지 변경 중...", Toast.LENGTH_SHORT).show();
 
                     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
                     databaseRef.child("user_photo").child(userId).child("profileImageUrl").setValue(imageUrl)
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(SettingActivity.this, "프로필 이미지 변경 완료", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(SettingActivity.this, "프로필 이미지 변경 완료", Toast.LENGTH_SHORT).show();
                                     String localFilePath = getApplicationContext().getFilesDir() + "/local_image.jpg"; // 로컬에 저장할 파일 경로
                                     File localFile = new File(localFilePath);
                                     if (localFile.exists()) {
@@ -470,7 +522,7 @@ public class SettingActivity extends AppCompatActivity {
                                         // 다운로드 성공
                                         // localFilePath에 이미지가 저장됨
                                         // 여기서 UI 업데이트 등을 수행할 수 있습니다.
-                                        Toast.makeText(SettingActivity.this, "이미지 내부 저장 완료", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SettingActivity.this, "프로필 이미지 변경 완료", Toast.LENGTH_SHORT).show();
                                     }).addOnFailureListener(exception -> {
                                         // 다운로드 실패
                                     }).addOnProgressListener(taskSnapshot2 -> {
