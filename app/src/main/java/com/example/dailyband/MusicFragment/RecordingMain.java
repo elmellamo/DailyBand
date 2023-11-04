@@ -164,7 +164,8 @@ public class RecordingMain extends Fragment {
                     value.put(MediaStore.Audio.Media.IS_PENDING, 0); // 파일이 완전히 쓰여짐을 표시
                     requireContext().getContentResolver().update(itemUri, value, null, null);
 
-                    Uri recordingUri = Uri.parse("file://" + filePath);
+                    //Uri recordingUri = Uri.parse("file://" + filePath);
+                    Uri recordingUri = itemUri;
                     if (recordingCompletedListener != null) {
                         recordingCompletedListener.onRecordingCompleted(recordingUri);
                         if(getActivity() instanceof AddMusic){
