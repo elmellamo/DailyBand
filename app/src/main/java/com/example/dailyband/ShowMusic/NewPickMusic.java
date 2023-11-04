@@ -168,6 +168,11 @@ public class NewPickMusic extends AppCompatActivity {
             public void onClick(View view) {
                 // detail_info_layout을 보이도록 변경합니다.
                 detail_info_layout.setVisibility(View.VISIBLE);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isLiked", isLiked);
+
+                // 프래그먼트에 Bundle을 전달
+                detailInfoFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, detailInfoFragment).commit();
             }
         });
@@ -223,35 +228,6 @@ public class NewPickMusic extends AppCompatActivity {
                 });
             }
         });
-
-        /*heartbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // isLiked 값 반전해야 함
-                isLiked = !isLiked;
-                // 여기서 해당 postId를 사용자의 좋아요 리스트에 추가 또는 삭제하기
-                mFirebaseMethods.addOrRemoveLike(title, postId, isLiked, writer_uid, new FirebaseMethods.OnLikeActionListener() {
-                    @Override
-                    public void onLikeAdded() {
-                        // 좋아요가 추가되었을 때의 처리
-                        updateHeartButton(true);
-                    }
-
-                    @Override
-                    public void onLikeRemoved() {
-                        // 좋아요가 제거되었을 때의 처리
-                        updateHeartButton(false);
-                    }
-
-                    @Override
-                    public void onFailed(String errorMessage) {
-                        // 좋아요 추가 또는 제거에 실패한 경우의 처리
-                        // errorMessage를 이용하여 실패 이유를 확인할 수 있음
-                        Log.e("로그", "좋아요 처리 실패: " + errorMessage);
-                    }
-                });
-            }
-        });*/
         // playBtn 클릭 이벤트 처리
         playbtn.setOnClickListener(new View.OnClickListener() {
             @Override

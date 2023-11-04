@@ -50,6 +50,11 @@ public class DetailInfoFragment extends Fragment {
         songtitle = view.findViewById(R.id.songtitle);
         songwriter = view.findViewById(R.id.songwriter);
 
+        Bundle bundle = getArguments();
+        // isLiked 값을 가져옴
+        isLiked = bundle.getBoolean("isLiked", false); // 두 번째 매개변수는 기본값
+
+
         if(isLiked){
             heartbtn.setImageResource(R.drawable.dark_heart_full);
         }else{
