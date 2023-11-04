@@ -52,7 +52,7 @@ public class RecordingMain extends Fragment {
     private WaveRecorder waveRecorder;
     private OnRecordingCompletedListener recordingCompletedListener;
 
-    private String directory_name = "dailyband";
+    private String directory_name = "Daily Band";
     private File externalDir;
     private boolean isRecording = false;
     private boolean isPaused = false;

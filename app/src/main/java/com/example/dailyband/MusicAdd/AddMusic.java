@@ -457,9 +457,14 @@ public class AddMusic extends AppCompatActivity {
 
     private Uri mergeTracks() {
         ContentValues values = new ContentValues();
+        long currentTimeMillis = System.currentTimeMillis();
+        // 시간을 원하는 포맷으로 변환합니다.
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        String formattedTime = sdf.format(new Date(currentTimeMillis));
 
-        values.put(MediaStore.Audio.Media.TITLE, "result.wav");
-        values.put(MediaStore.Audio.Media.DISPLAY_NAME, "result.wav");
+
+        values.put(MediaStore.Audio.Media.TITLE, formattedTime+".wav");
+        values.put(MediaStore.Audio.Media.DISPLAY_NAME, formattedTime+".wav");
         values.put(MediaStore.Audio.Media.DATE_ADDED, (int) (System.currentTimeMillis() / 1000));
         values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/x-wav");
         values.put(MediaStore.Audio.Media.RELATIVE_PATH, "Music/Daily Band/Result/");
