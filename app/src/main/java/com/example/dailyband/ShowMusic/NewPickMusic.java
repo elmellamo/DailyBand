@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.widget.CompoundButton;
@@ -80,12 +81,16 @@ public class NewPickMusic extends AppCompatActivity {
     private AnimatedVectorDrawableCompat avd;
     private AnimatedVectorDrawable avd2;
     private int switchnum = 0;
+    private boolean isScaleUp = true;
 
     protected void onDestroy(){
         if(blobVisualizer != null){
             blobVisualizer.release();
         }
         super.onDestroy();
+    }
+    protected void onStop(){
+        super.onStop();
     }
 
     //이건 맨 처음 체크할 때만, 그냥 애니메이션 효과 없이 할 것!
@@ -120,7 +125,6 @@ public class NewPickMusic extends AppCompatActivity {
         artist = selectedSong.getUser_id();
         mFirebaseMethods = new FirebaseMethods(NewPickMusic.this);
         mediaPlayer = new MediaPlayer();
-        detailInfoFragment = new DetailInfoFragment();
         showMusicInfoFragment = new ShowMusicInfoFragment();
         handler = new Handler();
         seekBar = findViewById(R.id.seek_bar);
@@ -146,7 +150,6 @@ public class NewPickMusic extends AppCompatActivity {
 
         getInfo();
         setInfo();
-        setDetail();
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -169,13 +172,11 @@ public class NewPickMusic extends AppCompatActivity {
         optionmenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // detail_info_layout을 보이도록 변경합니다.
-                detail_info_layout.setVisibility(View.VISIBLE);
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("isLiked", isLiked);
+                // detail_info_layout을 보이도록 변경합니다.\
 
-                // 프래그먼트에 Bundle을 전달
-                detailInfoFragment.setArguments(bundle);
+                detailInfoFragment = new DetailInfoFragment();
+                detailInfoFragment.setDetailInfo(isLiked, title, artist, postId);
+                detail_info_layout.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, detailInfoFragment).commit();
             }
         });
@@ -191,10 +192,13 @@ public class NewPickMusic extends AppCompatActivity {
 
         mFirebaseMethods.chkIsLiked(postId, new FirebaseMethods.OnLikeCheckListener() {
             @Override
-            public void onLikeChecked(boolean isLiked) {
+            public void onLikeChecked(boolean mfirebaselike) {
                 // 좋아요 상태를 받아왔을 때의 처리
                 //updateHeartButton(isLiked);
+                isLiked = mfirebaselike;
                 heartbtn.setChecked(isLiked);
+
+                Log.e("로그", "좋아요 체크 한번만 되는지 확인");
             }
 
             @Override
@@ -203,23 +207,29 @@ public class NewPickMusic extends AppCompatActivity {
                 Log.e("로그", "좋아요 확인 실패: " + errorMessage);
             }
         });
-        heartbtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        
+        heartbtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                compoundButton.startAnimation(scaleAnimation);
+            public void onClick(View view) {
+                heartbtn.startAnimation(scaleAnimation);
                 isLiked = !isLiked;
+                heartbtn.setChecked(isLiked);
+                Log.e("로그", "좋아요 확인해볼게요 >> "+isLiked);
+
                 // 여기서 해당 postId를 사용자의 좋아요 리스트에 추가 또는 삭제하기
                 mFirebaseMethods.addOrRemoveLike(title, postId, isLiked, writer_uid, new FirebaseMethods.OnLikeActionListener() {
                     @Override
                     public void onLikeAdded() {
                         // 좋아요가 추가되었을 때의 처리
                         updateHeartButton(true);
+                        Log.e("로그", "좋아요 ");
                     }
 
                     @Override
                     public void onLikeRemoved() {
                         // 좋아요가 제거되었을 때의 처리
                         updateHeartButton(false);
+                        Log.e("로그", "싫어요!! ");
                     }
 
                     @Override
@@ -264,9 +274,8 @@ public class NewPickMusic extends AppCompatActivity {
                                         seekBar.setMax(mediaPlayer.getDuration());
                                         mediaPlayer.seekTo(pausedPosition);
                                         mediaPlayer.start();
-                                        //if(blobVisualizer != null){
-                                        //    blobVisualizer.hide();
-                                        //}
+
+                                        //blobVisualizer.setVisibility(View.VISIBLE);
                                         int audioSessionId = mediaPlayer.getAudioSessionId();
                                         if(audioSessionId != -1){
                                             //waveVisualizer.setAudioSessionId(audioSessionId);
@@ -295,6 +304,7 @@ public class NewPickMusic extends AppCompatActivity {
                                     @Override
                                     public void onCompletion(MediaPlayer mp) {
                                         // 재생이 끝나면 seekBar를 초기 위치로 이동하고 playbtn 이미지를 다시 Play 이미지로 변경
+                                        //blobVisualizer.setVisibility(View.GONE);
                                         seekBar.setProgress(0);
                                         //playbtn.setImageResource(R.drawable.playbtn);
                                         playbtn.setImageDrawable(getResources().getDrawable(R.drawable.my_basic_play));
@@ -326,7 +336,7 @@ public class NewPickMusic extends AppCompatActivity {
                         mediaPlayer.pause();
                         isPlaying = false;
                         // Pause 버튼 이미지를 Play로 변경
-
+                        //blobVisualizer.setVisibility(View.GONE);
                         //playbtn.setImageResource(R.drawable.playbtn);
                         playbtn.setImageDrawable(getResources().getDrawable(R.drawable.my_basic_play));
                         Drawable drawable = playbtn.getDrawable();
@@ -346,6 +356,7 @@ public class NewPickMusic extends AppCompatActivity {
                         //}
 
                         mediaPlayer.start();
+                        //blobVisualizer.setVisibility(View.VISIBLE);
                         isPlaying = true;
                         // 재생 중인 경우 Play 버튼 이미지를 Pause로 변경
                         //playbtn.setImageResource(R.drawable.pause);
@@ -366,15 +377,25 @@ public class NewPickMusic extends AppCompatActivity {
         stopbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Animation scaleDown = AnimationUtils.loadAnimation(NewPickMusic.this, R.anim.scale_down);
+                Animation scaleUp = AnimationUtils.loadAnimation(NewPickMusic.this, R.anim.scale_up);
+                if(isScaleUp){
+                    stopbtn.startAnimation(scaleDown);
+                }else{
+                    stopbtn.startAnimation(scaleUp);
+                }
+                isScaleUp = !isScaleUp;
+
                 if (mediaPlayer != null) {
                     mediaPlayer.stop();
                     mediaPlayer.release();
                     mediaPlayer = null;
                     pausedPosition = 0;
                     seekBar.setProgress(0); // seekBar를 맨 처음 위치로 되돌립니다.
-                    if(blobVisualizer != null){
-                        blobVisualizer.release();
-                    }
+                    //if(blobVisualizer != null){
+                    //    blobVisualizer.release();
+                    //}
+                    //blobVisualizer.setVisibility(View.GONE);
                     //playbtn.setImageResource(R.drawable.playbtn);
                     playbtn.setImageDrawable(getResources().getDrawable(R.drawable.my_basic_play));
                     Drawable drawable = playbtn.getDrawable();
@@ -437,7 +458,6 @@ public class NewPickMusic extends AppCompatActivity {
                 if (userAccountDataSnapshot.exists()) {
                     // UserAccount 카테고리에서 name 값을 가져와서 사용하거나 처리할 수 있습니다.
                     artist = userAccountDataSnapshot.child("name").getValue(String.class);
-                    setDetail();
                     setInfo();
                     // 가져온 데이터를 사용하거나 처리할 수 있습니다.
                 } else {
@@ -450,10 +470,6 @@ public class NewPickMusic extends AppCompatActivity {
                 // 데이터 가져오기가 실패한 경우에 대한 처리
             }
         });
-    }
-
-    public void setDetail(){
-        detailInfoFragment.setDetailInfo(isLiked, title, artist, postId);
     }
     public void setInfo(){
         showMusicInfoFragment.setSongInfo(artist, writer, play, singer, explain);

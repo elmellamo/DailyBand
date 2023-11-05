@@ -2,6 +2,7 @@ package com.example.dailyband.ShowMusic;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,11 +55,6 @@ public class DetailInfoFragment extends Fragment {
         songtitle = view.findViewById(R.id.songtitle);
         songwriter = view.findViewById(R.id.songwriter);
 
-        Bundle bundle = getArguments();
-        // isLiked 값을 가져옴
-        isLiked = bundle.getBoolean("isLiked", false); // 두 번째 매개변수는 기본값
-
-
         if(isLiked){
             heartbtn.setImageResource(R.drawable.dark_heart_full);
         }else{
@@ -102,4 +98,19 @@ public class DetailInfoFragment extends Fragment {
         });
         return view;
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Log.e("로그", "프레그먼트에서 좋아요 확인 >>>"+isLiked );
+        // isLiked 값에 따라 heartbtn의 이미지 설정
+        if (isLiked) {
+            heartbtn.setImageResource(R.drawable.dark_heart_full);
+        } else {
+            heartbtn.setImageResource(R.drawable.dark_heart_empty);
+        }
+        // 기타 로직 수행
+    }
+
 }
