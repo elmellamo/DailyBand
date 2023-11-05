@@ -343,7 +343,7 @@ public class PickMusic extends AppCompatActivity {
     }
 
     public void setDetail(){
-        detailInfoFragment.setDetailInfo(isLiked, title, artist);
+        detailInfoFragment.setDetailInfo(isLiked, title, artist, postId);
     }
     public void setInfo(){
         showMusicInfoFragment.setSongInfo(artist, writer, play, singer, explain);

@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.dailyband.MusicAdd.AddMusic;
+import com.example.dailyband.MusicAdd.CollabAddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.example.dailyband.Utils.wavClass;
@@ -171,6 +172,9 @@ public class RecordingMain extends Fragment {
                         if(getActivity() instanceof AddMusic){
                             AddMusic addmusic = (AddMusic) getActivity();
                             addmusic.hideDetailPickupLayout();
+                        }else if(getActivity() instanceof CollabAddMusic){
+                            CollabAddMusic collabAddMusic = (CollabAddMusic) getActivity();
+                            collabAddMusic.CollabhideDetailPickupLayout();
                         }
                     }
 

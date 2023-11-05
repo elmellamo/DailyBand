@@ -264,8 +264,8 @@ public class NewPickMusic extends AppCompatActivity {
                                         seekBar.setMax(mediaPlayer.getDuration());
                                         mediaPlayer.seekTo(pausedPosition);
                                         mediaPlayer.start();
-                                        //if(waveVisualizer != null){
-                                        //    waveVisualizer.hide();
+                                        //if(blobVisualizer != null){
+                                        //    blobVisualizer.hide();
                                         //}
                                         int audioSessionId = mediaPlayer.getAudioSessionId();
                                         if(audioSessionId != -1){
@@ -344,6 +344,7 @@ public class NewPickMusic extends AppCompatActivity {
                         //if(audioSessionId != -1){
                         //    waveVisualizer.setAudioSessionId(audioSessionId);
                         //}
+
                         mediaPlayer.start();
                         isPlaying = true;
                         // 재생 중인 경우 Play 버튼 이미지를 Pause로 변경
@@ -371,7 +372,9 @@ public class NewPickMusic extends AppCompatActivity {
                     mediaPlayer = null;
                     pausedPosition = 0;
                     seekBar.setProgress(0); // seekBar를 맨 처음 위치로 되돌립니다.
-
+                    if(blobVisualizer != null){
+                        blobVisualizer.release();
+                    }
                     //playbtn.setImageResource(R.drawable.playbtn);
                     playbtn.setImageDrawable(getResources().getDrawable(R.drawable.my_basic_play));
                     Drawable drawable = playbtn.getDrawable();
@@ -450,7 +453,7 @@ public class NewPickMusic extends AppCompatActivity {
     }
 
     public void setDetail(){
-        detailInfoFragment.setDetailInfo(isLiked, title, artist);
+        detailInfoFragment.setDetailInfo(isLiked, title, artist, postId);
     }
     public void setInfo(){
         showMusicInfoFragment.setSongInfo(artist, writer, play, singer, explain);

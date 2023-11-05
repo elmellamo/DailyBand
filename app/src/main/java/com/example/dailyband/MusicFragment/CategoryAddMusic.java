@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.dailyband.MusicAdd.AddMusic;
+import com.example.dailyband.MusicAdd.CollabAddMusic;
 import com.example.dailyband.R;
 
 public class CategoryAddMusic extends Fragment {
@@ -43,6 +44,11 @@ public class CategoryAddMusic extends Fragment {
                     addmusic.hideAddCategoryFrameLayout();
                     //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
                     addmusic.showUpRecording();
+                }else if(getActivity() instanceof CollabAddMusic){
+                    CollabAddMusic collabAddMusic = (CollabAddMusic) getActivity();
+                    collabAddMusic.CollabhideAddCategoryFrameLayout();
+                    //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
+                    collabAddMusic.CollabshowUpRecording();
                 }
             }
         });
@@ -53,6 +59,10 @@ public class CategoryAddMusic extends Fragment {
                 if(getActivity() instanceof AddMusic){
                     AddMusic addmusic = (AddMusic) getActivity();
                     addmusic.hideAddCategoryFrameLayout();
+                }else if(getActivity() instanceof CollabAddMusic){
+                    CollabAddMusic collabAddMusic = (CollabAddMusic) getActivity();
+                    collabAddMusic.CollabhideAddCategoryFrameLayout();
+                    //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
                 }
             }
         });
@@ -65,6 +75,11 @@ public class CategoryAddMusic extends Fragment {
                     addmusic.hideAddCategoryFrameLayout();
                     //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
                     addmusic.showUpPiano();
+                }else if(getActivity() instanceof CollabAddMusic){
+                    CollabAddMusic collabAddMusic = (CollabAddMusic) getActivity();
+                    collabAddMusic.CollabhideAddCategoryFrameLayout();
+                    collabAddMusic.CollabshowUpPiano();
+                    //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
                 }
             }
         });
@@ -76,6 +91,11 @@ public class CategoryAddMusic extends Fragment {
                     addmusic.hideAddCategoryFrameLayout();
                     //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
                     addmusic.showUpDrum();
+                }else if(getActivity() instanceof CollabAddMusic){
+                    CollabAddMusic collabAddMusic = (CollabAddMusic) getActivity();
+                    collabAddMusic.CollabhideAddCategoryFrameLayout();
+                    collabAddMusic.CollabshowUpDrum();
+                    //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
                 }
             }
         });
@@ -87,6 +107,11 @@ public class CategoryAddMusic extends Fragment {
                     addmusic.hideAddCategoryFrameLayout();
                     //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
                     addmusic.getPathFromStorage();
+                }else if(getActivity() instanceof CollabAddMusic){
+                    CollabAddMusic collabAddMusic = (CollabAddMusic) getActivity();
+                    collabAddMusic.CollabhideAddCategoryFrameLayout();
+                    collabAddMusic.CollabgetPathFromStorage();
+                    //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
                 }
             }
         });
