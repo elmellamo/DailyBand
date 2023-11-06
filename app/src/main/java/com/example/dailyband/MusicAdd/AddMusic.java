@@ -44,14 +44,13 @@ import com.example.dailyband.MusicFragment.PianoFragment;
 import com.example.dailyband.MusicFragment.PopularFragment;
 import com.example.dailyband.MusicFragment.RecordingMain;
 import com.example.dailyband.R;
-import com.example.dailyband.Setting.SettingActivity;
+import com.example.dailyband.Setting.NewSettingActivity;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.Utils.MergeWav;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.example.dailyband.adapter.MusicTrackAdapter;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -208,7 +207,7 @@ public class AddMusic extends AppCompatActivity {
         setbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myStartActivity(SettingActivity.class);
+                myStartActivity(NewSettingActivity.class);
             }
         });
         homeBtn.setOnClickListener(new View.OnClickListener() {

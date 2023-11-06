@@ -1,43 +1,29 @@
 package com.example.dailyband.MusicAdd;
 
-import static android.Manifest.permission;
-        import android.Manifest;
+import android.Manifest;
 
         import android.content.ContentValues;
         import android.content.Context;
         import android.content.DialogInterface;
         import android.content.Intent;
         import android.content.pm.PackageManager;
-import android.graphics.drawable.AnimatedVectorDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.AudioAttributes;
         import android.media.AudioFormat;
         import android.media.AudioManager;
         import android.media.AudioTrack;
-import android.media.MediaPlayer;
-import android.media.MediaRecorder;
-        import android.net.Uri;
+import android.net.Uri;
         import android.os.Build;
         import android.os.Bundle;
-        import android.os.ParcelFileDescriptor;
-        import android.provider.MediaStore;
+import android.provider.MediaStore;
         import android.util.Log;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.animation.Animation;
-        import android.view.animation.BounceInterpolator;
-        import android.view.animation.ScaleAnimation;
-        import android.widget.Button;
-        import android.widget.EditText;
-        import android.widget.FrameLayout;
+import android.view.View;
+import android.widget.FrameLayout;
         import android.widget.ImageButton;
         import android.widget.ImageView;
         import android.widget.TextView;
         import android.widget.Toast;
 
-        import androidx.activity.result.ActivityResultLauncher;
-        import androidx.activity.result.contract.ActivityResultContracts;
-        import androidx.annotation.NonNull;
+import androidx.annotation.NonNull;
         import androidx.appcompat.app.AlertDialog;
         import androidx.appcompat.app.AppCompatActivity;
         import androidx.constraintlayout.widget.ConstraintLayout;
@@ -45,7 +31,6 @@ import android.media.MediaRecorder;
         import androidx.core.content.ContextCompat;
         import androidx.recyclerview.widget.LinearLayoutManager;
         import androidx.recyclerview.widget.RecyclerView;
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
 import com.example.dailyband.Home.HomeMain;
         import com.example.dailyband.Models.ComplexName;
@@ -55,15 +40,11 @@ import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.MusicFragment.PopularFragment;
 import com.example.dailyband.MusicFragment.RecordingMain;
         import com.example.dailyband.R;
-        import com.example.dailyband.Setting.SettingActivity;
-        import com.example.dailyband.ShowMusic.PickMusic;
-        import com.example.dailyband.Utils.FirebaseMethods;
+import com.example.dailyband.Setting.NewSettingActivity;
+import com.example.dailyband.Utils.FirebaseMethods;
         import com.example.dailyband.Utils.MergeWav;
         import com.example.dailyband.Utils.OnRecordingCompletedListener;
         import com.example.dailyband.adapter.CollabMusicTrackAdapter;
-        import com.example.dailyband.adapter.MusicTrackAdapter;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -215,7 +196,7 @@ public class CollabAddMusic extends AppCompatActivity {
         setbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myStartActivity(SettingActivity.class);
+                myStartActivity(NewSettingActivity.class);
             }
         });
         homeBtn.setOnClickListener(new View.OnClickListener() {

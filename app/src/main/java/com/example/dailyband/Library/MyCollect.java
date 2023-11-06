@@ -1,32 +1,21 @@
 package com.example.dailyband.Library;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dailyband.Home.HomeMain;
-import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.Models.TestSong;
-import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
-import com.example.dailyband.Setting.SettingActivity;
 import com.example.dailyband.Utils.FirebaseMethods;
-import com.example.dailyband.adapter.LoveAdapter;
 import com.example.dailyband.adapter.MySongAdapter;
-import com.example.dailyband.adapter.RankingSongAdapter;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,8 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -13,13 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dailyband.Library.LibraryMain;
-import com.example.dailyband.Library.MyCollect;
-import com.example.dailyband.Library.MyLove;
 import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Setting.NewSettingActivity;
-import com.example.dailyband.Setting.SettingActivity;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.RankingSongAdapter;
 import com.google.firebase.auth.FirebaseAuth;

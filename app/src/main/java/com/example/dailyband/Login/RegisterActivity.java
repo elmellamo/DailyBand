@@ -101,7 +101,17 @@ public class RegisterActivity extends AppCompatActivity {
                                                 account.setPassword(pwstr);
                                                 account.setUsername(namestr);
 
-                                                mDatabaseRef.child("UserAccount").child(firebaseUser.getUid()).setValue(account);
+                                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                                if (user != null) {
+                                                    // 사용자가 로그인되어 있음, getUid() 메소드 호출 가능
+                                                    String uid = user.getUid();
+                                                    mDatabaseRef.child("UserAccount").child(firebaseUser.getUid()).setValue(account);
+                                                    mDatabaseRef.child("user_introduce").child(firebaseUser.getUid()).setValue(null);
+
+                                                } else {
+                                                    // 사용자가 로그인되어 있지 않음
+                                                    // 오류 처리 또는 로그인 화면으로 이동 등의 작업 수행
+                                                }
 
                                                 Toast.makeText(RegisterActivity.this, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                                                 myStartActivity(LoginActivity.class);

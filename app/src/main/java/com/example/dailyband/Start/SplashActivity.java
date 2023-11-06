@@ -1,7 +1,6 @@
 package com.example.dailyband.Start;
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,22 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.UiThread;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.R;
-import com.example.dailyband.Setting.SettingActivity;
 import com.example.dailyband.Utils.MusicService;
-import com.example.dailyband.Utils.SharedData;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.example.dailyband.Start.StartActivity;
-import com.example.dailyband.Login.RegisterActivity;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -54,49 +45,14 @@ public class SplashActivity extends AppCompatActivity{
         Intent musicServiceIntent = new Intent(this, MusicService.class);
         startService(musicServiceIntent);
 
-        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-
-
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference().child("profile_images/" + userUid + ".jpg");
-        //String imagePath = Environment.getExternalStorageDirectory() + "/" + userUid + ".jpg";
-        String localFilePath = getApplicationContext().getFilesDir() + "/local_image.jpg"; // 로컬에 저장할 파일 경로
-        File localFile = new File(localFilePath);
-        if (localFile.exists()) {
-            localFile.delete();
-        }
-        storageRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
-            // 다운로드 성공
-            // localFilePath에 이미지가 저장됨
-            // 여기서 UI 업데이트 등을 수행할 수 있습니다.
-            Toast.makeText(SplashActivity.this, "이미지 다운로드", Toast.LENGTH_SHORT).show();
-        }).addOnFailureListener(exception -> {
-            // 다운로드 실패
-        }).addOnProgressListener(taskSnapshot -> {
-            // 다운로드 진행 중
-        });
-
-        //storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-          //  String imageUrl = uri.toString();
-            //Toast.makeText(SplashActivity.this, "imageUrl 다운로드", Toast.LENGTH_SHORT).show();
-
-            //Glide.with(this)
-              //      .load(imageUrl)
-                //    .into(splashImage); // profileImage는 앱의 이미지뷰 객체
-        //});
-
-
-
-
-
-
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         // SPLASH_DELAY 시간 후에 다음 화면으로 이동합니다.
 
-        if (currentUser != null)
+        if (currentUser != null){
+            Download_image();
             AUTO_LOGIN = true;
+        }
         else
             AUTO_LOGIN=false;
 
@@ -184,6 +140,30 @@ public class SplashActivity extends AppCompatActivity{
             public void onAnimationRepeat(Animation animation) {
             }
         });
+    }
+
+    public void Download_image(){
+        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("profile_images/" + userUid + ".jpg");
+        //String imagePath = Environment.getExternalStorageDirectory() + "/" + userUid + ".jpg";
+        String localFilePath = getApplicationContext().getFilesDir() + "/local_image.jpg"; // 로컬에 저장할 파일 경로
+        File localFile = new File(localFilePath);
+        if (localFile.exists()) {
+            localFile.delete();
+        }
+        storageRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+            // 다운로드 성공
+            // localFilePath에 이미지가 저장됨
+            // 여기서 UI 업데이트 등을 수행할 수 있습니다.
+            Toast.makeText(SplashActivity.this, "이미지 다운로드", Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(exception -> {
+            // 다운로드 실패
+        }).addOnProgressListener(taskSnapshot -> {
+            // 다운로드 진행 중
+        });
+
     }
 
 

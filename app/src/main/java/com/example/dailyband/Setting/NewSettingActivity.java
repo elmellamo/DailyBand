@@ -48,7 +48,7 @@ public class NewSettingActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private DatabaseReference mDatabase;
 
-     private ImageView profileImg;
+    private ImageView profileImg;
     private ImageView tmpImg;
     private Uri selectedImageUri = null;
     private Uri userImage=null;
@@ -63,7 +63,7 @@ public class NewSettingActivity extends AppCompatActivity {
     private ConstraintLayout gray_screen;
 
     private String NAME_SET_TEXT;
-    public String EMAIL_SET_TEXT;
+    public String EMAIL_SET_TEXT, INTRODUCE_SET_TEXT;
     private NameFragment nameFragment;
     private EmailFragment emailFragment;
     private IntroduceFragment introduceFragment;
@@ -103,6 +103,17 @@ public class NewSettingActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 NAME_SET_TEXT = snapshot.child("name").getValue().toString();
                 EMAIL_SET_TEXT = snapshot.child("emailId").getValue().toString();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        mDatabase.child("user_introduce").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                INTRODUCE_SET_TEXT = snapshot.child(userUID).getValue().toString();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -195,6 +206,8 @@ public class NewSettingActivity extends AppCompatActivity {
 
                 introduceFragment = new IntroduceFragment();
                 detail_info_layout.setVisibility(View.VISIBLE);
+                introduceFragment.setuserId(userUID);
+                introduceFragment.setIntroduce(INTRODUCE_SET_TEXT);
                 getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, introduceFragment).commit();
             }
         });
@@ -428,6 +441,10 @@ public class NewSettingActivity extends AppCompatActivity {
 
     public void updateName(String updatedName) {
         NAME_SET_TEXT = updatedName;
+    }
+
+    public void updateIntroduce(String updatedIntroduce) {
+        INTRODUCE_SET_TEXT = updatedIntroduce;
     }
 
     private Bitmap rotateImage(Bitmap source, float angle) {

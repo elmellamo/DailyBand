@@ -9,9 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.MusicAdd.AddMusic;
-import com.example.dailyband.MusicFragment.CategoryAddMusic;
 import com.example.dailyband.R;
-import com.example.dailyband.Setting.SettingActivity;
+import com.example.dailyband.Setting.NewSettingActivity;
 
 public class LibraryMain extends AppCompatActivity {
     private ImageButton addbtn, setbtn, homeBtn, librarybtn;
@@ -42,7 +41,7 @@ public class LibraryMain extends AppCompatActivity {
         });
         setbtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) { myStartActivity(SettingActivity.class);    }
+            public void onClick(View view) { myStartActivity(NewSettingActivity.class);    }
         });
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
