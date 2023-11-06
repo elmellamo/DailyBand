@@ -71,6 +71,8 @@ import java.io.FileNotFoundException;
         import java.io.IOException;
         import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.text.SimpleDateFormat;
         import java.util.ArrayList;
         import java.util.Date;
@@ -80,30 +82,26 @@ public class CollabAddMusic extends AppCompatActivity {
     public class CollabMusicTrack {
         public Uri uri;
         public String title = "";
-        public boolean isSpeaking = true;
+
+        public boolean isSpeaking = true; // mute / unmute
+        public boolean isStarted = false;
+        public boolean isEnded = false;
     }
+
     private static final int REQUEST_PERMISSION_CODE = 1000;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-    //private MediaRecorder mediaRecorder;
-    private MediaRecorder audioRecorder;
-    //private String outputFile;
 
-    private ImageView plusbtn, playbtn2, uploadbtn;
+    private ImageView plusbtn, playbtn, uploadbtn;
     private FirebaseMethods mFirebaseMethods;
     private TextView nextmenu;
-    private EditText pathTextView;
 
-    private Uri uri, audiouri;
-
-    private boolean isPlaying = false;
-    private FrameLayout addCategoryFrameLayout;
-
-    int mSampleRate = 44100;
-    int mChannelCount = AudioFormat.CHANNEL_IN_STEREO;
-    int mAudioFormat = AudioFormat.ENCODING_PCM_16BIT;
-    int mBufferSize = AudioTrack.getMinBufferSize(mSampleRate, mChannelCount, mAudioFormat);
+    private Uri uri;
 
     List<CollabMusicTrack> tracks;
+
+    Thread audioThread;
+    private boolean isPlaying = false;
+    private int playingLocation = 0;
 
     private RecyclerView musicTrackView;
     private LinearLayoutManager llm;
@@ -111,12 +109,15 @@ public class CollabAddMusic extends AppCompatActivity {
     private ConstraintLayout detail_pickup_layout, gray_screen;
     private FrameLayout detail_instrument_frame;
     private List<ComplexName> parents;
+
+    private FrameLayout addCategoryFrameLayout;
     PianoFragment pianoFragment;
     CategoryAddMusic categoryAddMusic;
     DrumFragment drumFragment;
     RecordingMain recordingMain;
     private ImageButton homeBtn, setbtn;
     private String parent_Id;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.collab_add_music);
@@ -133,7 +134,7 @@ public class CollabAddMusic extends AppCompatActivity {
         addCategoryFrameLayout = findViewById(R.id.add_category_framelayout);
         homeBtn = findViewById(R.id.homeBtn);
         setbtn = findViewById(R.id.setbtn);
-        playbtn2 = findViewById(R.id.playbtn2);
+        playbtn = findViewById(R.id.playbtn2);
         pianoFragment = new PianoFragment();
         drumFragment = new DrumFragment();
         recordingMain = new RecordingMain();
@@ -226,15 +227,29 @@ public class CollabAddMusic extends AppCompatActivity {
                 addCategoryFrameLayout.setVisibility(View.VISIBLE);
             }
         });
-        playbtn2.setOnClickListener(new View.OnClickListener() {
+        playbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 쓰레드에서 AudioTrack으로 선택된 uri 재생
-                for(int i=0;i<tracks.size();i++) {
-                    if(tracks.get(i).isSpeaking == false) continue;
-                    Runnable r = new CollabAudioTrackRunnable(tracks.get(i).uri);
-                    new Thread(r).start();
+                if(isPlaying) {
+                    // 재생중이었으면 경우 이미지를 Play로 변경
+                    playbtn.setImageResource(R.drawable.playbtn);
+
+                    if(audioThread != null)
+                        audioThread.interrupt();
+                    audioThread = null;
+                    isPlaying = false;
+                    return;
                 }
+
+                // 쓰레드에서 AudioTrack으로 uri 재생
+                isPlaying = true;
+                Runnable r = new CollabAudioTrackRunnable();
+                audioThread = new Thread(r);
+                audioThread.start();
+
+                // Play 버튼 이미지를 Pause로 변경
+                playbtn.setImageResource(R.drawable.pause);
+
             }
         });
     }
@@ -542,23 +557,27 @@ public class CollabAddMusic extends AppCompatActivity {
 
 
     public class CollabAudioTrackRunnable implements Runnable {
-        //int position;
-        //public AudioTrackRunnable(int position) {this.position = position;}
 
-        private Uri uri;
-        public CollabAudioTrackRunnable(Uri uri) {
-            this.uri = uri;
-        }
+        int mSampleRate = 44100;
+        int mChannelCount = AudioFormat.CHANNEL_IN_STEREO;
+        int mAudioFormat = AudioFormat.ENCODING_PCM_16BIT;
+        int mBufferSize = AudioTrack.getMinBufferSize(mSampleRate, mChannelCount, mAudioFormat);
+
+        public CollabAudioTrackRunnable() { }
 
         public void run() {
             try {
-                // 데이터 주고받을 배열
-                byte[] writeData = new byte[mBufferSize];
-
                 // 데이터 스트림
-                InputStream is = getContentResolver().openInputStream(uri);
+                // InputStream is = getContentResolver().openInputStream(uri);
+                int trackSize = tracks.size();
+                InputStream[] is = new InputStream[trackSize];
+                for(int i=0;i<trackSize;i++) {
+                    is[i] = getContentResolver().openInputStream(tracks.get(i).uri);
+                    is[i].skip(44 + playingLocation);
 
-                Log.d("테스트", "스트림 생성");
+                    tracks.get(i).isStarted = false;
+                    tracks.get(i).isEnded = false;
+                }
 
                 // AudioTrack 생성
                 AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -581,25 +600,50 @@ public class CollabAddMusic extends AppCompatActivity {
                         AudioTrack.MODE_STREAM,
                         0);
 
-                // isPlaying으로 정지
-                isPlaying = true;
+
+                byte[] readData = new byte[mBufferSize];
+                byte[] writeData = new byte[mBufferSize];
+
+                short[] readShorts = new short[mBufferSize/2];
+                short[] writeShorts = new short[mBufferSize/2];
+
+                int[] readInt = new int[mBufferSize/2];
+
                 at.play();
                 while (isPlaying) {
                     try {
-                        int ret = is.read(writeData, 0, mBufferSize);
-                        Log.d("테스트", "읽음: "+ret);
-                        if (ret <= 0) {
-                            (CollabAddMusic.this).runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    isPlaying = false;
-                                    //mBtPlay.setText("Play");
-                                }
-                            });
-
-                            break;
+                        for(int j=0;j<mBufferSize/2;j++) {
+                            readInt[j] = 0;
                         }
+
+                        int ret=0;
+                        for(int i=0;i<trackSize;i++) {
+                            if(tracks.get(i).isEnded) continue;
+
+                            int tmp = is[i].read(readData, 0, mBufferSize);
+                            if(tmp <= 0) tracks.get(i).isEnded = true;
+                            ret = Math.max(ret, tmp);
+
+                            // 읽어온 바이트들을 little endian으로 short로 변환
+                            ByteBuffer.wrap(readData).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(readShorts);
+                            for(int j=0;j<mBufferSize/2;j++) {
+                                // 값을 다 더해줌
+                                readInt[j] += readShorts[j];
+                            }
+                        }
+                        if(ret <= 0) break;
+
+                        // short 범위 내의 값으로 바꾼 후에 다시 little endian으로 변환
+                        for(int j=0;j<mBufferSize/2;j++) {
+                            if(readInt[j] > 32767) readInt[j] = 32767;
+                            if(readInt[j] < -32768) readInt[j] = -32768;
+
+                            writeShorts[j] = (short)readInt[j];
+                        }
+                        ByteBuffer.wrap(writeData).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().put(writeShorts);
                         at.write(writeData, 0, ret);
+                        playingLocation += ret;
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -608,7 +652,17 @@ public class CollabAddMusic extends AppCompatActivity {
                 at.release();
                 at = null;
 
-                is.close();
+                playbtn.setImageResource(R.drawable.playbtn);
+
+                // 전부 끝까지 재생했으면 재생위치 0으로 초기화
+                boolean isAllPlayed = true;
+                for(int i=0;i<trackSize;i++) {
+                    if(tracks.get(i).isEnded == false) {
+                        isAllPlayed = false;
+                        break;
+                    }
+                }
+                if(isAllPlayed) playingLocation = 0;
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

@@ -139,9 +139,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:background="@drawable/medicontrol"
-                    android:paddingLeft="20dp"
+                    android:paddingLeft="10dp"
                     android:paddingTop="15dp"
-                    android:paddingRight="20dp"
+                    android:paddingRight="10dp"
                     android:paddingBottom="15dp"
                     app:layout_constraintBottom_toTopOf="@+id/tracklist"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -152,46 +152,47 @@
                         android:id="@+id/playbtn2"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
+                        android:layout_marginHorizontal="5dp"
                         android:src="@drawable/playbtn"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toLeftOf="@+id/folderbtn"
+                        app:layout_constraintRight_toLeftOf="@+id/stopbtn"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageButton
-                        android:id="@+id/folderbtn"
+                        android:id="@+id/stopbtn"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
+                        android:layout_marginHorizontal="5dp"
                         android:background="@color/btn_color"
                         android:src="@drawable/folder_open"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toRightOf="@+id/playbtn2"
-                        app:layout_constraintRight_toLeftOf="@+id/path_text"
+                        app:layout_constraintRight_toLeftOf="@+id/seekBar"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <EditText
-                        android:id="@+id/path_text"
-                        android:layout_width="wrap_content"
+                    <SeekBar
+                        android:id="@+id/seekBar"
+                        android:layout_width="0dp"
+                        android:layout_marginHorizontal="5dp"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:inputType="text"
-                        android:text=""
+                        android:max="50"
+                        android:progress="0"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toRightOf="@id/folderbtn"
-                        app:layout_constraintRight_toLeftOf="@id/uploadbtn"
+                        app:layout_constraintLeft_toRightOf="@+id/stopbtn"
+                        app:layout_constraintRight_toLeftOf="@+id/uploadbtn"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageButton
                         android:id="@+id/uploadbtn"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
+                        android:layout_marginHorizontal="5dp"
                         android:background="@color/btn_color"
                         android:src="@drawable/upload"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/path_text"
+                        app:layout_constraintStart_toEndOf="@+id/seekBar"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
