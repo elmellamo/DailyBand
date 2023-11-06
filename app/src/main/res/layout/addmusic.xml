@@ -173,9 +173,9 @@
                     <SeekBar
                         android:id="@+id/seekBar"
                         android:layout_width="0dp"
-                        android:layout_marginHorizontal="5dp"
                         android:layout_height="wrap_content"
-                        android:max="50"
+                        android:layout_marginHorizontal="5dp"
+                        android:max="10000"
                         android:progress="0"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toRightOf="@+id/stopbtn"

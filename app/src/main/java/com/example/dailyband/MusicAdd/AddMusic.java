@@ -73,6 +73,11 @@ public class AddMusic extends AppCompatActivity {
         public boolean isEnded = false;
     }
 
+    int mSampleRate = 44100;
+    int mChannelCount = AudioFormat.CHANNEL_IN_STEREO;
+    int mAudioFormat = AudioFormat.ENCODING_PCM_16BIT;
+    int mBufferSize = AudioTrack.getMinBufferSize(mSampleRate, mChannelCount, mAudioFormat);
+
     private static final int REQUEST_PERMISSION_CODE = 1000;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
 
@@ -84,8 +89,8 @@ public class AddMusic extends AppCompatActivity {
 
     Thread audioThread;
     private boolean isPlaying = false;
-    private int playingLocation = 0;
-    private int max_len = 0;
+    private long playingLocation = 0;
+    private long max_len = 0;
 
     private ImageView plusbtn, playbtn, stopbtn;
     private TextView nextmenu, music_length;
@@ -265,7 +270,16 @@ public class AddMusic extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                startNewAudioThread(seekBar.getProgress());
+                Log.d("asdf", ""+seekBar.getProgress()+", "+max_len);
+                long location = (long)(((float)seekBar.getProgress() / 10000) * max_len / 1000 * 44100 * 4);
+                long mlocation = location - (location % mBufferSize);
+                Log.d("asdf", "location(byte) :"+location);
+                if(isPlaying)
+                    startNewAudioThread((int)mlocation);
+                else {
+                    playingLocation = (int)mlocation;
+                    updateMusicPosition();
+                }
             }
         });
 
@@ -319,20 +333,20 @@ public class AddMusic extends AppCompatActivity {
         Log.d("asdf", "max leen :"+max_len);
 
         updateMusicPosition();
-//        long minutes = (max_len / 1000)  / 60;
-//        int seconds = (int)((max_len / 1000) % 60);
     }
 
     public void updateMusicPosition() {
-        int max_minutes = (max_len / 1000)  / 60;
+        long max_minutes = (max_len / 1000)  / 60;
         int max_seconds = (int)((max_len / 1000) % 60);
 
-        int cur_len = playingLocation / 44100 / 4;
-        int cur_minutes = cur_len / 60;
-        int cur_seconds = cur_len % 60;
+        long cur_len = playingLocation / 44100 / 4;
+        long cur_minutes = cur_len / 60;
+        int cur_seconds = (int)(cur_len % 60);
 
         String musicLength = String.format("%02d:%02d / %02d:%02d", cur_minutes, cur_seconds, max_minutes, max_seconds);
         music_length.setText(musicLength);
+
+        seekBar.setProgress((int)((float)cur_len / max_len * 10000000));
     }
 
     public void getPathFromStorage() {
@@ -562,16 +576,17 @@ public class AddMusic extends AppCompatActivity {
         if(audioThread != null)
             audioThread.interrupt();
         audioThread = null;
+        Log.d("asdf", "쓰레드 멈추기 시도");
 
         // 쓰레드에서 AudioTrack으로 uri 재생
-        isPlaying = true;
-        playingLocation = startPoint;
-        Runnable r = new AudioTrackRunnable();
-        audioThread = new Thread(r);
-        audioThread.start();
-
-        // Play 버튼 이미지를 Pause로 변경
-        playbtn.setImageResource(R.drawable.pause);
+//        isPlaying = true;
+//        playingLocation = startPoint;
+//        Runnable r = new AudioTrackRunnable();
+//        audioThread = new Thread(r);
+//        audioThread.start();
+//
+//        // Play 버튼 이미지를 Pause로 변경
+//        playbtn.setImageResource(R.drawable.pause);
     }
 
     public class AudioTrackRunnable implements Runnable {
