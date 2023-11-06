@@ -18,6 +18,7 @@ import com.example.dailyband.Library.MyLove;
 import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
+import com.example.dailyband.Setting.NewSettingActivity;
 import com.example.dailyband.Setting.SettingActivity;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.RankingSongAdapter;
@@ -80,7 +81,7 @@ public class HomeMain extends AppCompatActivity{
         setbtn = findViewById(R.id.setbtn);
         setbtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) { myStartActivity(SettingActivity.class);    }
+            public void onClick(View view) { myStartActivity(NewSettingActivity.class);    }
         });
     }
 
