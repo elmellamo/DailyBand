@@ -1,6 +1,7 @@
 package com.example.dailyband.MusicAdd;
 
 import static android.Manifest.permission;
+
 import android.Manifest;
 
 import android.content.ContentValues;
@@ -12,28 +13,20 @@ import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.media.MediaRecorder;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.ScaleAnimation;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,7 +44,6 @@ import com.example.dailyband.MusicFragment.PianoFragment;
 import com.example.dailyband.MusicFragment.RecordingMain;
 import com.example.dailyband.R;
 import com.example.dailyband.Setting.SettingActivity;
-import com.example.dailyband.ShowMusic.PickMusic;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.Utils.MergeWav;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
@@ -74,6 +66,7 @@ public class AddMusic extends AppCompatActivity {
     public static class MusicTrack {
         public Uri uri;
         public String title = "";
+        public int length; // 초단위
 
         public boolean isSpeaking = true; // mute / unmute
         public boolean isStarted = false;
@@ -83,9 +76,7 @@ public class AddMusic extends AppCompatActivity {
     private static final int REQUEST_PERMISSION_CODE = 1000;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
 
-    private ImageView plusbtn, playbtn, uploadbtn;
     private FirebaseMethods mFirebaseMethods;
-    private TextView nextmenu;
 
     private Uri uri;
 
@@ -94,6 +85,11 @@ public class AddMusic extends AppCompatActivity {
     Thread audioThread;
     private boolean isPlaying = false;
     private int playingLocation = 0;
+    private int max_len = 0;
+
+    private ImageView plusbtn, playbtn, stopbtn;
+    private TextView nextmenu, music_length;
+    private SeekBar seekBar;
 
     private RecyclerView musicTrackView;
     private LinearLayoutManager llm;
@@ -124,6 +120,10 @@ public class AddMusic extends AppCompatActivity {
         homeBtn = findViewById(R.id.homeBtn);
         setbtn = findViewById(R.id.setbtn);
         playbtn = findViewById(R.id.playbtn2);
+        stopbtn = findViewById(R.id.stopbtn);
+        music_length = findViewById(R.id.music_length);
+        seekBar = findViewById(R.id.seekBar);
+
         pianoFragment = new PianoFragment();
         drumFragment = new DrumFragment();
         recordingMain = new RecordingMain();
@@ -138,7 +138,6 @@ public class AddMusic extends AppCompatActivity {
         llm = new LinearLayoutManager(this);
         musicTrackView.setLayoutManager(llm);
 
-//        paths = new ArrayList<>();
         tracks = new ArrayList<>();
 
         adapter = new MusicTrackAdapter(tracks);
@@ -241,6 +240,35 @@ public class AddMusic extends AppCompatActivity {
 
             }
         });
+        stopbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(audioThread != null)
+                    audioThread.interrupt();
+                audioThread = null;
+                isPlaying = false;
+                playingLocation = 0;
+
+                updateMusicPosition();
+            }
+        });
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                startNewAudioThread(seekBar.getProgress());
+            }
+        });
+
     }
     public void showUpRecording(){
         detail_pickup_layout.setVisibility(View.VISIBLE);
@@ -268,8 +296,43 @@ public class AddMusic extends AppCompatActivity {
         MusicTrack track = new MusicTrack();
         track.uri = uri;
         track.title = title;
+
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(getApplicationContext(), uri);
+        String durationStr = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        int millSecond = Integer.parseInt(durationStr);
+        track.length = millSecond;
+        Log.d("asdf",durationStr + ", milsec:"+millSecond);
+
         tracks.add(track);
         adapter.notifyDataSetChanged();
+        updateMaxMusicLength();
+    }
+
+    private void updateMaxMusicLength() {
+        max_len = 0;
+        for(int i=0;i<tracks.size();i++) {
+            Log.d("asdf", i+" len : "+tracks.get(i).length);
+            max_len = Math.max(max_len, tracks.get(i).length);
+        }
+
+        Log.d("asdf", "max leen :"+max_len);
+
+        updateMusicPosition();
+//        long minutes = (max_len / 1000)  / 60;
+//        int seconds = (int)((max_len / 1000) % 60);
+    }
+
+    public void updateMusicPosition() {
+        int max_minutes = (max_len / 1000)  / 60;
+        int max_seconds = (int)((max_len / 1000) % 60);
+
+        int cur_len = playingLocation / 44100 / 4;
+        int cur_minutes = cur_len / 60;
+        int cur_seconds = cur_len % 60;
+
+        String musicLength = String.format("%02d:%02d / %02d:%02d", cur_minutes, cur_seconds, max_minutes, max_seconds);
+        music_length.setText(musicLength);
     }
 
     public void getPathFromStorage() {
@@ -286,9 +349,6 @@ public class AddMusic extends AppCompatActivity {
         if(requestCode == 1){
             if(resultCode == RESULT_OK){
                 // audio 위치
-//                uri = data.getData();
-//                pathTextView.setText(uri.getPath().toString());
-
                 Uri uri = data.getData();
                 String path = uri.getPath();
                 addTrack(uri, path);
@@ -498,7 +558,21 @@ public class AddMusic extends AppCompatActivity {
         return result_uri;
     }
 
+    private void startNewAudioThread(int startPoint) {
+        if(audioThread != null)
+            audioThread.interrupt();
+        audioThread = null;
 
+        // 쓰레드에서 AudioTrack으로 uri 재생
+        isPlaying = true;
+        playingLocation = startPoint;
+        Runnable r = new AudioTrackRunnable();
+        audioThread = new Thread(r);
+        audioThread.start();
+
+        // Play 버튼 이미지를 Pause로 변경
+        playbtn.setImageResource(R.drawable.pause);
+    }
 
     public class AudioTrackRunnable implements Runnable {
 
@@ -588,6 +662,13 @@ public class AddMusic extends AppCompatActivity {
                         at.write(writeData, 0, ret);
                         playingLocation += ret;
 
+                        runOnUiThread(new Runnable(){
+                            @Override
+                            public void run() {
+                                updateMusicPosition();
+                            }
+                        });
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -606,11 +687,10 @@ public class AddMusic extends AppCompatActivity {
                         break;
                     }
                 }
+                Log.d("asdf", ""+playingLocation);
                 if(isAllPlayed) playingLocation = 0;
 
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

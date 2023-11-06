@@ -164,8 +164,7 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_marginHorizontal="5dp"
-                        android:background="@color/btn_color"
-                        android:src="@drawable/folder_open"
+                        android:src="@drawable/stop"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toRightOf="@+id/playbtn2"
                         app:layout_constraintRight_toLeftOf="@+id/seekBar"
@@ -180,16 +179,16 @@
                         android:progress="0"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toRightOf="@+id/stopbtn"
-                        app:layout_constraintRight_toLeftOf="@+id/uploadbtn"
+                        app:layout_constraintRight_toLeftOf="@+id/music_length"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageButton
-                        android:id="@+id/uploadbtn"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                    <TextView
+                        android:id="@+id/music_length"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginHorizontal="5dp"
-                        android:background="@color/btn_color"
-                        android:src="@drawable/upload"
+                        android:text="00:00 / 00:00"
+                        android:textColor="@color/btn_color"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/seekBar"
