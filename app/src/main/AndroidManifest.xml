@@ -80,7 +80,7 @@
             android:exported="true">
         </activity>
 
-        <activity android:name=".MusicAdd.TestParent"
+        <activity android:name=".MusicAdd.CollabAddMusic"
             android:exported="true">
         </activity>
 

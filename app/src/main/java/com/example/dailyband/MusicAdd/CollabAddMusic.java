@@ -70,7 +70,8 @@ import com.google.firebase.storage.StorageReference;
 import java.io.FileNotFoundException;
         import java.io.IOException;
         import java.io.InputStream;
-        import java.text.SimpleDateFormat;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
         import java.util.ArrayList;
         import java.util.Date;
         import java.util.List;
@@ -260,22 +261,50 @@ public class CollabAddMusic extends AppCompatActivity {
     }
 
     public void CollabgetOriginalSong(){
-        StorageReference songRef = FirebaseStorage.getInstance().getReference().child("songs/"+parent_Id+"/song");
-        songRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                long currentTimeMillis = System.currentTimeMillis();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                String formattedTime = sdf.format(new Date(currentTimeMillis));
-                Log.e("로그", "지금 되고 있는거야?"+uri.toString());
+        long currentTimeMillis = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        String formattedTime = sdf.format(new Date(currentTimeMillis));
+
+        ContentValues values = new ContentValues();
+
+        values.put(MediaStore.Audio.Media.TITLE, "firebase");
+        values.put(MediaStore.Audio.Media.DISPLAY_NAME, formattedTime);
+        values.put(MediaStore.Audio.Media.DATE_ADDED, (int) (System.currentTimeMillis() / 1000));
+        values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/x-wav");
+        values.put(MediaStore.Audio.Media.RELATIVE_PATH, "Music/Daily Band/Songs/");
+
+        Uri uri = getContentResolver().insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values);
+
+        try {
+            OutputStream outputStream = getContentResolver().openOutputStream(uri);
+
+            StorageReference songRef = FirebaseStorage.getInstance().getReference().child("songs/" + parent_Id + "/song");
+            songRef.getStream((state, inputStream) -> {
+
+                long totalBytes = state.getTotalByteCount();
+                long bytesDownloaded = 0;
+
+                byte[] buffer = new byte[1024];
+                int size;
+                while ((size = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, size);
+                    bytesDownloaded += size;
+                }
+
+                inputStream.close();
+
+            }).addOnSuccessListener(taskSnapshot -> {
+
+                Toast.makeText(CollabAddMusic.this, "로딩 완료", Toast.LENGTH_SHORT).show();
+                Log.e("로그", "지금 되고 있는거야?" + uri.toString());
                 addTrack(uri, formattedTime);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // 다운로드 실패 시 처리
-            }
-        });
+
+            }).addOnFailureListener(e -> {
+                Log.w("asdf", "download:FAILURE", e);
+            });
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void addTrack(Uri uri, String title) {
@@ -529,6 +558,8 @@ public class CollabAddMusic extends AppCompatActivity {
                 // 데이터 스트림
                 InputStream is = getContentResolver().openInputStream(uri);
 
+                Log.d("테스트", "스트림 생성");
+
                 // AudioTrack 생성
                 AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                 String rate = audioManager.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
@@ -556,6 +587,7 @@ public class CollabAddMusic extends AppCompatActivity {
                 while (isPlaying) {
                     try {
                         int ret = is.read(writeData, 0, mBufferSize);
+                        Log.d("테스트", "읽음: "+ret);
                         if (ret <= 0) {
                             (CollabAddMusic.this).runOnUiThread(new Runnable() {
                                 @Override
