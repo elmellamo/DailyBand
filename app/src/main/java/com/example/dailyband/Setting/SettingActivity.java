@@ -71,6 +71,7 @@ public class SettingActivity extends AppCompatActivity {
     private Uri userImage=null;
     private CardView cardView;
     private CardView cardView_email;
+    private CardView cardView_introduce;
     private ConstraintLayout setting_user_layout;
     private ConstraintLayout setting_email_layout;
     private ConstraintLayout cardview_email_layout;
@@ -78,15 +79,20 @@ public class SettingActivity extends AppCompatActivity {
     private ConstraintLayout setting_withdrawal_layout;
     private ConstraintLayout setting_logout_layout;
     private ConstraintLayout setting_contact_layout;
+    private ConstraintLayout setting_introduce_layout;
     private boolean isCardViewVisible = false;
     private EditText name_cardview_edittext;
     private EditText email_cardview_edittext;
     private EditText email_pw_cardview_edittext;
+    private TextView introduce_textView;
+    private EditText introduce_cardview_edittext;
+
     private String NAME_SET_TEXT;
     private ConstraintLayout touchable_cardview_layout;
     private Button change_name_btn;
     private Button change_email_btn;
     public String EMAIL_SET_TEXT;
+    private ConstraintLayout touchable_cardview_introduce_layout;
 
 
     @Override
@@ -118,7 +124,12 @@ public class SettingActivity extends AppCompatActivity {
         setting_withdrawal_layout = findViewById(R.id.setting_withdrawal_layout);
         setting_logout_layout = findViewById(R.id.setting_logout_layout);
         setting_contact_layout = findViewById(R.id.setting_contact_layout);
+        setting_introduce_layout = findViewById(R.id.setting_introduce_layout);
+        introduce_textView = findViewById(R.id.introduce_textView);
+        introduce_cardview_edittext = findViewById(R.id.introduce_cardview_edittext);
+        cardView_introduce = findViewById(R.id.cardView_introduce);
 
+        profileImg.bringToFront();
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         StorageReference storageRef = storage.getReference().child("profile_images");
         StorageReference imageRef = storageRef.child(userUID+".jpg");
@@ -134,9 +145,6 @@ public class SettingActivity extends AppCompatActivity {
 
             }
         });
-
-
-
 
         String localFilePath = getApplicationContext().getFilesDir() + "/local_image.jpg"; // 로컬에 저장할 파일 경로
         File localFile = new File(localFilePath); // 이미지 파일의 로컬 경로
@@ -180,9 +188,6 @@ public class SettingActivity extends AppCompatActivity {
             // 파일이 존재하지 않는 경우
             // 사용자에게 알림을 표시하거나 다른 조치를 취할 수 있습니다.
         }
-
-
-
 
         imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
             String imageUrl = uri.toString();
@@ -234,6 +239,29 @@ public class SettingActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        setting_introduce_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isCardViewVisible) {
+                    // 카드뷰가 보이지 않으면 스르륵 올라와서 보이게 함
+                    cardView_introduce.setVisibility(View.VISIBLE);
+                    cardView_introduce.startAnimation(slideUpAnimation);
+                    //introduce_cardview_edittext.setText(EMAIL_SET_TEXT);
+                    isCardViewVisible = true;
+                    setting_user_layout.setClickable(false);
+                    //cardView.bringToFront();
+                } else {
+                    // 카드뷰가 이미 보이면 다시 숨김
+                    cardView_introduce.setVisibility(View.INVISIBLE);
+                    touchable_cardview_introduce_layout.setVisibility(View.INVISIBLE);
+                    isCardViewVisible = false;
+                }
+            }
+        });
+
+
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

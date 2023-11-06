@@ -104,6 +104,7 @@
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+
         <!--설정 창 버튼들-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -118,330 +119,411 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             >
-
-            <TextView
-                android:id="@+id/mypage_info_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="개인정보 수정"
-                android:textColor="#80000000"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="5dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/setting_user_layout"/>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/setting_user_layout"
-                android:layout_marginTop="15dp"
-                android:clickable="true"
-                app:layout_constraintTop_toBottomOf="@id/mypage_info_text"
-                app:layout_constraintStart_toStartOf="parent"
-
-                >
-                <ImageView
-                    android:id="@+id/setting_user_img"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/setting_user_img"
-                    android:layout_marginStart="10dp"
-                    app:civ_border_color="#000000"
-                    app:civ_border_overlay="true"
-                    app:civ_border_width="0dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
-
-                <TextView
-                    android:id="@+id/setting_name"
-                    android:layout_width="wrap_content"
+                android:layout_height="400dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="사용자 이름"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#000000"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/setting_user_img"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:id="@+id/mypage_info_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="개인정보 수정"
+                        android:textColor="#80000000"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="5dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/setting_user_layout"/>
 
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:src="@drawable/setting_go_img"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="5dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                     />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/setting_user_layout"
+                        android:layout_marginTop="15dp"
+                        android:clickable="true"
+                        app:layout_constraintTop_toBottomOf="@id/mypage_info_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        >
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        <ImageView
+                            android:id="@+id/setting_user_img"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/setting_user_img"
+                            android:layout_marginStart="10dp"
+                            app:civ_border_color="#000000"
+                            app:civ_border_overlay="true"
+                            app:civ_border_width="0dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/setting_email_layout"
-                android:layout_marginTop="15dp"
-                android:clickable="true"
-                app:layout_constraintTop_toBottomOf="@id/setting_user_layout"
-                app:layout_constraintStart_toStartOf="parent"
+                        <TextView
+                            android:id="@+id/setting_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="사용자 이름"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#000000"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/setting_user_img"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
-                >
-                <ImageView
-                    android:id="@+id/setting_email_img"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@drawable/setting_email_img"
-                    android:layout_marginStart="11dp"
-                    app:civ_border_color="#000000"
-                    app:civ_border_overlay="true"
-                    app:civ_border_width="0dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:src="@drawable/setting_go_img"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="5dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                             />
 
-                <TextView
-                    android:id="@+id/setting_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="11dp"
-                    android:text="이메일"
-                    android:textStyle="bold"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/setting_email_img"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:src="@drawable/setting_go_img"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="5dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/setting_email_layout"
+                        android:layout_marginTop="15dp"
+                        android:clickable="true"
+                        app:layout_constraintTop_toBottomOf="@id/setting_user_layout"
+                        app:layout_constraintStart_toStartOf="parent"
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        >
+                        <ImageView
+                            android:id="@+id/setting_email_img"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/setting_email_img"
+                            android:layout_marginStart="11dp"
+                            app:civ_border_color="#000000"
+                            app:civ_border_overlay="true"
+                            app:civ_border_width="0dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/setting_password_layout"
-                android:layout_marginTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/setting_email_layout"
-                app:layout_constraintStart_toStartOf="parent"
+                        <TextView
+                            android:id="@+id/setting_email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="11dp"
+                            android:text="이메일"
+                            android:textStyle="bold"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/setting_email_img"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
-                >
-                <ImageView
-                    android:id="@+id/setting_password_img"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:src="@drawable/setting_password_img"
-                    android:layout_marginStart="12dp"
-                    app:civ_border_color="#000000"
-                    app:civ_border_overlay="true"
-                    app:civ_border_width="0dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:src="@drawable/setting_go_img"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="5dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
 
-                <TextView
-                    android:id="@+id/setting_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="비밀번호"
-                    android:textStyle="bold"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/setting_password_img"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:src="@drawable/setting_go_img"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="5dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/setting_password_layout"
+                        android:layout_marginTop="15dp"
+                        android:clickable="true"
+                        app:layout_constraintTop_toBottomOf="@id/setting_email_layout"
+                        app:layout_constraintStart_toStartOf="parent"
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <TextView
-                android:id="@+id/mypage_info2_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="문의 및 계정관리"
-                android:textColor="#80000000"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="25dp"
-                app:layout_constraintTop_toBottomOf="@id/setting_password_layout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/setting_contact_layout"/>
+                        >
+                        <ImageView
+                            android:id="@+id/setting_password_img"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:src="@drawable/setting_password_img"
+                            android:layout_marginStart="12dp"
+                            app:civ_border_color="#000000"
+                            app:civ_border_overlay="true"
+                            app:civ_border_width="0dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/setting_contact_layout"
-                android:layout_marginTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/mypage_info2_text"
-                app:layout_constraintStart_toStartOf="parent"
+                        <TextView
+                            android:id="@+id/setting_password"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="비밀번호"
+                            android:textStyle="bold"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/setting_password_img"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
-                >
-                <ImageView
-                    android:id="@+id/setting_contact_img"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:src="@drawable/setting_contact_img"
-                    android:layout_marginStart="12dp"
-                    app:civ_border_color="#000000"
-                    app:civ_border_overlay="true"
-                    app:civ_border_width="0dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:src="@drawable/setting_go_img"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="5dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
 
-                <TextView
-                    android:id="@+id/setting_contact"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="1대1 문의하기"
-                    android:textStyle="bold"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/setting_contact_img"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:src="@drawable/setting_go_img"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="5dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/mypage_info2_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="문의 및 계정관리"
+                        android:textColor="#80000000"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="25dp"
+                        android:clickable="true"
+                        app:layout_constraintTop_toBottomOf="@id/setting_password_layout"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/setting_introduce_layout"/>
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/setting_logout_layout"
-                android:clickable="true"
-                android:layout_marginTop="15dp"
-                app:layout_constraintTop_toBottomOf="@id/setting_contact_layout"
-                app:layout_constraintStart_toStartOf="parent"
 
-                >
-                <ImageView
-                    android:id="@+id/setting_logout_img"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@drawable/setting_logout_img"
-                    android:layout_marginStart="9dp"
-                    app:civ_border_color="#000000"
-                    app:civ_border_overlay="true"
-                    app:civ_border_width="0dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
 
-                <TextView
-                    android:id="@+id/setting_logout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="로그아웃"
-                    android:textStyle="bold"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/setting_logout_img"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/setting_introduce_layout"
+                        android:layout_marginTop="15dp"
+                        app:layout_constraintTop_toBottomOf="@id/mypage_info2_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/setting_contact_layout"
+                        >
+                        <ImageView
+                            android:id="@+id/setting_introduce_img"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/setting_user_img"
+                            android:layout_marginStart="10dp"
+                            app:civ_border_color="#000000"
+                            app:civ_border_overlay="true"
+                            app:civ_border_width="0dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
 
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:src="@drawable/setting_go_img"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="5dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
+                        <TextView
+                            android:id="@+id/setting_introduce"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="내 정보 수정하기"
+                            android:textStyle="bold"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/setting_introduce_img"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        <ImageView
+                            android:id="@+id/imageView_introduce"
+                            android:src="@drawable/setting_go_img"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="5dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/setting_withdrawal_layout"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:clickable="true"
-                app:layout_constraintTop_toBottomOf="@id/setting_logout_layout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                >
-                <ImageView
-                    android:id="@+id/setting_withdrawal_img"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/setting_withdrawal_img"
-                    android:layout_marginStart="10dp"
-                    app:civ_border_color="#000000"
-                    app:civ_border_overlay="true"
-                    app:civ_border_width="0dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/setting_withdrawal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="탈퇴하기"
-                    android:textStyle="bold"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/setting_withdrawal_img"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
 
-                <ImageView
-                    android:id="@+id/imageView6"
-                    android:src="@drawable/setting_go_img"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="5dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/setting_contact_layout"
+                        android:layout_marginTop="15dp"
+                        app:layout_constraintTop_toBottomOf="@id/setting_introduce_layout"
+                        app:layout_constraintStart_toStartOf="parent"
+
+                        >
+                        <ImageView
+                            android:id="@+id/setting_contact_img"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:src="@drawable/setting_contact_img"
+                            android:layout_marginStart="12dp"
+                            app:civ_border_color="#000000"
+                            app:civ_border_overlay="true"
+                            app:civ_border_width="0dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+
+                        <TextView
+                            android:id="@+id/setting_contact"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="1대1 문의하기"
+                            android:textStyle="bold"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/setting_contact_img"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:src="@drawable/setting_go_img"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="5dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/setting_logout_layout"
+                        android:clickable="true"
+                        android:layout_marginTop="15dp"
+                        app:layout_constraintTop_toBottomOf="@id/setting_contact_layout"
+                        app:layout_constraintStart_toStartOf="parent"
+
+                        >
+                        <ImageView
+                            android:id="@+id/setting_logout_img"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/setting_logout_img"
+                            android:layout_marginStart="9dp"
+                            app:civ_border_color="#000000"
+                            app:civ_border_overlay="true"
+                            app:civ_border_width="0dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+
+                        <TextView
+                            android:id="@+id/setting_logout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="로그아웃"
+                            android:textStyle="bold"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/setting_logout_img"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <ImageView
+                            android:id="@+id/imageView5"
+                            android:src="@drawable/setting_go_img"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="5dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/setting_withdrawal_layout"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:clickable="true"
+                        app:layout_constraintTop_toBottomOf="@id/setting_logout_layout"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        >
+                        <ImageView
+                            android:id="@+id/setting_withdrawal_img"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/setting_withdrawal_img"
+                            android:layout_marginStart="10dp"
+                            app:civ_border_color="#000000"
+                            app:civ_border_overlay="true"
+                            app:civ_border_width="0dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+
+                        <TextView
+                            android:id="@+id/setting_withdrawal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="탈퇴하기"
+                            android:textStyle="bold"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/setting_withdrawal_img"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <ImageView
+                            android:id="@+id/imageView6"
+                            android:src="@drawable/setting_go_img"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="5dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+            </ScrollView>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--이름 변경 카드뷰-->
@@ -685,25 +767,91 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cardView_introduce"
+            android:background="@drawable/setting_rectangular"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:cardCornerRadius="10dp"
+            >
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/touchable_cardview_introduce_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <TextView
+                    android:id="@+id/introduce_cardview_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="30dp"
+                    android:text="나의 소개 수정"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/introduce_edittextlayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/introduce_edittextlayout"
+                    app:layout_constraintBottom_toTopOf="@id/change_introduce_btn"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/introduce_cardview_textView"
+                    >
+
+                    <TextView
+                        android:id="@+id/introduce_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="이메일 : "
+                        android:layout_marginStart="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <EditText
+                        android:id="@+id/introduce_cardview_edittext"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:textSize="12sp"
+                        android:inputType="textMultiLine"
+                        android:maxLines="5"
+                        android:scrollbars="vertical"
+                        android:hint="다른 사람에게 나를 소개해보세요"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/introduce_textView"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <Button
+                    android:id="@+id/change_introduce_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="수정 저장"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/introduce_edittextlayout" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
