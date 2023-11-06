@@ -193,7 +193,6 @@ public class NewSettingActivity extends AppCompatActivity {
                 // detail_info_layout을 보이도록 변경합니다.\
 
                 emailFragment = new EmailFragment();
-                emailFragment.setEmail(NAME_SET_TEXT);
                 emailFragment.setuserId(userUID);
                 detail_info_layout.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, emailFragment).commit();
