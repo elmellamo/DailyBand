@@ -18,7 +18,7 @@ import com.example.dailyband.R;
 public class CategoryAddMusic extends Fragment {
     private View view;
     private ImageView clearbtn;
-    private ConstraintLayout keyslayout, drumlayout, importlayout, voicelayout;
+    private ConstraintLayout keyslayout, drumlayout, importlayout, voicelayout, popularlayout;
     public CategoryAddMusic() {
     }
 
@@ -35,6 +35,24 @@ public class CategoryAddMusic extends Fragment {
         drumlayout = view.findViewById(R.id.drumlayout);
         importlayout = view.findViewById(R.id.importlayout);
         voicelayout = view.findViewById(R.id.voicelayout);
+        popularlayout = view.findViewById(R.id.popularlayout);
+
+        popularlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(getActivity() instanceof AddMusic){
+                    AddMusic addmusic = (AddMusic) getActivity();
+                    addmusic.hideAddCategoryFrameLayout();
+                    //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
+                    addmusic.showUpPopular();
+                }else if(getActivity() instanceof CollabAddMusic){
+                    CollabAddMusic collabAddMusic = (CollabAddMusic) getActivity();
+                    collabAddMusic.CollabhideAddCategoryFrameLayout();
+                    //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
+                    collabAddMusic.CollabshowUpPopular();
+                }
+            }
+        });
 
         voicelayout.setOnClickListener(new View.OnClickListener() {
             @Override

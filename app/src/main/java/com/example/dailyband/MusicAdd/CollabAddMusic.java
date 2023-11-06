@@ -52,7 +52,8 @@ import com.example.dailyband.Home.HomeMain;
         import com.example.dailyband.MusicFragment.CategoryAddMusic;
         import com.example.dailyband.MusicFragment.DrumFragment;
         import com.example.dailyband.MusicFragment.PianoFragment;
-        import com.example.dailyband.MusicFragment.RecordingMain;
+import com.example.dailyband.MusicFragment.PopularFragment;
+import com.example.dailyband.MusicFragment.RecordingMain;
         import com.example.dailyband.R;
         import com.example.dailyband.Setting.SettingActivity;
         import com.example.dailyband.ShowMusic.PickMusic;
@@ -117,6 +118,7 @@ public class CollabAddMusic extends AppCompatActivity {
     RecordingMain recordingMain;
     private ImageButton homeBtn, setbtn;
     private String parent_Id;
+    private PopularFragment popularFragment;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +138,7 @@ public class CollabAddMusic extends AppCompatActivity {
         setbtn = findViewById(R.id.setbtn);
         playbtn = findViewById(R.id.playbtn2);
         pianoFragment = new PianoFragment();
+        popularFragment = new PopularFragment();
         drumFragment = new DrumFragment();
         recordingMain = new RecordingMain();
         gray_screen = findViewById(R.id.gray_screen);
@@ -252,6 +255,10 @@ public class CollabAddMusic extends AppCompatActivity {
 
             }
         });
+    }
+    public void CollabshowUpPopular(){
+        detail_pickup_layout.setVisibility(View.VISIBLE);
+        getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, popularFragment).commit();
     }
     public void CollabshowUpRecording(){
         detail_pickup_layout.setVisibility(View.VISIBLE);

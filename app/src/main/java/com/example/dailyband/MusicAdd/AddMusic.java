@@ -41,6 +41,7 @@ import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.MusicFragment.CategoryAddMusic;
 import com.example.dailyband.MusicFragment.DrumFragment;
 import com.example.dailyband.MusicFragment.PianoFragment;
+import com.example.dailyband.MusicFragment.PopularFragment;
 import com.example.dailyband.MusicFragment.RecordingMain;
 import com.example.dailyband.R;
 import com.example.dailyband.Setting.SettingActivity;
@@ -108,6 +109,7 @@ public class AddMusic extends AppCompatActivity {
     CategoryAddMusic categoryAddMusic;
     DrumFragment drumFragment;
     RecordingMain recordingMain;
+    PopularFragment popularFragment;
     private ImageButton homeBtn, setbtn;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +133,7 @@ public class AddMusic extends AppCompatActivity {
 
         pianoFragment = new PianoFragment();
         drumFragment = new DrumFragment();
+        popularFragment = new PopularFragment();
         recordingMain = new RecordingMain();
         gray_screen = findViewById(R.id.gray_screen);
 
@@ -283,6 +286,10 @@ public class AddMusic extends AppCompatActivity {
             }
         });
 
+    }
+    public void showUpPopular(){
+        detail_pickup_layout.setVisibility(View.VISIBLE);
+        getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, popularFragment).commit();
     }
     public void showUpRecording(){
         detail_pickup_layout.setVisibility(View.VISIBLE);
