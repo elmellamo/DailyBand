@@ -68,6 +68,7 @@ public class NewSettingActivity extends AppCompatActivity {
     private EmailFragment emailFragment;
     private IntroduceFragment introduceFragment;
     private PasswordFragment passwordFragment;
+    private String name_intent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -165,9 +166,11 @@ public class NewSettingActivity extends AppCompatActivity {
         setting_user_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // detail_info_layout을 보이도록 변경합니다.\
+                // detail_info_layout을 보이도록 변경합니다.
 
                 nameFragment = new NameFragment();
+                nameFragment.setSetName(NAME_SET_TEXT);
+                nameFragment.setuserId(userUID);
                 detail_info_layout.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, nameFragment).commit();
             }
@@ -179,6 +182,8 @@ public class NewSettingActivity extends AppCompatActivity {
                 // detail_info_layout을 보이도록 변경합니다.\
 
                 emailFragment = new EmailFragment();
+                emailFragment.setEmail(NAME_SET_TEXT);
+                emailFragment.setuserId(userUID);
                 detail_info_layout.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, emailFragment).commit();
             }
@@ -197,7 +202,7 @@ public class NewSettingActivity extends AppCompatActivity {
         setting_password_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // detail_info_layout을 보이도록 변경합니다.\
+                // detail_info_layout을 보이도록 변경합니다.
 
                 passwordFragment = new PasswordFragment();
                 detail_info_layout.setVisibility(View.VISIBLE);
@@ -413,6 +418,16 @@ public class NewSettingActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    public void blindFrame(){
+        if (detail_info_layout.getVisibility() == View.VISIBLE) {
+            detail_info_layout.setVisibility(View.GONE);
+        }
+    }
+
+    public void updateName(String updatedName) {
+        NAME_SET_TEXT = updatedName;
     }
 
     private Bitmap rotateImage(Bitmap source, float angle) {

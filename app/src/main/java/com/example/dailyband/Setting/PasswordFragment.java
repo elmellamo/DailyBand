@@ -19,8 +19,11 @@ public class PasswordFragment extends Fragment {
     private View view;
     EditText prevpw, currpw, currpwchk;
     Button change_btn;
+
     public PasswordFragment() {
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
