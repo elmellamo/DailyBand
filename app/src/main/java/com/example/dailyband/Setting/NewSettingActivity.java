@@ -10,14 +10,11 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,18 +22,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.dailyband.Login.LoginActivity;
 import com.example.dailyband.R;
-import com.example.dailyband.ShowMusic.DetailInfoFragment;
-import com.example.dailyband.ShowMusic.ShowMusicInfoFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -50,7 +42,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.jar.Attributes;
 
 public class NewSettingActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -61,19 +52,22 @@ public class NewSettingActivity extends AppCompatActivity {
     private ImageView tmpImg;
     private Uri selectedImageUri = null;
     private Uri userImage=null;
-    private ConstraintLayout setting_user_layout;
+    private ConstraintLayout detail_info_layout, setting_user_layout, setting_email_layout
+            ,setting_introduce_layout,setting_password_layout;
 
     private ConstraintLayout setting_withdrawal_layout;
     private ConstraintLayout setting_logout_layout;
     private ConstraintLayout setting_contact_layout;
     private boolean isCardViewVisible = false;
 
-    private ConstraintLayout detail_info_layout, gray_screen;
-    private DetailInfoFragment detailInfoFragment;
+    private ConstraintLayout gray_screen;
 
     private String NAME_SET_TEXT;
     public String EMAIL_SET_TEXT;
     private NameFragment nameFragment;
+    private EmailFragment emailFragment;
+    private IntroduceFragment introduceFragment;
+    private PasswordFragment passwordFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,8 +84,14 @@ public class NewSettingActivity extends AppCompatActivity {
         setting_logout_layout = findViewById(R.id.setting_logout_layout);
         setting_contact_layout = findViewById(R.id.setting_contact_layout);
         nameFragment = new NameFragment();
+        emailFragment = new EmailFragment();
+        introduceFragment = new IntroduceFragment();
+        passwordFragment  = new PasswordFragment();
         gray_screen = findViewById(R.id.gray_screen);
+        setting_email_layout = findViewById(R.id.setting_email_layout);
         detail_info_layout = findViewById(R.id.detail_info_layout);
+        setting_introduce_layout = findViewById(R.id.setting_introduce_layout);
+        setting_password_layout = findViewById(R.id.setting_password_layout);
 
         profileImg.bringToFront();
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -170,6 +170,38 @@ public class NewSettingActivity extends AppCompatActivity {
                 nameFragment = new NameFragment();
                 detail_info_layout.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, nameFragment).commit();
+            }
+        });
+
+        setting_email_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // detail_info_layout을 보이도록 변경합니다.\
+
+                emailFragment = new EmailFragment();
+                detail_info_layout.setVisibility(View.VISIBLE);
+                getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, emailFragment).commit();
+            }
+        });
+        setting_introduce_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // detail_info_layout을 보이도록 변경합니다.\
+
+                introduceFragment = new IntroduceFragment();
+                detail_info_layout.setVisibility(View.VISIBLE);
+                getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, introduceFragment).commit();
+            }
+        });
+
+        setting_password_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // detail_info_layout을 보이도록 변경합니다.\
+
+                passwordFragment = new PasswordFragment();
+                detail_info_layout.setVisibility(View.VISIBLE);
+                getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, passwordFragment).commit();
             }
         });
 
