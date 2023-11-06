@@ -69,6 +69,7 @@ public class PopularFragment extends Fragment {
     private DatabaseReference myRef;
     private FirebaseMethods mFirebaseMethods;
     private FirebaseAuth mAuth;
+    private AddMusic addMusicActivity;
     public PopularFragment() {
     }
     @Override
@@ -83,6 +84,7 @@ public class PopularFragment extends Fragment {
         // 리사이클러뷰 초기화
         expandableListView = view.findViewById(R.id.expandableListView);
         songs = new ArrayList<>();
+        addMusicActivity = (AddMusic) getActivity();
 
         getSongs();
 
@@ -116,18 +118,8 @@ public class PopularFragment extends Fragment {
                         return song2.getDate_created().compareTo(song1.getDate_created());
                     }
                 });
-                adapter = new PPExpandableListAdapter(songs, getContext());
+                adapter = new PPExpandableListAdapter(songs, getContext(), addMusicActivity);
                 expandableListView.setAdapter(adapter);
-                /*
-                expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-                    @Override
-                    public boolean onGroupClick(ExpandableListView parent, View view, int groupPosition, long l) {
-                        setListVieweHight(parent, groupPosition);
-                        return false;
-                    }
-                });
-                //pprecyclerview.setAdapter(adapter);
-                 */
             }
 
             @Override
@@ -138,32 +130,4 @@ public class PopularFragment extends Fragment {
         });
     }
 
-    private void setListVieweHight(ExpandableListView listView, int group) {
-        PPExpandableListAdapter listAdapter = (PPExpandableListAdapter) listView.getExpandableListAdapter();
-        int totalHeight = 0;
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.EXACTLY);
-
-        for (int i = 0; i < listAdapter.getGroupCount(); i++) {
-            View groupItem = listAdapter.getGroupView(i, false, null, listView);
-            groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += groupItem.getMeasuredHeight();
-
-            if ((listView.isGroupExpanded(i) && i != group) || (!listView.isGroupExpanded(i) && i == group)) {
-                for (int j = 0; j < listAdapter.getChildrenCount(i); j++) {
-                    View listItem = listAdapter.getChildView(i, j, false, null, listView);
-                    listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-                    totalHeight += listItem.getMeasuredHeight();
-                }
-            }
-        }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        int height = totalHeight + listView.getDividerHeight() * (listAdapter.getGroupCount() - 1);
-        if (height < 10) {
-            height = 200;
-        }
-        params.height = height;
-        listView.setLayoutParams(params);
-        listView.requestLayout();
-    }
 }

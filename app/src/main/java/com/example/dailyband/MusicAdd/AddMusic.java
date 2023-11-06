@@ -47,12 +47,18 @@ import com.example.dailyband.R;
 import com.example.dailyband.Setting.NewSettingActivity;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.Utils.MergeWav;
+import com.example.dailyband.Utils.OnCollaborationClickListener;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.example.dailyband.adapter.MusicTrackAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.text.SimpleDateFormat;
@@ -62,7 +68,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class AddMusic extends AppCompatActivity {
+public class AddMusic extends AppCompatActivity implements OnCollaborationClickListener {
     public static class MusicTrack {
         public Uri uri;
         public String title = "";
@@ -132,7 +138,6 @@ public class AddMusic extends AppCompatActivity {
 
         pianoFragment = new PianoFragment();
         drumFragment = new DrumFragment();
-        popularFragment = new PopularFragment();
         recordingMain = new RecordingMain();
         gray_screen = findViewById(R.id.gray_screen);
 
@@ -220,6 +225,7 @@ public class AddMusic extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 addCategoryFrameLayout.setVisibility(View.VISIBLE);
+                popularFragment = new PopularFragment();
             }
         });
         playbtn.setOnClickListener(new View.OnClickListener() {
@@ -311,7 +317,58 @@ public class AddMusic extends AppCompatActivity {
     public void hideDetailPickupLayout(){
         detail_pickup_layout.setVisibility(View.GONE);
     }
+    public void hideGray(){
+        if (detail_pickup_layout.getVisibility() == View.VISIBLE) {
+            detail_pickup_layout.setVisibility(View.GONE);
+        }
+    }
+    public void onCollaborationClick(String addPostId) {
+        long currentTimeMillis = System.currentTimeMillis();
+        // 시간을 원하는 포맷으로 변환합니다.
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        String formattedTime = sdf.format(new Date(currentTimeMillis));
 
+        ContentValues values = new ContentValues();
+
+        values.put(MediaStore.Audio.Media.TITLE, "firebase");
+        values.put(MediaStore.Audio.Media.DISPLAY_NAME, formattedTime);
+        values.put(MediaStore.Audio.Media.DATE_ADDED, (int) (System.currentTimeMillis() / 1000));
+        values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/x-wav");
+        values.put(MediaStore.Audio.Media.RELATIVE_PATH, "Music/Daily Band/Songs/");
+
+        Uri uri = getContentResolver().insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values);
+
+        try {
+            OutputStream outputStream = getContentResolver().openOutputStream(uri);
+
+            StorageReference songRef = FirebaseStorage.getInstance().getReference().child("songs/" + addPostId + "/song");
+            songRef.getStream((state, inputStream) -> {
+
+                long totalBytes = state.getTotalByteCount();
+                long bytesDownloaded = 0;
+
+                byte[] buffer = new byte[1024];
+                int size;
+                while ((size = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, size);
+                    bytesDownloaded += size;
+                }
+
+                inputStream.close();
+
+            }).addOnSuccessListener(taskSnapshot -> {
+
+                Toast.makeText(AddMusic.this, "로딩 완료", Toast.LENGTH_SHORT).show();
+                Log.e("로그", "지금 되고 있는거야?" + uri.toString());
+                addTrack(uri, formattedTime);
+
+            }).addOnFailureListener(e -> {
+                Log.w("asdf", "download:FAILURE", e);
+            });
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     private void addTrack(Uri uri, String title) {
         MusicTrack track = new MusicTrack();
         track.uri = uri;
