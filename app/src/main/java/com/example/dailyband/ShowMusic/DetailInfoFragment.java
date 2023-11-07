@@ -84,6 +84,7 @@ public class DetailInfoFragment extends Fragment {
                 intent.putExtra("title_intent", title);
                 intent.putExtra("artist_intent", artist);
                 intent.putExtra("postId_intent", postId);
+                intent.putExtra("userUid_intent",userUid);
                 startActivity(intent);
                 getActivity().finish();
             }
