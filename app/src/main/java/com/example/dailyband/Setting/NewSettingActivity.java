@@ -195,7 +195,7 @@ public class NewSettingActivity extends AppCompatActivity {
         setting_email_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // detail_info_layout을 보이도록 변경합니다.\
+                // detail_info_layout을 보이도록 변경합니다.
 
                 emailFragment = new EmailFragment();
                 emailFragment.setuserId(userUID);

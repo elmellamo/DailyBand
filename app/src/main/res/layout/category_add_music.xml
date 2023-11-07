@@ -120,9 +120,9 @@
 
             <ImageView
                 android:layout_marginLeft="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/mic_whiteimg"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/piano_img_add"
                 android:id="@+id/keysimg"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -163,9 +163,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/mic_whiteimg"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/drum_img_add"
                 android:id="@+id/drumimg"
                 android:layout_marginLeft="10dp"
                 app:layout_constraintRight_toRightOf="parent"
@@ -211,9 +211,9 @@
 
             <ImageView
                 android:layout_marginLeft="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/mic_whiteimg"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/import_img_add"
                 android:id="@+id/importimg"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -255,9 +255,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/mic_whiteimg"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/chart_img_add"
                 android:id="@+id/popularimg"
                 android:layout_marginLeft="10dp"
                 app:layout_constraintRight_toRightOf="parent"
@@ -305,7 +305,6 @@
                 android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/mic_whiteimg"
                 android:id="@+id/etcimg"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
