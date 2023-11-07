@@ -106,7 +106,6 @@ public class RegisterActivity extends AppCompatActivity {
                                                     // 사용자가 로그인되어 있음, getUid() 메소드 호출 가능
                                                     String uid = user.getUid();
                                                     mDatabaseRef.child("UserAccount").child(firebaseUser.getUid()).setValue(account);
-                                                    mDatabaseRef.child("user_introduce").child(firebaseUser.getUid()).setValue(null);
 
                                                 } else {
                                                     // 사용자가 로그인되어 있지 않음

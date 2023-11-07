@@ -113,7 +113,12 @@ public class NewSettingActivity extends AppCompatActivity {
         mDatabase.child("user_introduce").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                INTRODUCE_SET_TEXT = snapshot.child(userUID).getValue().toString();
+                if (snapshot.hasChild(userUID)){
+                    INTRODUCE_SET_TEXT = snapshot.child(userUID).getValue().toString();
+                }
+                else{
+                    INTRODUCE_SET_TEXT = null;
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
