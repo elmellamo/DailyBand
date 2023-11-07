@@ -1,7 +1,6 @@
 package com.example.dailyband.MusicFragment;
 
 import android.content.ContentValues;
-import android.graphics.Color;
 import android.media.AudioFormat;
 import android.media.SoundPool;
 import android.net.Uri;
@@ -13,17 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.dailyband.MusicAdd.AddMusic;
-import com.example.dailyband.MusicAdd.CollabAddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.github.squti.androidwaverecorder.WaveConfig;
@@ -186,9 +182,6 @@ public class DrumFragment extends Fragment implements View.OnClickListener{
                         if(getActivity() instanceof AddMusic){
                             AddMusic addmusic = (AddMusic) getActivity();
                             addmusic.hideDetailPickupLayout();
-                        }else if(getActivity() instanceof CollabAddMusic){
-                            CollabAddMusic collabAddMusic = (CollabAddMusic) getActivity();
-                            collabAddMusic.CollabhideDetailPickupLayout();
                         }
                     }
 

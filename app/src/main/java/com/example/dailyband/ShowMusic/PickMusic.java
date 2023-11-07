@@ -284,7 +284,7 @@ public class PickMusic extends AppCompatActivity {
             }
         });
     }
-    public void updateSeekbar() {
+    private void updateSeekbar() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             int curPos = mediaPlayer.getCurrentPosition();
             seekBar.setProgress(curPos);

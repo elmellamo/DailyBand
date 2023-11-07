@@ -16,6 +16,7 @@ import android.view.animation.BounceInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -29,9 +30,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
+import com.example.dailyband.Collection.CollectionActivity;
+import com.example.dailyband.Home.HomeMain;
+import com.example.dailyband.Love.LoveActivity;
 import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.Models.TestSong;
+import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
+import com.example.dailyband.Setting.NewSettingActivity;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.CollabAdapter;
 import com.gauravk.audiovisualizer.visualizer.BlobVisualizer;
@@ -72,6 +78,7 @@ public class NewPickMusic extends AppCompatActivity {
     Runnable runnable;
     Handler handler;
     private boolean isPlaying = false;
+    private ImageButton addbtn, setbtn, librarybtn, myInfobtn, homeBtn;
     // MediaPlayer 일시정지된 지점을 저장하는 변수
     private int pausedPosition = 0;
     private String writer, explain, singer, play, artist;
@@ -134,6 +141,11 @@ public class NewPickMusic extends AppCompatActivity {
         picksongname.setText(title);
         heartbtn = findViewById(R.id.heartbtn);
         optionmenu = findViewById(R.id.optionmenu);
+        homeBtn = findViewById(R.id.homeBtn);
+        myInfobtn = findViewById(R.id.myInfobtn);
+        librarybtn = findViewById(R.id.librarybtn);
+        setbtn = findViewById(R.id.setbtn);
+        addbtn = findViewById(R.id.addbtn);
 
         gray_screen = findViewById(R.id.gray_screen);
         detail_info_layout = findViewById(R.id.detail_info_layout);
@@ -409,8 +421,39 @@ public class NewPickMusic extends AppCompatActivity {
                 }
             }
         });
+
+        homeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(HomeMain.class);
+            }
+        });
+        myInfobtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(LoveActivity.class);
+            }
+        });
+        librarybtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(CollectionActivity.class);
+            }
+        });
+        addbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(NewPickMusic.this, AddMusic.class);
+                intent.putExtra("parent_Id", "ori");
+                startActivity(intent);
+            }
+        });
+        setbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { myStartActivity(NewSettingActivity.class);    }
+        });
     }
-    public void updateSeekbar() {
+    private void updateSeekbar() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             int curPos = mediaPlayer.getCurrentPosition();
             seekBar.setProgress(curPos);
@@ -518,5 +561,9 @@ public class NewPickMusic extends AppCompatActivity {
             }
         });
     }
-
+    private void myStartActivity(Class c){
+        Intent intent = new Intent(this, c);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 }

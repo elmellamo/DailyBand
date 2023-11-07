@@ -52,8 +52,6 @@ import com.example.dailyband.Utils.MergeWav;
 import com.example.dailyband.Utils.OnCollaborationClickListener;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.example.dailyband.adapter.MusicTrackAdapter;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -107,6 +105,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     private ConstraintLayout detail_pickup_layout, gray_screen;
     private FrameLayout detail_instrument_frame;
     private List<ComplexName> parents;
+    public ArrayList<String> parentPostId;
 
     private FrameLayout addCategoryFrameLayout;
     PianoFragment pianoFragment;
@@ -115,13 +114,21 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     RecordingMain recordingMain;
     PopularFragment popularFragment;
     private ImageButton homeBtn, setbtn, myInfobtn, librarybtn, addbtn;
-
+    private String parent_Id;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addmusic);
 
-        mFirebaseMethods = new FirebaseMethods(AddMusic.this);
         myPermissions();
+
+        Intent intent = getIntent();
+        parent_Id = intent.getStringExtra("parent_Id"); //콜라보레이션할 원곡의 uid postid!!!
+        if(!parent_Id.equals("ori")){
+            //콜라보 있게 addmusic에 왔음!
+            onCollaborationClick(parent_Id);
+        }
+
+        mFirebaseMethods = new FirebaseMethods(AddMusic.this);
 
         nextmenu = findViewById(R.id.nextmenu);
         plusbtn = findViewById(R.id.plusbtn);
@@ -146,6 +153,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         getSupportFragmentManager().beginTransaction().replace(R.id.add_category_framelayout, new CategoryAddMusic()).commit();
 
         parents = new ArrayList<>();
+        parentPostId = new ArrayList<>();
 
         //리사이클러 뷰 설정
         musicTrackView = (RecyclerView) findViewById(R.id.tracklist);
@@ -178,8 +186,9 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //myStartActivity(TestAdd.class);
-                myStartActivity(AddMusic.class);
+                Intent intent = new Intent(AddMusic.this, AddMusic.class);
+                intent.putExtra("parent_Id", "ori");
+                startActivity(intent);
             }
         });
         setbtn.setOnClickListener(new View.OnClickListener() {
@@ -378,10 +387,9 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                 inputStream.close();
 
             }).addOnSuccessListener(taskSnapshot -> {
-
-                Toast.makeText(AddMusic.this, "로딩 완료", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddMusic.this, "콜라보레이션 노래가 등록되었습니다.", Toast.LENGTH_SHORT).show();
                 Log.e("로그", "지금 되고 있는거야?" + uri.toString());
-                addTrack(uri, formattedTime);
+                addTrack(uri, addPostId);
 
             }).addOnFailureListener(e -> {
                 Log.w("asdf", "download:FAILURE", e);
@@ -605,8 +613,6 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
             }
         }
     }
-
-
     private void uploadToFirebase(){
         TextInputLayout textInputLayout = findViewById(R.id.songname_edit_layout);
         final String title = textInputLayout.getEditText().getText().toString();
@@ -623,9 +629,14 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
 
         uri = mergeTracks();
 
+        for(int i=0; i<tracks.size(); i++){
+            parentPostId.add(tracks.get(i).title);
+        }
+
         Intent intent = new Intent(this, AddCaption.class);
         intent.putExtra("title", title);
         intent.putExtra("uri", uri.toString());
+        intent.putExtra("original", parentPostId);
         startActivity(intent);
     }
 
@@ -661,16 +672,6 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
             audioThread.interrupt();
         audioThread = null;
         Log.d("asdf", "쓰레드 멈추기 시도");
-
-        // 쓰레드에서 AudioTrack으로 uri 재생
-//        isPlaying = true;
-//        playingLocation = startPoint;
-//        Runnable r = new AudioTrackRunnable();
-//        audioThread = new Thread(r);
-//        audioThread.start();
-//
-//        // Play 버튼 이미지를 Pause로 변경
-//        playbtn.setImageResource(R.drawable.pause);
     }
 
     public class AudioTrackRunnable implements Runnable {

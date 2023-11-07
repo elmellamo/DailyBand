@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import com.example.dailyband.MusicAdd.CollabAddMusic;
+import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
 
 public class DetailInfoFragment extends Fragment {
@@ -99,10 +99,8 @@ public class DetailInfoFragment extends Fragment {
         collablayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), CollabAddMusic.class);
-
-                // 정보를 전달하기 위해 Intent에 데이터 추가
-                intent.putExtra("parent_Id", postId); // 원하는 정보의 키와 값을 넣어주세요
+                Intent intent = new Intent(getActivity(), AddMusic.class);
+                intent.putExtra("parent_Id", postId);
                 startActivity(intent);
             }
         });

@@ -1,18 +1,13 @@
 package com.example.dailyband.MusicFragment;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.content.ContentValues;
-import android.content.SharedPreferences;
 import android.media.AudioFormat;
-import android.media.MediaRecorder;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +21,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.dailyband.MusicAdd.AddMusic;
-import com.example.dailyband.MusicAdd.CollabAddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.github.squti.androidwaverecorder.WaveConfig;
@@ -651,9 +645,6 @@ public class PianoFragment extends Fragment implements View.OnClickListener {
                         if(getActivity() instanceof AddMusic){
                             AddMusic addmusic = (AddMusic) getActivity();
                             addmusic.hideDetailPickupLayout();
-                        }else if(getActivity() instanceof CollabAddMusic){
-                            CollabAddMusic collabAddMusic = (CollabAddMusic) getActivity();
-                            collabAddMusic.CollabhideDetailPickupLayout();
                         }
                     }
 

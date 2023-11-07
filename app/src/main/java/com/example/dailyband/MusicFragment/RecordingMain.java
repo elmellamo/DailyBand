@@ -1,20 +1,12 @@
 package com.example.dailyband.MusicFragment;
 
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
-import static com.example.dailyband.Utils.wavClass.PERMISSION_REQUEST_CODE;
-
-import android.Manifest;
 import android.content.ContentValues;
-import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +15,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.dailyband.MusicAdd.AddMusic;
-import com.example.dailyband.MusicAdd.CollabAddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
-import com.example.dailyband.Utils.wavClass;
 import com.github.squti.androidwaverecorder.WaveConfig;
 import com.github.squti.androidwaverecorder.WaveRecorder;
 
@@ -41,9 +28,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class RecordingMain extends Fragment {
@@ -172,9 +157,6 @@ public class RecordingMain extends Fragment {
                         if(getActivity() instanceof AddMusic){
                             AddMusic addmusic = (AddMusic) getActivity();
                             addmusic.hideDetailPickupLayout();
-                        }else if(getActivity() instanceof CollabAddMusic){
-                            CollabAddMusic collabAddMusic = (CollabAddMusic) getActivity();
-                            collabAddMusic.CollabhideDetailPickupLayout();
                         }
                     }
 

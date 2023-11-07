@@ -28,6 +28,7 @@ import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Setting.NewSettingActivity;
+import com.example.dailyband.ShowMusic.NewPickMusic;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.RankingSongAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -105,8 +106,9 @@ public class HomeMain extends AppCompatActivity{
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //myStartActivity(TestAdd.class);
-                myStartActivity(AddMusic.class);
+                Intent intent = new Intent(HomeMain.this, AddMusic.class);
+                intent.putExtra("parent_Id", "ori");
+                startActivity(intent);
             }
         });
         setbtn.setOnClickListener(new View.OnClickListener() {

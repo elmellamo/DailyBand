@@ -210,8 +210,9 @@ public class NewSettingActivity extends AppCompatActivity {
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //myStartActivity(TestAdd.class);
-                myStartActivity(AddMusic.class);
+                Intent intent = new Intent(NewSettingActivity.this, AddMusic.class);
+                intent.putExtra("parent_Id", "ori");
+                startActivity(intent);
             }
         });
         setbtn.setOnClickListener(new View.OnClickListener() {

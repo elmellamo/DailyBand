@@ -20,22 +20,16 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
 import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.MusicAdd.AddMusic;
-import com.example.dailyband.MusicAdd.CollabAddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.OnCollaborationClickListener;
-import com.example.dailyband.Utils.OnRecordingCompletedListener;
-import com.example.dailyband.Utils.OnSongUrlListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.Locale;
 
 public class PPExpandableListAdapter extends BaseExpandableListAdapter {
     private ArrayList<TestSong> data;
@@ -176,6 +170,7 @@ public class PPExpandableListAdapter extends BaseExpandableListAdapter {
                         public void onSuccess(Uri uri) {
                             String downloadUrl = uri.toString();
 
+                            if (currentMediaPlayer != null && !currentMediaPlayer.isPlaying()) {
                             try {
                                 currentMediaPlayer.setDataSource(downloadUrl);
                                 currentMediaPlayer.prepareAsync();
@@ -210,7 +205,7 @@ public class PPExpandableListAdapter extends BaseExpandableListAdapter {
                                 });
                             } catch (IOException e) {
                                 e.printStackTrace();
-                            }
+                            }}
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -269,9 +264,6 @@ public class PPExpandableListAdapter extends BaseExpandableListAdapter {
                         AnimatedVectorDrawable avd2 = (AnimatedVectorDrawable) drawable;
                         avd2.start();
                     }
-                    // MediaPlayer 해제
-                    //releaseMediaPlayer(groupPosition);
-                    // 모든 MediaPlayer 해제
                     releaseAllMediaPlayers();
                     // updateSeekbar 중지
                     stopUpdateSeekbars();
