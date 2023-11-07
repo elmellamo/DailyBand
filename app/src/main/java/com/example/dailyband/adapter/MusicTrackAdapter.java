@@ -1,10 +1,12 @@
 package com.example.dailyband.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ToggleButton;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,12 +25,14 @@ public class MusicTrackAdapter extends RecyclerView.Adapter<MusicTrackAdapter.Tr
     public static class TrackViewHolder extends RecyclerView.ViewHolder {
         public final EditText tv_path;
         public final ToggleButton mute_btn;
+        public final ImageButton closebtn;
 
         public TrackViewHolder(View itemView) {
             super(itemView);
 
             tv_path = itemView.findViewById(R.id.path_text);
             mute_btn = itemView.findViewById(R.id.mutebtn);
+            closebtn = itemView.findViewById(R.id.closebtn);
         }
     }
 
@@ -58,6 +62,16 @@ public class MusicTrackAdapter extends RecyclerView.Adapter<MusicTrackAdapter.Tr
                 tracks.get( holder.getBindingAdapterPosition()).isSpeaking = status;
 
                 //Log.d("뷰홀더","위치"+holder.getAdapterPosition()+"상태바뀜"+status);
+            }
+        });
+
+        holder.closebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int pos = holder.getBindingAdapterPosition();
+                Log.d("asdf", "아이템 제거 : "+pos);
+                tracks.remove( pos );
+                notifyItemRemoved(pos);
             }
         });
     }
