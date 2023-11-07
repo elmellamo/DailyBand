@@ -4,6 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/graygreen"
     android:layout_height="wrap_content">
+    <com.scwang.wave.MultiWaveHeader
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:id="@+id/wave_header"
+        app:mwhStartColor="@color/start_green"
+        app:mwhCloseColor="@color/start_green"
+        app:mwhWaves="PairWave"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </com.scwang.wave.MultiWaveHeader>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,6 +26,7 @@
         app:layout_constraintVertical_weight="0.2"
         android:paddingHorizontal="20dp"
         android:paddingVertical="15dp">
+
         <ImageView
             android:id="@+id/clearimg"
             android:layout_width="wrap_content"
@@ -34,7 +46,9 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

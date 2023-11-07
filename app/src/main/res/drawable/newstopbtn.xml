@@ -10,7 +10,7 @@
     <path
     android:name="filledShape"
     android:pathData="M 7,10 L 7,76 L 62,76 L 62,10 Z"
-    android:fillColor="@color/maingreen"
+    android:fillColor="@color/test_main_clolr"
     android:strokeWidth="1"/>
 
 </vector>

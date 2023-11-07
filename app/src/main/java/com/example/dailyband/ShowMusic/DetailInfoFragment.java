@@ -16,11 +16,12 @@ import androidx.fragment.app.Fragment;
 
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
+import com.scwang.wave.MultiWaveHeader;
 
 public class DetailInfoFragment extends Fragment {
 
     private View view;
-    private ConstraintLayout downloadlayout, artistlayout, creditlayout, collablayout;
+    private ConstraintLayout downloadlayout, artistlayout, creditlayout, collablayout, collalayout, orilayout;
     private boolean isLiked;
     private String title, artist, postId, userUid;
     private ImageView heartbtn;
@@ -48,6 +49,8 @@ public class DetailInfoFragment extends Fragment {
         artistlayout = view.findViewById(R.id.artistlayout);
         creditlayout = view.findViewById(R.id.creditlayout);
         collablayout = view.findViewById(R.id.collablayout);
+        collalayout = view.findViewById(R.id.collalayout);
+        orilayout = view.findViewById(R.id.orilayout);
 
         heartbtn = view.findViewById(R.id.heartbtn);
         songtitle = view.findViewById(R.id.songtitle);
@@ -104,6 +107,28 @@ public class DetailInfoFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        collalayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(getActivity() instanceof NewPickMusic){
+                    NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                    newPickMusic.showUpColla();
+                }
+            }
+        });
+        orilayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(getActivity() instanceof NewPickMusic){
+                    NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                    newPickMusic.showUpParent();
+                }
+            }
+        });
+
+
+
+
         return view;
     }
 

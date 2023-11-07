@@ -72,6 +72,8 @@ public class NewPickMusic extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private FrameLayout detail_info_frame;
     private ShowMusicInfoFragment showMusicInfoFragment;
+    private ShowCollaborationFragment showCollaborationFragment;
+    private ShowOrigianlFragment showOrigianlFragment;
     private DetailInfoFragment detailInfoFragment;
     private StorageReference songRef;
     SeekBar seekBar;
@@ -133,6 +135,8 @@ public class NewPickMusic extends AppCompatActivity {
         mFirebaseMethods = new FirebaseMethods(NewPickMusic.this);
         mediaPlayer = new MediaPlayer();
         showMusicInfoFragment = new ShowMusicInfoFragment();
+        showCollaborationFragment = new ShowCollaborationFragment();
+        showOrigianlFragment = new ShowOrigianlFragment();
         handler = new Handler();
         seekBar = findViewById(R.id.seek_bar);
         playbtn = findViewById(R.id.playbtn);
@@ -486,6 +490,16 @@ public class NewPickMusic extends AppCompatActivity {
 
     public void showUpInfo(){
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, showMusicInfoFragment).commit();
+    }
+    public void showUpColla(){
+        showCollaborationFragment = new ShowCollaborationFragment();
+        showCollaborationFragment.setCollaborationInfo(postId);
+        getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, showCollaborationFragment).commit();
+    }
+    public void showUpParent(){
+        showOrigianlFragment = new ShowOrigianlFragment();
+        showOrigianlFragment.setOriginalInfo(postId);
+        getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, showOrigianlFragment).commit();
     }
     public void blindFrame(){
         if (detail_info_layout.getVisibility() == View.VISIBLE) {

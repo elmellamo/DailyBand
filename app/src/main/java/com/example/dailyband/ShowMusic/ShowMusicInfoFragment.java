@@ -14,8 +14,10 @@ import androidx.fragment.app.Fragment;
 
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
-public class ShowMusicInfoFragment extends Fragment {
+import com.scwang.wave.MultiWaveHeader;
 
+public class ShowMusicInfoFragment extends Fragment {
+    private MultiWaveHeader waveHeader;
     private View view;
     private ImageView clearimg;
     private TextView artisttxt, writertxt, playtxt, singtxt, infotxt;
@@ -53,6 +55,14 @@ public class ShowMusicInfoFragment extends Fragment {
         playtxt.setText(play);
         singtxt.setText(singer);
         infotxt.setText(explain);
+
+        waveHeader = view.findViewById(R.id.wave_header);
+        waveHeader.setVelocity(1);
+        waveHeader.setProgress(1);
+        waveHeader.isRunning();
+        waveHeader.setGradientAngle(45);
+        waveHeader.setWaveHeight(40);
+
         clearimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

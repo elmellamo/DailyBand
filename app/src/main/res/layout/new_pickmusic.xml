@@ -100,7 +100,7 @@
                 android:id="@+id/birdimg"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:src="@drawable/new_icon"
+                android:src="@drawable/newgreenbird"
                 app:civ_border_color="#000000"
                 app:civ_border_overlay="true"
                 app:civ_border_width="0dp"
@@ -130,6 +130,7 @@
                 android:layout_toEndOf="@id/stopbtn"
                 android:layout_gravity="center"
                 android:layout_marginStart="16dp"
+                android:theme="@style/SeekBarColor"
                 android:backgroundTint="@color/white"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>

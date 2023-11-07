@@ -12,9 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.Models.TestSong;
-import com.example.dailyband.ShowMusic.NewPickMusic;
-import com.example.dailyband.ShowMusic.PickMusic;
 import com.example.dailyband.R;
+import com.example.dailyband.ShowMusic.NewPickMusic;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,26 +21,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
-
-public class CollabAdapter extends RecyclerView.Adapter<CollabAdapter.CollabViewHolder> {
+public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.ParentViewHolder> {
     private Context context;
     private List<ComplexName> songs;
 
-    public CollabAdapter(Context context, List<ComplexName> songs) {
+    public ParentAdapter(Context context, List<ComplexName> songs) {
         this.context = context;
         this.songs = songs;
     }
 
     @NonNull
     @Override
-    public CollabAdapter.CollabViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.popular_item, parent, false);
-        CollabViewHolder holder = new CollabViewHolder(view);
+    public ParentAdapter.ParentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.ori_item, parent, false);
+        ParentViewHolder holder = new ParentViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CollabAdapter.CollabViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull ParentAdapter.ParentViewHolder holder, final int position) {
         ComplexName song = songs.get(position);
         holder.numRanking.setText(String.valueOf(position + 1));
         holder.songName.setText(song.getTitle());
@@ -52,11 +50,11 @@ public class CollabAdapter extends RecyclerView.Adapter<CollabAdapter.CollabView
         return (null !=songs ? songs.size() : 0);
     }
 
-    public class CollabViewHolder extends RecyclerView.ViewHolder {
+    public class ParentViewHolder extends RecyclerView.ViewHolder {
         public TextView numRanking;
         public TextView songName;
 
-        public CollabViewHolder(@NonNull View itemView) {
+        public ParentViewHolder(@NonNull View itemView) {
             super(itemView);
             numRanking = itemView.findViewById(R.id.numRanking);
             songName = itemView.findViewById(R.id.songname);
