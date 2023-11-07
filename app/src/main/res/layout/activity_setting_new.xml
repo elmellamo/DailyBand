@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:background="#E69FD18C"
+        android:background="@color/test_main_clolr"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:text="프로필 사진을 클릭해서 수정하세요"
                 android:textStyle="bold"
-                android:textColor="#66875B"
+                android:textColor="#ffffff"
                 android:textSize="13sp"
                 android:id="@+id/info_text"
                 android:gravity="center"
