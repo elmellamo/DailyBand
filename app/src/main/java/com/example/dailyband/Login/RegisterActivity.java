@@ -64,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String pwchkstr = pwchkEdittext.getText().toString();
 
                 if (namestr.isEmpty() || emailstr.isEmpty() || pwstr.isEmpty() || pwchkstr.isEmpty()) {
-                    Toast.makeText(RegisterActivity.this, "정보를 정확히 입력하세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "빈 칸 없이 입력하세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                 String pwstr = pwEdittext.getText().toString();
 
                 if (emailstr.isEmpty() || pwstr.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "정보를 정확히 입력하세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "빈 칸 없이 입력하세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

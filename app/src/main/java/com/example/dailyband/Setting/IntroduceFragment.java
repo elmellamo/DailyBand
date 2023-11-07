@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,6 +58,7 @@ public class IntroduceFragment extends Fragment {
 
                 String NEW_INTRODUCE = introduce_editText.getText().toString();
                 mDatabase.child("user_introduce").child(userId).setValue(NEW_INTRODUCE);
+                Toast.makeText(getContext(), "소개글이 수정되었습니다", Toast.LENGTH_SHORT).show();
 
                 // 프래그먼트 내에서 사용 중인 EditText의 포커스를 제거하여 키보드를 숨깁니다
                 View focusedView = requireActivity().getCurrentFocus();

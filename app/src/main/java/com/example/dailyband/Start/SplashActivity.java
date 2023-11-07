@@ -157,7 +157,7 @@ public class SplashActivity extends AppCompatActivity{
             // 다운로드 성공
             // localFilePath에 이미지가 저장됨
             // 여기서 UI 업데이트 등을 수행할 수 있습니다.
-            Toast.makeText(SplashActivity.this, "이미지 다운로드", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(SplashActivity.this, "이미지 다운로드", Toast.LENGTH_SHORT).show();
         }).addOnFailureListener(exception -> {
             // 다운로드 실패
         }).addOnProgressListener(taskSnapshot -> {

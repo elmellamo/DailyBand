@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,6 +63,7 @@ public class NameFragment extends Fragment {
 
                 String NEW_NAME = editText.getText().toString();
                 mDatabase.child("UserAccount").child(userId).child("name").setValue(NEW_NAME);
+                Toast.makeText(getContext(), "닉네임이 변경되었습니다", Toast.LENGTH_SHORT).show();
 
                 // 프래그먼트 내에서 사용 중인 EditText의 포커스를 제거하여 키보드를 숨깁니다
                 View focusedView = requireActivity().getCurrentFocus();

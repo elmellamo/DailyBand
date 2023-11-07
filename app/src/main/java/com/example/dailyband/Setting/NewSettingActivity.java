@@ -162,7 +162,7 @@ public class NewSettingActivity extends AppCompatActivity {
                 //imageView7.setImageBitmap(rotatedBitmap);
 
                 //imageView7.bringToFront();
-                Toast.makeText(NewSettingActivity.this, "로컬 파일 존재", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(NewSettingActivity.this, "로컬 파일 존재", Toast.LENGTH_SHORT).show();
             }
         } else {
             // 파일이 존재하지 않는 경우
@@ -308,7 +308,7 @@ public class NewSettingActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(NewSettingActivity.this, "탈퇴되었습니다.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(NewSettingActivity.this, "탈퇴 처리되었습니다.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -385,6 +385,7 @@ public class NewSettingActivity extends AppCompatActivity {
     }
 
     private void uploadImageToFirebase(Uri imageUri) {
+        Toast.makeText(NewSettingActivity.this, "프로필 이미지 변경 중...", Toast.LENGTH_SHORT).show();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         if (imageUri != null) {
             StorageReference storageRef = storage.getReference().child("profile_images");
@@ -395,7 +396,6 @@ public class NewSettingActivity extends AppCompatActivity {
                 // 업로드 성공 시 이미지 URL을 얻어올 수 있음
                 imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     String imageUrl = uri.toString();
-                    Toast.makeText(NewSettingActivity.this, "이미지 변경 중...", Toast.LENGTH_SHORT).show();
 
                     DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
                     databaseRef.child("user_photo").child(userId).child("profileImageUrl").setValue(imageUrl)
