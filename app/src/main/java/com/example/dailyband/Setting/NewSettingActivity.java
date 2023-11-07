@@ -47,7 +47,6 @@ public class NewSettingActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private FirebaseStorage storage;
     private DatabaseReference mDatabase;
-
     private ImageView profileImg;
     private ImageView tmpImg;
     private Uri selectedImageUri = null;

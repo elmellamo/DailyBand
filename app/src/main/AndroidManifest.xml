@@ -76,7 +76,8 @@
             android:windowSoftInputMode="adjustNothing"
             android:exported="true">
         </activity>
-        <activity android:name=".Setting.SettingActivity"
+
+        <activity android:name=".ShowMusic.ArtistInfo"
             android:exported="true">
         </activity>
 

@@ -175,7 +175,7 @@ public class NewPickMusic extends AppCompatActivity {
                 // detail_info_layout을 보이도록 변경합니다.\
 
                 detailInfoFragment = new DetailInfoFragment();
-                detailInfoFragment.setDetailInfo(isLiked, title, artist, postId);
+                detailInfoFragment.setDetailInfo(isLiked, title, artist, postId, writer_uid);
                 detail_info_layout.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, detailInfoFragment).commit();
             }

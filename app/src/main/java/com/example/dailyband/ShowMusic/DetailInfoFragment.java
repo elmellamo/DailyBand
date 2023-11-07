@@ -25,17 +25,18 @@ public class DetailInfoFragment extends Fragment {
     private View view;
     private ConstraintLayout downloadlayout, artistlayout, creditlayout, collablayout;
     private boolean isLiked;
-    private String title, artist, postId;
+    private String title, artist, postId, userUid;
     private ImageView heartbtn;
     private TextView songtitle, songwriter;
     public DetailInfoFragment() {
     }
 
-    public void setDetailInfo(boolean isLiked, String title, String artist, String postId){
+    public void setDetailInfo(boolean isLiked, String title, String artist, String postId, String userUid){
         this.isLiked = isLiked;
         this.title = title;
         this.artist = artist;
         this.postId = postId;
+        this.userUid = userUid;
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,12 +69,23 @@ public class DetailInfoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //다운로드 할 수 있게 해야 한다!!
+
             }
         });
         artistlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //완전 새로운 액티비티를 열어야 한다.
+                //ArtistInfo 열어야함, intent 보내면서
+                Intent intent = new Intent(getActivity(), ArtistInfo.class);
+                //isLiked, title, artist, postId;
+
+                //intent.putExtra("isLiked_intent", isLiked);
+                intent.putExtra("title_intent", title);
+                intent.putExtra("artist_intent", artist);
+                intent.putExtra("postId_intent", postId);
+                startActivity(intent);
+                getActivity().finish();
             }
         });
         creditlayout.setOnClickListener(new View.OnClickListener() {
@@ -112,5 +124,4 @@ public class DetailInfoFragment extends Fragment {
         }
         // 기타 로직 수행
     }
-
 }
