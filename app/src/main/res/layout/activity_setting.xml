@@ -860,7 +860,6 @@
 
 
 
-
     <!--메뉴바-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -875,177 +874,153 @@
         app:layout_constraintVertical_weight="0.1"
         >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/menu_bar_icon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
+
+        <ImageButton
+            android:id="@+id/homeBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:adjustViewBounds="true"
+            android:backgroundTint="@color/graygreen"
+            android:contentDescription="홈"
+            android:layout_marginBottom="10dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/myInfobtn"
             app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/home_new" />
+
+        <ImageButton
+            android:id="@+id/myInfobtn"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginBottom="10dp"
+            android:adjustViewBounds="true"
+            android:backgroundTint="@color/graygreen"
+            android:contentDescription="설정"
+            android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@+id/homeBtn"
+            app:layout_constraintRight_toLeftOf="@+id/addbtn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/user_last" />
+
+        <ImageButton
+            android:id="@+id/addbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginBottom="10dp"
+            android:adjustViewBounds="true"
+            android:backgroundTint="@color/graygreen"
+            android:contentDescription="내 음악 추가하기"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@+id/myInfobtn"
+            app:layout_constraintRight_toLeftOf="@+id/librarybtn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/add_last" />
+
+        <ImageButton
+            android:id="@+id/librarybtn"
+            android:layout_width="wrap_content"
+            android:layout_height="47dp"
+            android:layout_marginBottom="10dp"
+            android:adjustViewBounds="true"
+            android:backgroundTint="@color/graygreen"
+            android:contentDescription="라이브러리"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@+id/addbtn"
+            app:layout_constraintRight_toLeftOf="@+id/setbtn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/library_last" />
+
+        <ImageButton
+            android:id="@+id/setbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="43dp"
+            android:layout_marginBottom="10dp"
+            android:adjustViewBounds="true"
+            android:backgroundTint="@color/graygreen"
+            android:contentDescription="설정"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@+id/librarybtn"
             app:layout_constraintRight_toRightOf="parent"
-            >
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/setting_last" />
 
-
-            <ImageButton
-                android:id="@+id/homeBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="45dp"
-                android:adjustViewBounds="true"
-                android:backgroundTint="@color/graygreen"
-                android:contentDescription="홈"
-                android:scaleType="fitCenter"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="spread"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/myInfobtn"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/home_new" />
-
-            <ImageButton
-                android:id="@+id/myInfobtn"
-                android:layout_width="wrap_content"
-                android:layout_height="45dp"
-                android:adjustViewBounds="true"
-                android:backgroundTint="@color/graygreen"
-                android:contentDescription="설정"
-                android:scaleType="fitCenter"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="spread"
-                app:layout_constraintLeft_toRightOf="@+id/homeBtn"
-                app:layout_constraintRight_toLeftOf="@+id/addbtn"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/user_last" />
-
-            <ImageButton
-                android:id="@+id/addbtn"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:adjustViewBounds="true"
-                android:backgroundTint="@color/graygreen"
-                android:contentDescription="내 음악 추가하기"
-                android:scaleType="fitCenter"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="spread"
-                app:layout_constraintLeft_toRightOf="@+id/myInfobtn"
-                app:layout_constraintRight_toLeftOf="@+id/librarybtn"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/add_last" />
-
-            <ImageButton
-                android:id="@+id/librarybtn"
-                android:layout_width="wrap_content"
-                android:layout_height="47dp"
-                android:adjustViewBounds="true"
-                android:backgroundTint="@color/graygreen"
-                android:contentDescription="라이브러리"
-                android:scaleType="fitCenter"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="spread"
-                app:layout_constraintLeft_toRightOf="@+id/addbtn"
-                app:layout_constraintRight_toLeftOf="@+id/setbtn"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/library_last" />
-
-            <ImageButton
-                android:id="@+id/setbtn"
-                android:layout_width="wrap_content"
-                android:layout_height="43dp"
-                android:adjustViewBounds="true"
-                android:backgroundTint="@color/graygreen"
-                android:contentDescription="설정"
-                android:scaleType="fitCenter"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="spread"
-                app:layout_constraintLeft_toRightOf="@+id/librarybtn"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/setting_last" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/menu_bar_word"
-            android:layout_width="match_parent"
-            android:layout_alignParentBottom="true"
+        <TextView
+            android:id="@+id/homeword"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="7dp"
+            android:gravity="center"
+            android:text="홈"
+            android:textColor="#8C000000"
+            android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            >
+            app:layout_constraintLeft_toLeftOf="@+id/homeBtn"
+            app:layout_constraintRight_toRightOf="@+id/homeBtn"
+            />
 
-            <TextView
-                android:id="@+id/homeword"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:text="홈"
-                android:gravity="center"
-                android:textSize="13sp"
-                android:textColor="#8C000000"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="spread"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/myinfoword"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/myinfoword"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="7dp"
+            android:gravity="center"
+            android:text="내 정보"
+            android:textSize="13sp"
+            android:textColor="#8C000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/myInfobtn"
+            app:layout_constraintRight_toRightOf="@+id/myInfobtn"
+            />
 
-            <TextView
-                android:id="@+id/myinfoword"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:gravity="center"
-                android:text="내 정보"
-                android:textSize="13sp"
-                android:textColor="#8C000000"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="spread"
-                app:layout_constraintLeft_toRightOf="@+id/homeword"
-                app:layout_constraintRight_toLeftOf="@+id/addword"
-                app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+            android:id="@+id/addword"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="7dp"
+            android:gravity="center"
+            android:text="추가하기"
+            android:textSize="13sp"
+            android:textColor="#8C000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/addbtn"
+            app:layout_constraintRight_toRightOf="@+id/addbtn"
+            />
+        <TextView
+            android:id="@+id/libraryword"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginBottom="7dp"
+            android:text="라이브러리"
+            android:textSize="13sp"
+            android:gravity="center"
+            android:textColor="#8C000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/librarybtn"
+            app:layout_constraintRight_toRightOf="@+id/librarybtn"/>
+        <TextView
+            android:id="@+id/setword"
+            android:layout_width="0dp"
+            android:gravity="center"
+            android:layout_height="20dp"
+            android:layout_marginBottom="7dp"
+            android:text="설정"
+            android:textSize="13sp"
+            android:textColor="#8C000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/setbtn"
+            app:layout_constraintRight_toRightOf="@+id/setbtn"/>
 
-            <TextView
-                android:id="@+id/addword"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:gravity="center"
-                android:text="추가하기"
-                android:textSize="13sp"
-                android:textColor="#8C000000"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="spread"
-                app:layout_constraintLeft_toRightOf="@+id/myinfoword"
-                app:layout_constraintRight_toLeftOf="@+id/libraryword"
-                app:layout_constraintTop_toTopOf="parent"/>
-            <TextView
-                android:id="@+id/libraryword"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:text="라이브러리"
-                android:textSize="13sp"
-                android:gravity="center"
-                android:textColor="#8C000000"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="spread"
-                app:layout_constraintLeft_toRightOf="@+id/addword"
-                app:layout_constraintRight_toLeftOf="@+id/setword"
-                app:layout_constraintTop_toTopOf="parent"/>
-            <TextView
-                android:id="@+id/setword"
-                android:layout_width="0dp"
-                android:gravity="center"
-                android:layout_height="20dp"
-                android:text="설정"
-                android:textSize="13sp"
-                android:textColor="#8C000000"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_chainStyle="spread"
-                app:layout_constraintLeft_toRightOf="@+id/libraryword"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
