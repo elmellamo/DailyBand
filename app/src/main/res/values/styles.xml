@@ -4,7 +4,7 @@
         <!-- colorPrimaryDark 변경 -->
         <item name="colorPrimaryDark">#DEE5E0</item>
         <item name="colorPrimary">@color/midgreen</item>
-        <item name="colorAccent">@color/maingreen</item>
+        <item name="colorAccent">@color/new_maingreen</item>
         <!-- 다른 속성들 ... -->
     </style>
 

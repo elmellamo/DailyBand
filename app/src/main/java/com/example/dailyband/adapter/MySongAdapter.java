@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.R;
+import com.example.dailyband.ShowMusic.NewPickMusic;
 import com.example.dailyband.ShowMusic.PickMusic;
 
 import java.text.ParseException;
@@ -61,16 +62,14 @@ public class MySongAdapter extends RecyclerView.Adapter<MySongAdapter.MySongView
         holder.whensong.setText(desiredDateString);
 
 
-        holder.containertxt.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int adapterPosition = holder.getAbsoluteAdapterPosition();
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     TestSong selectedSong = songs.get(adapterPosition);
-                    Intent intent = new Intent(context, PickMusic.class);
-                    intent.putExtra("postId", selectedSong.getPost_id());
-                    intent.putExtra("title", selectedSong.getTitle());
-                    intent.putExtra("user_id", selectedSong.getUser_id()); //해당 노래를 작곡한 사람
+                    Intent intent = new Intent(context, NewPickMusic.class);
+                    intent.putExtra("selectedSong", selectedSong);
                     context.startActivity(intent);
                 }
             }

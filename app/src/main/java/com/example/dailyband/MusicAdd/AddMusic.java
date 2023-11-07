@@ -36,7 +36,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dailyband.Collection.CollectionActivity;
 import com.example.dailyband.Home.HomeMain;
+import com.example.dailyband.Love.LoveActivity;
 import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.MusicFragment.CategoryAddMusic;
 import com.example.dailyband.MusicFragment.DrumFragment;
@@ -112,7 +114,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     DrumFragment drumFragment;
     RecordingMain recordingMain;
     PopularFragment popularFragment;
-    private ImageButton homeBtn, setbtn;
+    private ImageButton homeBtn, setbtn, myInfobtn, librarybtn, addbtn;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +129,10 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         detail_instrument_frame = findViewById(R.id.detail_instrument_frame);
         addCategoryFrameLayout = findViewById(R.id.add_category_framelayout);
         homeBtn = findViewById(R.id.homeBtn);
+        myInfobtn = findViewById(R.id.myInfobtn);
+        librarybtn = findViewById(R.id.librarybtn);
         setbtn = findViewById(R.id.setbtn);
+        addbtn = findViewById(R.id.addbtn);
         playbtn = findViewById(R.id.playbtn2);
         stopbtn = findViewById(R.id.stopbtn);
         music_length = findViewById(R.id.music_length);
@@ -151,6 +156,36 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
 
         adapter = new MusicTrackAdapter(tracks);
         musicTrackView.setAdapter(adapter);
+
+        homeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(HomeMain.class);
+            }
+        });
+        myInfobtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(LoveActivity.class);
+            }
+        });
+        librarybtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(CollectionActivity.class);
+            }
+        });
+        addbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //myStartActivity(TestAdd.class);
+                myStartActivity(AddMusic.class);
+            }
+        });
+        setbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { myStartActivity(NewSettingActivity.class);    }
+        });
 
         pianoFragment.setOnRecordingCompletedListener(new OnRecordingCompletedListener() {
             @Override
@@ -206,18 +241,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                 //myStartActivity(AddCaption.class);
             }
         });
-        setbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myStartActivity(NewSettingActivity.class);
-            }
-        });
-        homeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myStartActivity(HomeMain.class);
-            }
-        });
+
         plusbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

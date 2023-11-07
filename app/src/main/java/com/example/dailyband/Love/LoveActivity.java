@@ -2,20 +2,17 @@ package com.example.dailyband.Love;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dailyband.Library.LibraryMain;
+import com.example.dailyband.Collection.CollectionActivity;
+import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
@@ -27,8 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.scwang.wave.MultiWaveHeader;
 
 import java.util.ArrayList;
@@ -44,7 +39,7 @@ public class LoveActivity extends AppCompatActivity {
     private FirebaseMethods mFirebaseMethods;
     private LinearLayout emptytxt;
 
-    private ImageButton addbtn, setbtn, librarybtn, myInfobtn;
+    private ImageButton addbtn, setbtn, librarybtn, myInfobtn, homeBtn;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.love_activity);
@@ -55,6 +50,7 @@ public class LoveActivity extends AppCompatActivity {
         librarybtn = findViewById(R.id.librarybtn);
         myInfobtn = findViewById(R.id.myInfobtn);
         setbtn = findViewById(R.id.setbtn);
+        homeBtn = findViewById(R.id.homeBtn);
 
         waveHeader.setVelocity(1);
         waveHeader.setProgress(1);
@@ -67,6 +63,13 @@ public class LoveActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(LoveActivity.this));
         songs = new ArrayList<>();
         getLove();
+
+        homeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(HomeMain.class);
+            }
+        });
 
         setbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +84,7 @@ public class LoveActivity extends AppCompatActivity {
         librarybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myStartActivity(LibraryMain.class);
+                myStartActivity(CollectionActivity.class);
             }
         });
         addbtn.setOnClickListener(new View.OnClickListener() {

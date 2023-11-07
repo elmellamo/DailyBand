@@ -53,20 +53,11 @@
             android:layout_marginLeft="5dp"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/heart_full"
+            android:src="@drawable/newgreenheart"
             app:layout_constraintStart_toEndOf="@+id/lovenum"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/optionmenu"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintHorizontal_weight="0.1"
-        android:src="@drawable/optionmenu"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

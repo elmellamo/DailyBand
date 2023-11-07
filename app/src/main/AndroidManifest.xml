@@ -51,6 +51,10 @@
             android:exported="true">
 
         </activity>
+        <activity android:name=".Collection.CollectionActivity"
+            android:exported="true">
+
+        </activity>
 
         <activity android:name=".Utils.SharedData"
             android:exported="true">

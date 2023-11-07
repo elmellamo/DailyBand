@@ -15,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +26,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
+import com.example.dailyband.Collection.CollectionActivity;
+import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.Login.LoginActivity;
+import com.example.dailyband.Love.LoveActivity;
+import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -68,6 +73,7 @@ public class NewSettingActivity extends AppCompatActivity {
     private IntroduceFragment introduceFragment;
     private PasswordFragment passwordFragment;
     private String name_intent;
+    private ImageButton addbtn, setbtn, librarybtn, myInfobtn, homeBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,6 +98,12 @@ public class NewSettingActivity extends AppCompatActivity {
         detail_info_layout = findViewById(R.id.detail_info_layout);
         setting_introduce_layout = findViewById(R.id.setting_introduce_layout);
         setting_password_layout = findViewById(R.id.setting_password_layout);
+        homeBtn = findViewById(R.id.homeBtn);
+        myInfobtn = findViewById(R.id.myInfobtn);
+        librarybtn = findViewById(R.id.librarybtn);
+        setbtn = findViewById(R.id.setbtn);
+        addbtn = findViewById(R.id.addbtn);
+
 
         profileImg.bringToFront();
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -175,6 +187,36 @@ public class NewSettingActivity extends AppCompatActivity {
                     //.placeholder(R.drawable.brid_second_img)
                     //.error(R.drawable.brid_second_img)
                     .into(profileImg); // profileImage는 앱의 이미지뷰 객체
+        });
+
+        homeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(HomeMain.class);
+            }
+        });
+        myInfobtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(LoveActivity.class);
+            }
+        });
+        librarybtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(CollectionActivity.class);
+            }
+        });
+        addbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //myStartActivity(TestAdd.class);
+                myStartActivity(AddMusic.class);
+            }
+        });
+        setbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { myStartActivity(NewSettingActivity.class);    }
         });
 
         //사용자 이름 클릭하면 사용자 이름 수정하는 카드 뷰 띄우기

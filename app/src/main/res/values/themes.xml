@@ -4,15 +4,15 @@
         <!-- Primary brand color. -->
         <item name="windowNoTitle">true</item>
 
-        <item name="colorPrimary">@color/maingreen</item>
-        <item name="colorPrimaryVariant">@color/primarydark_color</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/test_main_clolr</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+        <item name="colorOnPrimary">@color/test_main_clolr</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/midgreen</item>
         <item name="colorSecondaryVariant">@color/test_main_clolr</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/test_main_clolr</item>
         <!-- Customize your theme here. -->
     </style>
 

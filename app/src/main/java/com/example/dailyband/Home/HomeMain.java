@@ -4,10 +4,12 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +21,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dailyband.Library.LibraryMain;
+import com.bumptech.glide.Glide;
+import com.example.dailyband.Collection.CollectionActivity;
 import com.example.dailyband.Love.LoveActivity;
 import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.MusicAdd.AddMusic;
@@ -27,12 +30,17 @@ import com.example.dailyband.R;
 import com.example.dailyband.Setting.NewSettingActivity;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.RankingSongAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,11 +48,12 @@ import java.util.Comparator;
 import java.util.List;
 
 public class HomeMain extends AppCompatActivity{
-    private ImageButton addbtn, setbtn, librarybtn, myInfobtn;
+    private ImageButton addbtn, setbtn, librarybtn, myInfobtn, homeBtn;
     private TextView username;
     private RecyclerView recyclerView;
     private RankingSongAdapter adapter;
     private List<TestSong> songs;
+    private ImageView circle_iv;
 
     private static final int REQUEST_PERMISSION_CODE = 1000;
     private FirebaseDatabase mFirebaseDatabase;
@@ -66,12 +75,21 @@ public class HomeMain extends AppCompatActivity{
         recyclerView = findViewById(R.id.popularlist);
         myInfobtn = findViewById(R.id.myInfobtn);
         username = findViewById(R.id.username);
+        setbtn = findViewById(R.id.setbtn);
+        homeBtn = findViewById(R.id.homeBtn);
+        circle_iv = findViewById(R.id.circle_iv);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         songs = new ArrayList<>();
         getInfo();
         getSongs();
         username.setText(nickname);
 
+        homeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(HomeMain.class);
+            }
+        });
         myInfobtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +99,7 @@ public class HomeMain extends AppCompatActivity{
         librarybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myStartActivity(LibraryMain.class);
+                myStartActivity(CollectionActivity.class);
             }
         });
         addbtn.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +109,6 @@ public class HomeMain extends AppCompatActivity{
                 myStartActivity(AddMusic.class);
             }
         });
-        setbtn = findViewById(R.id.setbtn);
         setbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { myStartActivity(NewSettingActivity.class);    }
@@ -162,6 +179,16 @@ public class HomeMain extends AppCompatActivity{
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // 데이터 가져오기가 실패한 경우에 대한 처리
             }
+        });
+
+        StorageReference profileImageRef = FirebaseStorage.getInstance().getReference().child("profile_images").child(userUID+".jpg");
+        profileImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            String imageUrl = uri.toString();
+            Glide.with(this)
+                    .load(imageUrl)
+                    //.placeholder(R.drawable.brid_second_img)
+                    //.error(R.drawable.brid_second_img)
+                    .into(circle_iv); // profileImage는 앱의 이미지뷰 객체
         });
     }
 
