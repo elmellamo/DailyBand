@@ -164,7 +164,7 @@
         android:id="@+id/menu_bar"
         android:background="@color/graygreen"
         android:layout_alignParentBottom="true"
-        app:layout_constraintTop_toBottomOf="@+id/topscreen_setting"
+        app:layout_constraintTop_toBottomOf="@+id/topscreen_homemain"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
