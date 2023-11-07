@@ -5,9 +5,9 @@
     android:background="@color/graygreen"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:padding="10dp"
-        android:id="@+id/heartlayout"
+        android:id="@+id/profilelayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
@@ -15,12 +15,21 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_weight="0.1"
         >
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:id="@+id/cuteheart"
-            android:src="@drawable/cute_heart"/>
-    </LinearLayout>
+            android:clickable="true"
+            android:src="@drawable/brid_second_img"
+            app:civ_border_color="#000000"
+            app:civ_border_overlay="true"
+            app:civ_border_width="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:padding="10dp"
@@ -28,7 +37,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintHorizontal_weight="0.9"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/heartlayout"
+        app:layout_constraintStart_toEndOf="@id/profilelayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -42,17 +51,38 @@
             app:layout_constraintHorizontal_weight="0.9"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/writername"/>
+
+        <TextView
+            android:layout_marginTop="6dp"
+            android:id="@+id/writername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="담담이야"
+            android:textSize="15sp"
+            android:textColor="#949494"
+            android:ellipsize="marquee"
+            app:layout_constraintTop_toBottomOf="@+id/songname"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:id="@+id/lovenum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="200"
+            android:textSize="15sp"
+            android:textColor="#949494"
+            app:layout_constraintStart_toEndOf="@+id/writername"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <ImageView
+            android:layout_marginLeft="5dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/newgreenheart"
+            app:layout_constraintStart_toEndOf="@+id/lovenum"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <ImageView
-            android:id="@+id/optionmenu"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintHorizontal_weight="0.1"
-            android:src="@drawable/optionmenu"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

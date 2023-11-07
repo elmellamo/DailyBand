@@ -19,4 +19,6 @@
     <color name="yellogreen">#9acd32</color>
     <color name="darkyellogreen">#82b553</color>
     <color name="test_main_clolr">#3a5a40</color>
+    <color name="start_green">#79AC78</color>
+    <color name="end_green">#537538</color>
 </resources>

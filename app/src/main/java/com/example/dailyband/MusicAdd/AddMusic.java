@@ -85,14 +85,11 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     int mBufferSize = AudioTrack.getMinBufferSize(mSampleRate, mChannelCount, mAudioFormat);
 
     private static final int REQUEST_PERMISSION_CODE = 1000;
-    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
 
     private FirebaseMethods mFirebaseMethods;
 
     private Uri uri;
-
     List<MusicTrack> tracks;
-
     Thread audioThread;
     private boolean isPlaying = false;
     private long playingLocation = 0;

@@ -64,4 +64,6 @@ dependencies {
     //implementation 'com.kailashdabhi:om-recorder:1.1.5'
     implementation 'com.github.squti:Android-Wave-Recorder:1.7.0'
     implementation 'com.gauravk.audiovisualizer:audiovisualizer:0.9.2'
+
+    implementation 'com.scwang.wave:MultiWaveHeader:1.0.0'
 }
