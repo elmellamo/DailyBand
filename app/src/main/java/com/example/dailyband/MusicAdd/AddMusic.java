@@ -4,6 +4,8 @@ import static android.Manifest.permission;
 
 import android.Manifest;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
@@ -59,6 +61,7 @@ import com.example.dailyband.adapter.MusicTrackAdapter;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.mikhaellopez.circularfillableloaders.CircularFillableLoaders;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -100,7 +103,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     private long playingLocation = 0;
     private long max_len = 0;
 
-    private ImageView plusbtn, playbtn, stopbtn;
+    private ImageView plusbtn, playbtn, stopbtn, backcontext;
     private TextView nextmenu, music_length;
     private SeekBar seekBar;
 
@@ -120,18 +123,14 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     PopularFragment popularFragment;
     private ImageButton homeBtn, setbtn, myInfobtn, librarybtn, addbtn;
     private String parent_Id;
+    private CircularFillableLoaders circularFillableLoaders;
+    private ConstraintLayout circularlayout;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addmusic);
 
         myPermissions();
-
-        Intent intent = getIntent();
-        parent_Id = intent.getStringExtra("parent_Id"); //콜라보레이션할 원곡의 uid postid!!!
-        if(!parent_Id.equals("ori")){
-            //콜라보 있게 addmusic에 왔음!
-            onCollaborationClick(parent_Id);
-        }
 
         mFirebaseMethods = new FirebaseMethods(AddMusic.this);
 
@@ -147,8 +146,26 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         addbtn = findViewById(R.id.addbtn);
         playbtn = findViewById(R.id.playbtn2);
         stopbtn = findViewById(R.id.stopbtn);
+        backcontext = findViewById(R.id.backcontext);
         music_length = findViewById(R.id.music_length);
         seekBar = findViewById(R.id.seekBar);
+        circularlayout = findViewById(R.id.circularlayout);
+        circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
+        circularlayout.bringToFront();
+
+        Intent intent = getIntent();
+        parent_Id = intent.getStringExtra("parent_Id"); //콜라보레이션할 원곡의 uid postid!!!
+        if(!parent_Id.equals("ori")){
+            //콜라보 있게 addmusic에 왔음!
+            onCollaborationClick(parent_Id);
+        }
+        backcontext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
 
         pianoFragment = new PianoFragment();
         drumFragment = new DrumFragment();
@@ -268,7 +285,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
             public void onClick(View v) {
                 if(isPlaying) {
                     // 재생중이었으면 경우 이미지를 Play로 변경
-                    playbtn.setImageResource(R.drawable.playbtn);
+                    playbtn.setImageResource(R.drawable.testbtn);
 
                     if(audioThread != null)
                         audioThread.interrupt();
@@ -284,7 +301,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                 audioThread.start();
 
                 // Play 버튼 이미지를 Pause로 변경
-                playbtn.setImageResource(R.drawable.pause);
+                playbtn.setImageResource(R.drawable.final_pause);
 
             }
         });
@@ -355,7 +372,23 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
             detail_pickup_layout.setVisibility(View.GONE);
         }
     }
+
+    private void hideProgressBar() {
+        // 프로그레스바를 숨기는 코드
+        circularlayout.animate()
+                .alpha(0f) // 투명도를 0으로 설정하여 페이드 아웃 애니메이션 적용
+                .setDuration(500) // 애니메이션 지속 시간 (밀리초)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        // 애니메이션 종료 후에 실행할 작업 (예: 뷰를 숨기거나 제거하는 등)
+                        circularlayout.setVisibility(View.GONE);
+                    }
+                })
+                .start();
+    }
     public void onCollaborationClick(String addPostId) {
+        circularlayout.setVisibility(View.VISIBLE);
         long currentTimeMillis = System.currentTimeMillis();
         // 시간을 원하는 포맷으로 변환합니다.
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
@@ -393,7 +426,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                 Toast.makeText(AddMusic.this, "콜라보레이션 노래가 등록되었습니다.", Toast.LENGTH_SHORT).show();
                 Log.e("로그", "지금 되고 있는거야?" + uri.toString());
                 addTrack(uri, addPostId);
-
+                hideProgressBar();
             }).addOnFailureListener(e -> {
                 Log.w("asdf", "download:FAILURE", e);
             });
@@ -843,20 +876,8 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     }
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            finishAffinity(); // 현재 액티비티와 관련된 모든 액티비티 종료
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "한 번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000); // 2초 안에 다시 뒤로가기 버튼을 눌러야 종료
+        super.onBackPressed();
+        finishAffinity(); // 현재 액티비티와 관련된 모든 액티비티 종료
+        return;
     }
 }

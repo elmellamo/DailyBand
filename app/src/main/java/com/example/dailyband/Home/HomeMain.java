@@ -99,12 +99,6 @@ public class HomeMain extends AppCompatActivity{
         circularlayout = findViewById(R.id.circularlayout);
         circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
         circularlayout.bringToFront();
-        username.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myStartActivity(Test.class);
-            }
-        });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         songs = new ArrayList<>();
