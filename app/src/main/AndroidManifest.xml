@@ -64,9 +64,6 @@
         <activity android:name=".Login.LoginActivity"
             android:exported="true">
         </activity>
-        <activity android:name=".ShowMusic.PickMusic"
-            android:exported="true">
-        </activity>
 
         <activity android:name=".Login.RegisterActivity"
             android:exported="true">

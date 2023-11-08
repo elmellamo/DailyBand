@@ -48,7 +48,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/backcontext"
                 android:layout_marginStart="10dp"
+                android:singleLine="true"
                 android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
                 app:layout_constraintHorizontal_weight="0.8"
                 app:layout_constraintRight_toLeftOf="@+id/savemenu"
                 android:textSize="20sp"
@@ -103,33 +105,31 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintBottom_toTopOf="@+id/play_layout"
-                    android:background="@drawable/gray_linearborder"
                     android:id="@+id/writer_layout"
                     >
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="작곡"
+                        android:background="@drawable/gray_linearborder"
                         android:textSize="18sp"
                         android:id="@+id/title_writer"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        android:gravity="center"
                         android:paddingBottom="5dp">
                     </TextView>
 
                     <EditText
                         android:textColor="@color/black"
                         android:textColorHint="#a3b18a"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
                         android:background="@null"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="작곡한 사람을 알려주세요."
                         android:id="@+id/writer_content"
-                        app:layout_constraintLeft_toRightOf="@+id/title_writer"
-                        app:layout_constraintBottom_toBottomOf="@+id/title_writer"
-                        app:layout_constraintTop_toTopOf="@+id/title_writer"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/title_writer"
                         android:textSize="15sp"
                         >
                     </EditText>
@@ -142,34 +142,32 @@
                     app:layout_constraintBottom_toTopOf="@+id/singer_layout"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    android:background="@drawable/gray_linearborder"
                     android:id="@+id/play_layout"
                     android:layout_marginTop="20dp"
                     >
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="연주"
                         android:textSize="18sp"
                         android:id="@+id/title_play"
+                        android:background="@drawable/gray_linearborder"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        android:gravity="center"
                         android:paddingBottom="5dp">
                     </TextView>
 
                     <EditText
                         android:textColor="@color/black"
                         android:textColorHint="#a3b18a"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
                         android:background="@null"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="사용한 악기를 알려주세요."
                         android:id="@+id/play_content"
-                        app:layout_constraintLeft_toRightOf="@+id/title_play"
-                        app:layout_constraintBottom_toBottomOf="@+id/title_play"
-                        app:layout_constraintTop_toTopOf="@+id/title_play"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/title_play"
                         android:textSize="15sp"
                         >
                     </EditText>
@@ -182,34 +180,32 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintBottom_toTopOf="@+id/explain_layout"
                     app:layout_constraintRight_toRightOf="parent"
-                    android:background="@drawable/gray_linearborder"
                     android:id="@+id/singer_layout"
                     android:layout_marginTop="20dp"
                     >
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="노래"
+                        android:background="@drawable/gray_linearborder"
                         android:textSize="18sp"
                         android:id="@+id/title_singer"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        android:gravity="center"
                         android:paddingBottom="5dp">
                     </TextView>
 
                     <EditText
                         android:textColor="@color/black"
                         android:textColorHint="#a3b18a"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
                         android:background="@null"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="노래를 부른 사람을 알려주세요."
                         android:id="@+id/play_singer"
-                        app:layout_constraintLeft_toRightOf="@+id/title_singer"
-                        app:layout_constraintBottom_toBottomOf="@+id/title_singer"
-                        app:layout_constraintTop_toTopOf="@+id/title_singer"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/title_singer"
                         android:textSize="15sp"
                         >
                     </EditText>
@@ -240,7 +236,7 @@
                         android:textColor="@color/black"
                         android:textColorHint="#a3b18a"
                         android:layout_marginTop="15dp"
-                        android:paddingBottom="15dp"
+                        android:paddingBottom="10dp"
                         android:background="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

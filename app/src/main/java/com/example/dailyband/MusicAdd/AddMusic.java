@@ -17,6 +17,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -79,6 +80,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         public boolean isEnded = false;
     }
 
+    private boolean doubleBackToExitPressedOnce = false;
     int mSampleRate = 44100;
     int mChannelCount = AudioFormat.CHANNEL_IN_STEREO;
     int mAudioFormat = AudioFormat.ENCODING_PCM_16BIT;
@@ -802,5 +804,23 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     }
     private void startToast(String msg){
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            finishAffinity(); // 현재 액티비티와 관련된 모든 액티비티 종료
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "한 번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000); // 2초 안에 다시 뒤로가기 버튼을 눌러야 종료
     }
 }

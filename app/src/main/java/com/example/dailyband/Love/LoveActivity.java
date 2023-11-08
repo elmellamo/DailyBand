@@ -2,9 +2,11 @@ package com.example.dailyband.Love;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +38,7 @@ public class LoveActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LoveAdapter adapter;
     private List<ComplexName> songs;
+    private boolean doubleBackToExitPressedOnce = false;
     private FirebaseMethods mFirebaseMethods;
     private LinearLayout emptytxt;
 
@@ -136,5 +139,23 @@ public class LoveActivity extends AppCompatActivity {
         Intent intent = new Intent(this, c);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            finishAffinity(); // 현재 액티비티와 관련된 모든 액티비티 종료
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "한 번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000); // 2초 안에 다시 뒤로가기 버튼을 눌러야 종료
     }
 }

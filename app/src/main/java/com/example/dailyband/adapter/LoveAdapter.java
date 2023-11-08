@@ -13,12 +13,10 @@ import android.widget.TextView;
         import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.dailyband.Love.LoveActivity;
 import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.ShowMusic.NewPickMusic;
-import com.example.dailyband.ShowMusic.PickMusic;
-        import com.example.dailyband.R;
+import com.example.dailyband.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;

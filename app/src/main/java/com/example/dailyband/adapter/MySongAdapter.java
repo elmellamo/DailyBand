@@ -11,18 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.R;
 import com.example.dailyband.ShowMusic.NewPickMusic;
-import com.example.dailyband.ShowMusic.PickMusic;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 public class MySongAdapter extends RecyclerView.Adapter<MySongAdapter.MySongViewHolder> {
     private Context context;

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -56,6 +57,7 @@ public class HomeMain extends AppCompatActivity{
     private List<TestSong> songs;
     private ImageView circle_iv;
 
+    private boolean doubleBackToExitPressedOnce = false;
     private static final int REQUEST_PERMISSION_CODE = 1000;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
@@ -351,4 +353,23 @@ public class HomeMain extends AppCompatActivity{
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            finishAffinity(); // 현재 액티비티와 관련된 모든 액티비티 종료
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "한 번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000); // 2초 안에 다시 뒤로가기 버튼을 눌러야 종료
+    }
+
 }

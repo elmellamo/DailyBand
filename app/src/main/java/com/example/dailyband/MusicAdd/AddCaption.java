@@ -3,17 +3,23 @@ package com.example.dailyband.MusicAdd;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.dailyband.Collection.CollectionActivity;
 import com.example.dailyband.Home.HomeMain;
+import com.example.dailyband.Love.LoveActivity;
 import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.R;
+import com.example.dailyband.Setting.NewSettingActivity;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,10 +33,12 @@ import java.util.List;
 public class AddCaption extends AppCompatActivity {
     private String title, postId;
     private Uri uri;
+    private boolean doubleBackToExitPressedOnce = false;
     private TextView writtentitle, savemenu;
     private List<ComplexName> parents;
     private EditText writer_content, play_content, play_singer, play_explain;
     private FirebaseMethods mFirebaseMethods;
+    private ImageButton homeBtn, setbtn, myInfobtn, librarybtn, addbtn;
     private ArrayList<String> originalpostid;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +60,11 @@ public class AddCaption extends AppCompatActivity {
         play_singer = findViewById(R.id.play_singer);
         writtentitle = findViewById(R.id.writtentitle);
         savemenu = findViewById(R.id.savemenu);
+        homeBtn = findViewById(R.id.homeBtn);
+        myInfobtn = findViewById(R.id.myInfobtn);
+        librarybtn = findViewById(R.id.librarybtn);
+        setbtn = findViewById(R.id.setbtn);
+        addbtn = findViewById(R.id.addbtn);
 
         writtentitle.setText(title);
         getmoreDetail();
@@ -61,6 +74,38 @@ public class AddCaption extends AppCompatActivity {
                 goUpload();
             }
         });
+
+        homeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(HomeMain.class);
+            }
+        });
+        myInfobtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(LoveActivity.class);
+            }
+        });
+        librarybtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(CollectionActivity.class);
+            }
+        });
+        addbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddCaption.this, AddMusic.class);
+                intent.putExtra("parent_Id", "ori");
+                startActivity(intent);
+            }
+        });
+        setbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { myStartActivity(NewSettingActivity.class);    }
+        });
+
     }
 
     private void getmoreDetail(){
@@ -123,4 +168,5 @@ public class AddCaption extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
+
 }
