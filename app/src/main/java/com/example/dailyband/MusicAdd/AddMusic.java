@@ -81,6 +81,8 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         public String title = "";
         public int length; // 초단위
 
+        public String original_postid = null;
+
         public boolean isSpeaking = true; // mute / unmute
         public boolean isStarted = false;
         public boolean isEnded = false;
@@ -425,7 +427,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
             }).addOnSuccessListener(taskSnapshot -> {
                 Toast.makeText(AddMusic.this, "콜라보레이션 노래가 등록되었습니다.", Toast.LENGTH_SHORT).show();
                 Log.e("로그", "지금 되고 있는거야?" + uri.toString());
-                addTrack(uri, addPostId);
+                addTrack(uri, addPostId, addPostId);
                 hideProgressBar();
             }).addOnFailureListener(e -> {
                 Log.w("asdf", "download:FAILURE", e);
@@ -438,6 +440,23 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         MusicTrack track = new MusicTrack();
         track.uri = uri;
         track.title = title;
+        track.original_postid = null;
+
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(getApplicationContext(), uri);
+        String durationStr = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        int millSecond = Integer.parseInt(durationStr);
+        track.length = millSecond;
+
+        tracks.add(track);
+        adapter.notifyDataSetChanged();
+        updateMaxMusicLength();
+    }
+    private void addTrack(Uri uri, String title, String orig_post_id) {
+        MusicTrack track = new MusicTrack();
+        track.uri = uri;
+        track.title = title;
+        track.original_postid = orig_post_id;
 
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(getApplicationContext(), uri);
@@ -684,10 +703,15 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
             return;
         }
 
-        uri = mergeTracks();
+        uri = mergeTracks(title);
 
+        String temp;
         for(int i=0; i<tracks.size(); i++){
-            parentPostId.add(tracks.get(i).title);
+            temp = tracks.get(i).original_postid;
+            if(temp != null) {
+                parentPostId.add(temp);
+                Log.d("asdf", "parent id : "+temp);
+            }
         }
 
         Intent intent = new Intent(this, AddCaption.class);
@@ -697,7 +721,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         startActivity(intent);
     }
 
-    private Uri mergeTracks() {
+    private Uri mergeTracks(String title) {
         ContentValues values = new ContentValues();
         long currentTimeMillis = System.currentTimeMillis();
         // 시간을 원하는 포맷으로 변환합니다.
@@ -705,8 +729,8 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         String formattedTime = sdf.format(new Date(currentTimeMillis));
 
 
-        values.put(MediaStore.Audio.Media.TITLE, formattedTime+".wav");
-        values.put(MediaStore.Audio.Media.DISPLAY_NAME, formattedTime+".wav");
+        values.put(MediaStore.Audio.Media.TITLE, title);
+        values.put(MediaStore.Audio.Media.DISPLAY_NAME, title+".wav");
         values.put(MediaStore.Audio.Media.DATE_ADDED, (int) (System.currentTimeMillis() / 1000));
         values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/x-wav");
         values.put(MediaStore.Audio.Media.RELATIVE_PATH, "Music/Daily Band/Result/");
