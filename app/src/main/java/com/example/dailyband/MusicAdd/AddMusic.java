@@ -4,11 +4,13 @@ import static android.Manifest.permission;
 
 import android.Manifest;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -19,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -446,6 +449,29 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         startActivityForResult(intent_upload, 1);
     }
 
+    @SuppressLint("Range")
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
+    }
+
     // 폴더에서 노래 가져온 결과
     @Override
     protected void onActivityResult(int requestCode,int resultCode,Intent data){
@@ -453,7 +479,8 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
             if(resultCode == RESULT_OK){
                 // audio 위치
                 Uri uri = data.getData();
-                String path = uri.getPath();
+//                String path = uri.getPath();
+                String path = getFileName(uri);
                 addTrack(uri, path);
             }
         }
@@ -682,7 +709,6 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         public void run() {
             try {
                 // 데이터 스트림
-                // InputStream is = getContentResolver().openInputStream(uri);
                 int trackSize = tracks.size();
                 InputStream[] is = new InputStream[trackSize];
                 for(int i=0;i<trackSize;i++) {
@@ -714,7 +740,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                         AudioTrack.MODE_STREAM,
                         0);
 
-
+                // 데이터를 처리하기 위한 배열
                 byte[] readData = new byte[mBufferSize];
                 byte[] writeData = new byte[mBufferSize];
 
@@ -726,10 +752,12 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                 at.play();
                 while (isPlaying) {
                     try {
+                        // 버퍼 초기화
                         for(int j=0;j<mBufferSize/2;j++) {
                             readInt[j] = 0;
                         }
 
+                        // 각 파일별로 읽어와 다 더해줌
                         int ret=0;
                         for(int i=0;i<trackSize;i++) {
                             if(tracks.get(i).isEnded) continue;
@@ -759,9 +787,12 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                             writeShorts[j] = (short)readInt[j];
                         }
                         ByteBuffer.wrap(writeData).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().put(writeShorts);
-                        at.write(writeData, 0, ret);
-                        playingLocation += ret;
 
+                        // 오디오 출력
+                        at.write(writeData, 0, ret);
+
+                        // 현재 재생위치 업데이트
+                        playingLocation += ret;
                         runOnUiThread(new Runnable(){
                             @Override
                             public void run() {
@@ -779,7 +810,6 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
 
                 playbtn.setImageResource(R.drawable.playbtn);
 
-                // 전부 끝까지 재생했으면 재생위치 0으로 초기화
                 boolean isAllPlayed = true;
                 for(int i=0;i<trackSize;i++) {
                     if(tracks.get(i).isEnded == false) {
@@ -787,6 +817,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                         break;
                     }
                 }
+                // 전부 끝까지 재생했으면 재생위치 0으로 초기화
                 if(isAllPlayed) {
                     playingLocation = 0;
                     runOnUiThread(new Runnable(){
