@@ -310,10 +310,8 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Log.d("asdf", ""+seekBar.getProgress()+", "+max_len);
                 long location = (long)(((float)seekBar.getProgress() / 10000) * max_len / 1000 * 44100 * 4);
                 long mlocation = location - (location % mBufferSize);
-                Log.d("asdf", "location(byte) :"+location);
                 if(isPlaying)
                     startNewAudioThread((int)mlocation);
                 else {
@@ -410,7 +408,6 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         String durationStr = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
         int millSecond = Integer.parseInt(durationStr);
         track.length = millSecond;
-        Log.d("asdf",durationStr + ", milsec:"+millSecond);
 
         tracks.add(track);
         adapter.notifyDataSetChanged();
@@ -420,11 +417,8 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     private void updateMaxMusicLength() {
         max_len = 0;
         for(int i=0;i<tracks.size();i++) {
-            Log.d("asdf", i+" len : "+tracks.get(i).length);
             max_len = Math.max(max_len, tracks.get(i).length);
         }
-
-        Log.d("asdf", "max leen :"+max_len);
 
         updateMusicPosition();
     }
@@ -433,6 +427,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         long max_minutes = (max_len / 1000)  / 60;
         int max_seconds = (int)((max_len / 1000) % 60);
 
+        float f_cur_len = (float)playingLocation / 44100 / 4;
         long cur_len = playingLocation / 44100 / 4;
         long cur_minutes = cur_len / 60;
         int cur_seconds = (int)(cur_len % 60);
@@ -440,7 +435,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         String musicLength = String.format("%02d:%02d / %02d:%02d", cur_minutes, cur_seconds, max_minutes, max_seconds);
         music_length.setText(musicLength);
 
-        seekBar.setProgress((int)((float)cur_len / max_len * 10000000));
+        seekBar.setProgress((int)(f_cur_len / max_len * 10000000));
     }
 
     public void getPathFromStorage() {
@@ -673,7 +668,6 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         if(audioThread != null)
             audioThread.interrupt();
         audioThread = null;
-        Log.d("asdf", "쓰레드 멈추기 시도");
     }
 
     public class AudioTrackRunnable implements Runnable {
@@ -742,6 +736,10 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
 
                             int tmp = is[i].read(readData, 0, mBufferSize);
                             if(tmp <= 0) tracks.get(i).isEnded = true;
+
+                            if(!tracks.get(i).isSpeaking)
+                                continue;
+
                             ret = Math.max(ret, tmp);
 
                             // 읽어온 바이트들을 little endian으로 short로 변환
@@ -789,8 +787,15 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                         break;
                     }
                 }
-                Log.d("asdf", ""+playingLocation);
-                if(isAllPlayed) playingLocation = 0;
+                if(isAllPlayed) {
+                    playingLocation = 0;
+                    runOnUiThread(new Runnable(){
+                        @Override
+                        public void run() {
+                            updateMusicPosition();
+                        }
+                    });
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
