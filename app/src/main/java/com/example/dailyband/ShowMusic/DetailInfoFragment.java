@@ -1,13 +1,17 @@
 package com.example.dailyband.ShowMusic;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +20,11 @@ import androidx.fragment.app.Fragment;
 
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.scwang.wave.MultiWaveHeader;
+
+import java.io.OutputStream;
 
 public class DetailInfoFragment extends Fragment {
 
@@ -68,8 +76,43 @@ public class DetailInfoFragment extends Fragment {
         downloadlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //다운로드 할 수 있게 해야 한다!!
+                ContentValues values = new ContentValues();
 
+                values.put(MediaStore.Audio.Media.TITLE, title);
+                values.put(MediaStore.Audio.Media.DISPLAY_NAME, title+".wav");
+                values.put(MediaStore.Audio.Media.DATE_ADDED, (int) (System.currentTimeMillis() / 1000));
+                values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/x-wav");
+                values.put(MediaStore.Audio.Media.RELATIVE_PATH, "Music/Daily Band/Downloads/");
+
+                Uri uri = getContext().getContentResolver().insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values);
+
+                try {
+                    OutputStream outputStream = getContext().getContentResolver().openOutputStream(uri);
+
+                    StorageReference songRef = FirebaseStorage.getInstance().getReference().child("songs/" + postId + "/song");
+                    songRef.getStream((state, inputStream) -> {
+
+                        long totalBytes = state.getTotalByteCount();
+                        long bytesDownloaded = 0;
+
+                        byte[] buffer = new byte[1024];
+                        int size;
+                        while ((size = inputStream.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, size);
+                            bytesDownloaded += size;
+                        }
+
+                        inputStream.close();
+
+                    }).addOnSuccessListener(taskSnapshot -> {
+                        Toast.makeText(getContext(), "다운로드 완료", Toast.LENGTH_SHORT).show();
+                        //Log.e("로그", "지금 되고 있는거야?" + uri.toString());
+                    }).addOnFailureListener(e -> {
+                        Log.w("asdf", "download:FAILURE", e);
+                    });
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         artistlayout.setOnClickListener(new View.OnClickListener() {
