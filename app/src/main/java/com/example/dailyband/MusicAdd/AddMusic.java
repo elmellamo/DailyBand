@@ -865,7 +865,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                 at.release();
                 at = null;
 
-                playbtn.setImageResource(R.drawable.playbtn);
+                playbtn.setImageResource(R.drawable.testbtn);
 
                 boolean isAllPlayed = true;
                 for(int i=0;i<trackSize;i++) {
