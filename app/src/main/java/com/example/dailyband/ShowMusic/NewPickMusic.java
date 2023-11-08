@@ -1,5 +1,7 @@
 package com.example.dailyband.ShowMusic;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
@@ -53,6 +55,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.mikhaellopez.circularfillableloaders.CircularFillableLoaders;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -93,6 +96,8 @@ public class NewPickMusic extends AppCompatActivity {
     private AnimatedVectorDrawable avd2;
     private int switchnum = 0;
     private boolean isScaleUp = true;
+    private CircularFillableLoaders circularFillableLoaders;
+    private ConstraintLayout circularlayout;
 
     protected void onDestroy(){
         if(blobVisualizer != null){
@@ -152,6 +157,10 @@ public class NewPickMusic extends AppCompatActivity {
         librarybtn = findViewById(R.id.librarybtn);
         setbtn = findViewById(R.id.setbtn);
         addbtn = findViewById(R.id.addbtn);
+        circularlayout = findViewById(R.id.circularlayout);
+        circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
+        circularlayout.bringToFront();
+
 
         gray_screen = findViewById(R.id.gray_screen);
         detail_info_layout = findViewById(R.id.detail_info_layout);
@@ -265,6 +274,7 @@ public class NewPickMusic extends AppCompatActivity {
             public void onClick(View view) {
                 // 현재 MediaPlayer가 null이거나 재생 중이지 않은 경우
                 if (mediaPlayer == null || !mediaPlayer.isPlaying()) {
+                    showProgressBar();
                     // Firebase Storage에서 WAV 파일 다운로드 및 재생 코드
                     StorageReference songRef = FirebaseStorage.getInstance().getReference().child("songs/"+postId+"/song");
                     songRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -279,6 +289,7 @@ public class NewPickMusic extends AppCompatActivity {
                                 mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                                     @Override
                                     public void onPrepared(MediaPlayer mediaPlayer) {
+                                        hideProgressBar();
                                         mediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
                                             @Override
                                             public void onBufferingUpdate(MediaPlayer mp, int i) {
@@ -344,6 +355,7 @@ public class NewPickMusic extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             // 다운로드 실패 시 처리
+                            hideProgressBar();
                         }
                     });
                 } else {
@@ -582,23 +594,27 @@ public class NewPickMusic extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
+    private void showProgressBar() {
+        // 프로그레스바를 보여주는 코드
+        circularlayout.setVisibility(View.VISIBLE);
+    }
 
+    private void hideProgressBar() {
+        // 프로그레스바를 숨기는 코드
+        circularlayout.animate()
+                .alpha(0f) // 투명도를 0으로 설정하여 페이드 아웃 애니메이션 적용
+                .setDuration(500) // 애니메이션 지속 시간 (밀리초)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        // 애니메이션 종료 후에 실행할 작업 (예: 뷰를 숨기거나 제거하는 등)
+                        circularlayout.setVisibility(View.GONE);
+                    }
+                })
+                .start();
+    }
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
-            finishAffinity(); // 현재 액티비티와 관련된 모든 액티비티 종료
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "한 번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000); // 2초 안에 다시 뒤로가기 버튼을 눌러야 종료
     }
 }

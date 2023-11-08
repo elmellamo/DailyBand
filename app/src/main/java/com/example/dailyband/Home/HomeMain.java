@@ -1,9 +1,14 @@
 package com.example.dailyband.Home;
 
+import static android.view.View.GONE;
+
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,6 +36,7 @@ import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Setting.NewSettingActivity;
 import com.example.dailyband.ShowMusic.NewPickMusic;
+import com.example.dailyband.Utils.DataFetchCallback;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.RankingSongAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -43,11 +50,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
+import com.mikhaellopez.circularfillableloaders.CircularFillableLoaders;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import cjh.WaveProgressBarlibrary.WaveProgressBar;
 
 public class HomeMain extends AppCompatActivity{
     private ImageButton addbtn, setbtn, librarybtn, myInfobtn, homeBtn;
@@ -64,6 +76,10 @@ public class HomeMain extends AppCompatActivity{
     private FirebaseMethods mFirebaseMethods;
     private FirebaseAuth mAuth;
     private String nickname;
+    int progress = 0;
+    boolean started = false;
+    private CircularFillableLoaders circularFillableLoaders;
+    private ConstraintLayout circularlayout;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +87,6 @@ public class HomeMain extends AppCompatActivity{
 
         mFirebaseMethods = new FirebaseMethods(HomeMain.this);
         myPermissions();
-
         nickname = "사용자";
         addbtn = findViewById(R.id.addbtn);
         librarybtn = findViewById(R.id.librarybtn);
@@ -81,12 +96,21 @@ public class HomeMain extends AppCompatActivity{
         setbtn = findViewById(R.id.setbtn);
         homeBtn = findViewById(R.id.homeBtn);
         circle_iv = findViewById(R.id.circle_iv);
+        circularlayout = findViewById(R.id.circularlayout);
+        circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
+        circularlayout.bringToFront();
+        username.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myStartActivity(Test.class);
+            }
+        });
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         songs = new ArrayList<>();
-        getInfo();
-        getSongs();
+        getImage();
+        fetchData();
         username.setText(nickname);
-
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,7 +143,7 @@ public class HomeMain extends AppCompatActivity{
         });
     }
 
-    private void getSongs(){
+    private void getSongs(DataFetchCallback callback){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("songs");
 
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -150,9 +174,7 @@ public class HomeMain extends AppCompatActivity{
                 // 정렬된 데이터를 리사이클러뷰에 표시하기 위해 어댑터에 설정
                 RankingSongAdapter adapter = new RankingSongAdapter(HomeMain.this, songs);
                 recyclerView.setAdapter(adapter);
-
-                // songs 리스트에 파이어베이스에서 읽어온 데이터가 들어있음
-                // 이제 songs 리스트를 정렬하고 리사이클러뷰에 표시할 수 있음
+                callback.onDataFetchedSuccessfully();
             }
 
             @Override
@@ -164,7 +186,8 @@ public class HomeMain extends AppCompatActivity{
 
     }
 
-    private void getInfo(){
+    private void getInfo(DataFetchCallback callback){
+        //started = true;
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference userAccountRef = FirebaseDatabase.getInstance().getReference().child("UserAccount").child(userUID);
         userAccountRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -174,6 +197,7 @@ public class HomeMain extends AppCompatActivity{
                     // UserAccount 카테고리에서 name 값을 가져와서 사용하거나 처리할 수 있습니다.
                     nickname = userAccountDataSnapshot.child("name").getValue(String.class);
                     username.setText(nickname);
+                    callback.onDataFetchedSuccessfully();
                 } else {
                     // "UserAccount" 카테고리에서 해당 데이터가 없는 경우에 대한 처리
                 }
@@ -184,17 +208,73 @@ public class HomeMain extends AppCompatActivity{
                 // 데이터 가져오기가 실패한 경우에 대한 처리
             }
         });
-
+    }
+    private void getImage(){
+        String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         StorageReference profileImageRef = FirebaseStorage.getInstance().getReference().child("profile_images").child(userUID+".jpg");
         profileImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
             String imageUrl = uri.toString();
-            Glide.with(this)
-                    .load(imageUrl)
-                    //.placeholder(R.drawable.brid_second_img)
-                    //.error(R.drawable.brid_second_img)
-                    .into(circle_iv); // profileImage는 앱의 이미지뷰 객체
+            if(!isDestroyed() && !isFinishing()){
+                Glide.with(this)
+                        .load(imageUrl)
+                        .into(circle_iv); // profileImage는 앱의 이미지뷰 객체
+            }
         });
     }
+    private void fetchData() {
+        showProgressBar();
+
+        getInfo(new DataFetchCallback() {
+            @Override
+            public void onDataFetchedSuccessfully() {
+                // getInfo 성공 후의 처리
+
+                getSongs(new DataFetchCallback() {
+                    @Override
+                    public void onDataFetchedSuccessfully() {
+                        // getSongs 성공 후의 처리
+                        hideProgressBar();
+                        // 여기에서 프로그레스바를 숨김
+                    }
+
+                    @Override
+                    public void onDataFetchFailed() {
+                        // getSongs 실패 후의 처리
+                        hideProgressBar();
+                        // 여기에서 프로그레스바를 숨김
+                    }
+                });
+            }
+
+            @Override
+            public void onDataFetchFailed() {
+                // getInfo 실패 후의 처리
+                hideProgressBar();
+                // 여기에서 프로그레스바를 숨김
+            }
+        });
+    }
+
+    private void showProgressBar() {
+        // 프로그레스바를 보여주는 코드
+        circularlayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressBar() {
+        // 프로그레스바를 숨기는 코드
+        circularlayout.animate()
+                .alpha(0f) // 투명도를 0으로 설정하여 페이드 아웃 애니메이션 적용
+                .setDuration(500) // 애니메이션 지속 시간 (밀리초)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        // 애니메이션 종료 후에 실행할 작업 (예: 뷰를 숨기거나 제거하는 등)
+                        circularlayout.setVisibility(View.GONE);
+                    }
+                })
+                .start();
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

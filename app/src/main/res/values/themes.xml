@@ -6,11 +6,11 @@
 
         <item name="colorPrimary">@color/test_main_clolr</item>
         <item name="colorPrimaryVariant">@color/white</item>
-        <item name="colorOnPrimary">@color/test_main_clolr</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/midgreen</item>
-        <item name="colorSecondaryVariant">@color/test_main_clolr</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/test_main_clolr</item>
         <!-- Customize your theme here. -->

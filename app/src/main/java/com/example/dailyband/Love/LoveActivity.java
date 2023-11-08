@@ -1,5 +1,7 @@
 package com.example.dailyband.Love;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +22,7 @@ import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Setting.NewSettingActivity;
+import com.example.dailyband.Utils.DataFetchCallback;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.LoveAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mikhaellopez.circularfillableloaders.CircularFillableLoaders;
 import com.scwang.wave.MultiWaveHeader;
 
 import java.util.ArrayList;
@@ -42,6 +47,8 @@ public class LoveActivity extends AppCompatActivity {
     private FirebaseMethods mFirebaseMethods;
     private LinearLayout emptytxt;
 
+    private CircularFillableLoaders circularFillableLoaders;
+    private ConstraintLayout circularlayout;
     private ImageButton addbtn, setbtn, librarybtn, myInfobtn, homeBtn;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +61,9 @@ public class LoveActivity extends AppCompatActivity {
         myInfobtn = findViewById(R.id.myInfobtn);
         setbtn = findViewById(R.id.setbtn);
         homeBtn = findViewById(R.id.homeBtn);
+        circularlayout = findViewById(R.id.circularlayout);
+        circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
+        circularlayout.bringToFront();
 
         waveHeader.setVelocity(1);
         waveHeader.setProgress(1);
@@ -65,7 +75,7 @@ public class LoveActivity extends AppCompatActivity {
         emptytxt = findViewById(R.id.emptytxt);
         recyclerView.setLayoutManager(new LinearLayoutManager(LoveActivity.this));
         songs = new ArrayList<>();
-        getLove();
+        fetchData();
 
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +110,7 @@ public class LoveActivity extends AppCompatActivity {
         });
     }
 
-    private void getLove(){
+    private void getLove(DataFetchCallback callback){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         String myUID = mFirebaseMethods.getMyUid();
         DatabaseReference loveRef = databaseReference.child("user_like").child(myUID);
@@ -124,13 +134,55 @@ public class LoveActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                     checkEmpty();
                 }
+
+                callback.onDataFetchedSuccessfully();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // 데이터를 가져오는데 실패한 경우 처리하는 코드
+                callback.onDataFetchFailed();
             }
         });
+    }
+
+
+    private void fetchData() {
+        showProgressBar();
+        getLove(new DataFetchCallback() {
+            @Override
+            public void onDataFetchedSuccessfully() {
+                // getInfo 성공 후의 처리
+                hideProgressBar();
+            }
+
+            @Override
+            public void onDataFetchFailed() {
+                // getInfo 실패 후의 처리
+                // 여기에서 프로그레스바를 숨김
+                hideProgressBar();
+            }
+        });
+    }
+
+    private void showProgressBar() {
+        // 프로그레스바를 보여주는 코드
+        circularlayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressBar() {
+        // 프로그레스바를 숨기는 코드
+        circularlayout.animate()
+                .alpha(0f) // 투명도를 0으로 설정하여 페이드 아웃 애니메이션 적용
+                .setDuration(500) // 애니메이션 지속 시간 (밀리초)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        // 애니메이션 종료 후에 실행할 작업 (예: 뷰를 숨기거나 제거하는 등)
+                        circularlayout.setVisibility(View.GONE);
+                    }
+                })
+                .start();
     }
     private void checkEmpty(){
         emptytxt.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);

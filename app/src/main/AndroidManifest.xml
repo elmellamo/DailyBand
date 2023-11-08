@@ -65,6 +65,10 @@
             android:exported="true">
         </activity>
 
+        <activity android:name=".Home.Test"
+            android:exported="true">
+        </activity>
+
         <activity android:name=".Login.RegisterActivity"
             android:exported="true">
         </activity>
