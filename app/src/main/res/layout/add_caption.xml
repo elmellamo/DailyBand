@@ -70,7 +70,7 @@
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="20sp"
-                android:textColor="@color/maingreen"
+                android:textColor="@color/test_main_clolr"
                 app:layout_constraintLeft_toRightOf="@+id/writtentitle"
                 app:layout_constraintHorizontal_weight="0.15"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
