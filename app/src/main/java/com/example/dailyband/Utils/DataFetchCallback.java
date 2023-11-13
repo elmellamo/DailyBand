@@ -3,3 +3,4 @@ public interface DataFetchCallback {
     void onDataFetchedSuccessfully();
     void onDataFetchFailed();
 }
+

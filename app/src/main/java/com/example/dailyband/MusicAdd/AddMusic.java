@@ -22,9 +22,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -51,6 +54,8 @@ import com.example.dailyband.MusicFragment.DrumFragment;
 import com.example.dailyband.MusicFragment.PianoFragment;
 import com.example.dailyband.MusicFragment.PopularFragment;
 import com.example.dailyband.MusicFragment.RecordingMain;
+import com.example.dailyband.OcarinaTest.Ocarina4HoleFragment;
+import com.example.dailyband.OcarinaTest.OcarinaTouchListener;
 import com.example.dailyband.R;
 import com.example.dailyband.Setting.NewSettingActivity;
 import com.example.dailyband.Utils.FirebaseMethods;
@@ -105,6 +110,8 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     private long playingLocation = 0;
     private long max_len = 0;
 
+    protected static OcarinaTouchListener touchListener;
+    protected static boolean volumeLockEnabled;
     private ImageView plusbtn, playbtn, stopbtn, backcontext;
     private TextView nextmenu, music_length;
     private SeekBar seekBar;
@@ -123,6 +130,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     DrumFragment drumFragment;
     RecordingMain recordingMain;
     PopularFragment popularFragment;
+    Ocarina4HoleFragment ocarina4HoleFragment;
     private ImageButton homeBtn, setbtn, myInfobtn, librarybtn, addbtn;
     private String parent_Id;
     private CircularFillableLoaders circularFillableLoaders;
@@ -148,6 +156,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         addbtn = findViewById(R.id.addbtn);
         playbtn = findViewById(R.id.playbtn2);
         stopbtn = findViewById(R.id.stopbtn);
+        ocarina4HoleFragment = new Ocarina4HoleFragment();
         backcontext = findViewById(R.id.backcontext);
         music_length = findViewById(R.id.music_length);
         seekBar = findViewById(R.id.seekBar);
@@ -258,6 +267,18 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                 addTrack(recordingUri, formattedTime);
             }
         });
+        ocarina4HoleFragment.setOnRecordingCompletedListener(new OnRecordingCompletedListener() {
+            @Override
+            public void onRecordingCompleted(Uri recordingUri) {
+                // 현재 시간을 얻어옵니다.
+                long currentTimeMillis = System.currentTimeMillis();
+                // 시간을 원하는 포맷으로 변환합니다.
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                String formattedTime = sdf.format(new Date(currentTimeMillis));
+
+                addTrack(recordingUri, formattedTime);
+            }
+        });
 
         gray_screen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -347,6 +368,10 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     public void showUpPopular(){
         detail_pickup_layout.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, popularFragment).commit();
+    }
+    public void showUpOcarina(){
+        detail_pickup_layout.setVisibility(View.VISIBLE);
+        getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, new Ocarina4HoleFragment()).commit();
     }
     public void showUpRecording(){
         detail_pickup_layout.setVisibility(View.VISIBLE);
@@ -903,5 +928,50 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         super.onBackPressed();
         finishAffinity(); // 현재 액티비티와 관련된 모든 액티비티 종료
         return;
+    }
+
+    //여기부터는 오카리나 관련
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (volumeLockEnabled) {
+            int action = event.getAction();
+            int keyCode = event.getKeyCode();
+
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_VOLUME_UP:
+                    if (action == KeyEvent.ACTION_DOWN) {
+                        touchListener.setButtons(9, true);
+                        dispatchTouchEvent(MotionEvent.obtain((long) SystemClock.uptimeMillis(), (long) SystemClock.uptimeMillis() + 10, MotionEvent.ACTION_DOWN, 10000.0f, 0.0f, 0));
+                    } else if (action == KeyEvent.ACTION_UP) {
+                        touchListener.setButtons(9, false);
+                        dispatchTouchEvent(MotionEvent.obtain((long) SystemClock.uptimeMillis(), (long) SystemClock.uptimeMillis() + 10, MotionEvent.ACTION_UP, 10000.0f, 0.0f, 0));
+                    }
+                    return true;
+                case KeyEvent.KEYCODE_VOLUME_DOWN:
+                    if (action == KeyEvent.ACTION_DOWN) {
+                        touchListener.setButtons(10, true);
+                        dispatchTouchEvent(MotionEvent.obtain((long) SystemClock.uptimeMillis(), (long) SystemClock.uptimeMillis() + 10, MotionEvent.ACTION_DOWN, 10000.0f, 0.0f, 0));
+                    } else if (action == KeyEvent.ACTION_UP) {
+                        touchListener.setButtons(10, false);
+                        dispatchTouchEvent(MotionEvent.obtain((long) SystemClock.uptimeMillis(), (long) SystemClock.uptimeMillis() + 10, MotionEvent.ACTION_UP, 10000.0f, 0.0f, 0));
+                    }
+                    return true;
+                default:
+                    return super.dispatchKeyEvent(event);
+            }
+        }
+        return super.dispatchKeyEvent(event);
+    }
+    static public void setVolumeLock(boolean b) {
+        volumeLockEnabled = b;
+    }
+
+    static public boolean getVolumeLock() {
+        return volumeLockEnabled;
+    }
+
+    static public OcarinaTouchListener getTouchListener() {
+        return touchListener;
     }
 }

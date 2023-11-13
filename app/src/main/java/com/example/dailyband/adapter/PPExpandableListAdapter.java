@@ -16,6 +16,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
 import com.example.dailyband.Models.TestSong;
@@ -118,6 +119,7 @@ public class PPExpandableListAdapter extends BaseExpandableListAdapter {
 
     // updateSeekbar 동작을 중지하는 메서드
     public void stopUpdateSeekbars() {
+
         handler.removeCallbacksAndMessages(null);
     }
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
@@ -277,20 +279,12 @@ public class PPExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     public void updateSeekbar(MediaPlayer mp, SeekBar sb) {
-        if (mp != null && sb != null) {
-            if (mp.isPlaying()) {
-                int curPos = mp.getCurrentPosition();
-                sb.setProgress(curPos);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateSeekbar(mp, sb);
-                    }
-                }, 100);
-            }
+        if (mp != null && sb != null && mp.isPlaying()) {
+            int curPos = mp.getCurrentPosition();
+            sb.setProgress(curPos);
+            handler.postDelayed(() -> updateSeekbar(mp, sb), 100);
         }
     }
-
     @Override
     public int getChildrenCount(int groupPosition) {
         // 각 부모 항목에 대한 자식 항목의 개수를 반환 (이 경우 항상 1)

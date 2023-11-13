@@ -93,6 +93,14 @@ public class PopularFragment extends Fragment {
             }
         });
     }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // 프래그먼트의 뷰가 제거될 때 미디어 플레이어 해제
+        adapter.releaseAllMediaPlayers();
+        // updateSeekbar 중지
+        adapter.stopUpdateSeekbars();
+    }
 
     @Override
     public void onDestroy() {

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/graygreen">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="20dp"
+        android:id="@+id/explainlayout">
+
+        <android.widget.Button
+            android:id="@+id/bt_record"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/stop_record"
+            android:onClick="record"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/recordingbtn"/>
+
+        <android.widget.Button
+            android:id="@+id/stop_record"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/stopbtn_black"/>
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:id="@+id/pianotxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ocarina"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageButton android:id="@+id/button1"
+        android:src="@drawable/ocarina_selector"
+        android:scaleType="fitCenter"
+        android:background="@null"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="1"
+        android:layout_margin="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintLeft_toRightOf="@+id/button3"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/explainlayout"
+        />
+    <ImageButton
+        android:id="@+id/button2"
+        android:src="@drawable/ocarina_selector"
+        android:scaleType="fitCenter"
+        android:background="@null"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:text="2"
+        android:layout_margin="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/button4"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button1"
+        />
+
+    <ImageButton android:id="@+id/button3"
+        android:src="@drawable/ocarina_selector"
+        android:scaleType="fitCenter"
+        android:background="@null"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:text="3"
+        android:layout_margin="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/button4"
+        app:layout_constraintRight_toLeftOf="@+id/button1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/explainlayout"
+        />
+    <ImageButton
+        android:id="@+id/button4"
+        android:src="@drawable/ocarina_selector"
+        android:scaleType="fitCenter"
+        android:background="@null"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:text="4"
+        android:layout_margin="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/button2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button3"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

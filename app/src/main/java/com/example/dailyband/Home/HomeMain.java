@@ -1,15 +1,11 @@
 package com.example.dailyband.Home;
 
-import static android.view.View.GONE;
-
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,12 +31,9 @@ import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Setting.NewSettingActivity;
-import com.example.dailyband.ShowMusic.NewPickMusic;
 import com.example.dailyband.Utils.DataFetchCallback;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.RankingSongAdapter;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,7 +41,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.mikhaellopez.circularfillableloaders.CircularFillableLoaders;
 
@@ -56,14 +48,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import cjh.WaveProgressBarlibrary.WaveProgressBar;
 
 public class HomeMain extends AppCompatActivity{
     private ImageButton addbtn, setbtn, librarybtn, myInfobtn, homeBtn;
-    private TextView username;
+    private TextView username, gomakeyourmusic;
     private RecyclerView recyclerView;
     private RankingSongAdapter adapter;
     private List<TestSong> songs;
@@ -96,6 +84,7 @@ public class HomeMain extends AppCompatActivity{
         setbtn = findViewById(R.id.setbtn);
         homeBtn = findViewById(R.id.homeBtn);
         circle_iv = findViewById(R.id.circle_iv);
+        gomakeyourmusic = findViewById(R.id.gomakeyourmusic);
         circularlayout = findViewById(R.id.circularlayout);
         circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
         circularlayout.bringToFront();
@@ -105,6 +94,7 @@ public class HomeMain extends AppCompatActivity{
         getImage();
         fetchData();
         username.setText(nickname);
+
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

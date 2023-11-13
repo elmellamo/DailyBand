@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">DailyBand</string>
+
+    <string name="nav_ocarina_12_hole">12 Hole Ocarina</string>
+    <string name="nav_ocarina_4_hole">4 Hole Ocarina</string>
+    <string name="vol_lock_on">Volume: Locked</string>
+    <string name="vol_lock_off">Volume: Unlocked</string>
 </resources>

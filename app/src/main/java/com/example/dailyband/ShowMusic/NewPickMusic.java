@@ -186,11 +186,9 @@ public class NewPickMusic extends AppCompatActivity {
                     seekBar.setProgress(i);
                 }
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
@@ -482,6 +480,8 @@ public class NewPickMusic extends AppCompatActivity {
                 }
             };
             handler.postDelayed(runnable, 100);
+        }else{
+            handler.removeCallbacks(runnable);
         }
     }
 
