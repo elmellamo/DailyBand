@@ -83,6 +83,9 @@ public class PPExpandableListAdapter extends BaseExpandableListAdapter {
 
     // MediaPlayer 초기화 및 해제를 위한 메소드 추가
     private void initializeMediaPlayer(int position, ImageView btnplay, SeekBar seek) {
+        if (mediaPlayer[position] == null) {
+            mediaPlayer[position] = new MediaPlayer();
+        }
 
         mediaPlayer[position].setOnCompletionListener(mp -> {
             // 재생이 끝나면 처리
@@ -119,7 +122,6 @@ public class PPExpandableListAdapter extends BaseExpandableListAdapter {
 
     // updateSeekbar 동작을 중지하는 메서드
     public void stopUpdateSeekbars() {
-
         handler.removeCallbacksAndMessages(null);
     }
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
@@ -326,6 +328,8 @@ public class PPExpandableListAdapter extends BaseExpandableListAdapter {
         } else {
             // 닫혀진 상태에서는 화살표 아래로 변경
             btn_expand_toggle.setImageResource(R.drawable.arrow_below);
+            stopUpdateSeekbars();
+            releaseMediaPlayer(groupPosition);
         }
 
         return view;

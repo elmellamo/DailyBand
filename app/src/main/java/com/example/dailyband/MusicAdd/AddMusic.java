@@ -56,6 +56,7 @@ import com.example.dailyband.MusicFragment.PopularFragment;
 import com.example.dailyband.MusicFragment.RecordingMain;
 import com.example.dailyband.OcarinaTest.Ocarina4HoleFragment;
 import com.example.dailyband.OcarinaTest.OcarinaTouchListener;
+import com.example.dailyband.OcarinaTest.PlayAudio;
 import com.example.dailyband.R;
 import com.example.dailyband.Setting.NewSettingActivity;
 import com.example.dailyband.Utils.FirebaseMethods;
@@ -931,7 +932,10 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     }
 
     //여기부터는 오카리나 관련
-
+    public void startOcarina(){
+        touchListener = new OcarinaTouchListener("4Hole");
+        PlayAudio.start();
+    }
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (volumeLockEnabled) {
@@ -963,6 +967,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         }
         return super.dispatchKeyEvent(event);
     }
+
     static public void setVolumeLock(boolean b) {
         volumeLockEnabled = b;
     }

@@ -63,12 +63,7 @@ public class Ocarina4HoleFragment extends Fragment {
         view = inflater.inflate(R.layout.ocarina_new, container, false);
         bt_record = view.findViewById(R.id.bt_record);
         stop_record = view.findViewById(R.id.stop_record);
-        waveRecorder = new WaveRecorder(filePath);
-        externalDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC), directory_name);
-        if (!externalDir.exists()) {
-            externalDir.mkdirs();
-        }
-        filePath = new File(externalDir, "audioFile.wav").getAbsolutePath();
+
 
         bt_record.setOnClickListener(v -> {
             if(!isRecording){
@@ -80,8 +75,7 @@ public class Ocarina4HoleFragment extends Fragment {
             stopRecording();
         });
 
-
-        return inflater.inflate(R.layout.ocarina_new, container, false);
+        return view;
     }
 
     @Override
@@ -100,6 +94,12 @@ public class Ocarina4HoleFragment extends Fragment {
     }
 
     private void startRecording() {
+        waveRecorder = new WaveRecorder(filePath);
+        externalDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC), directory_name);
+        if (!externalDir.exists()) {
+            externalDir.mkdirs();
+        }
+        filePath = new File(externalDir, "audioFile.wav").getAbsolutePath();
         String fileName = "audioFile.wav";
         File internalStorageDir = requireContext().getFilesDir();
         filePath = new File(internalStorageDir, fileName).getAbsolutePath();
@@ -179,7 +179,4 @@ public class Ocarina4HoleFragment extends Fragment {
             Toast.makeText(requireContext(), "아직 녹음을 시작하지 않았습니다.", Toast.LENGTH_SHORT).show();
         }
     }
-
-
-
 }

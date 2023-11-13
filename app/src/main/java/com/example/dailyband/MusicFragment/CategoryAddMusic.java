@@ -43,6 +43,7 @@ public class CategoryAddMusic extends Fragment {
                 if(getActivity() instanceof AddMusic){
                     AddMusic addmusic = (AddMusic) getActivity();
                     addmusic.hideAddCategoryFrameLayout();
+                    addmusic.startOcarina();
                     //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
                     addmusic.showUpOcarina();
                 }

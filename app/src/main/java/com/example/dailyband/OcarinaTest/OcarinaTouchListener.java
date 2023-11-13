@@ -13,7 +13,7 @@ public class OcarinaTouchListener implements View.OnTouchListener {
     private static boolean[] buttons = new boolean[12];
     private static String currentOcarina;
 
-    OcarinaTouchListener(String c) {
+    public OcarinaTouchListener(String c) {
         for (int i = 0; i < buttons.length; i++) {
             buttons[i] = false;
         }
