@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.example.dailyband.Collection.CollectionActivity;
@@ -70,6 +71,7 @@ public class NewSettingActivity extends AppCompatActivity {
 
     private String NAME_SET_TEXT;
     public String EMAIL_SET_TEXT, INTRODUCE_SET_TEXT;
+    private boolean is_Fragment_Open = false;
     private NameFragment nameFragment;
     private EmailFragment emailFragment;
     private IntroduceFragment introduceFragment;
@@ -139,17 +141,16 @@ public class NewSettingActivity extends AppCompatActivity {
             }
         });
 
-        String localFilePath = getApplicationContext().getFilesDir() + "/local_image.jpg"; // 로컬에 저장할 파일 경로
+        String localFilePath = getApplicationContext().getFilesDir() + "/local_image.jpg";
         File localFile = new File(localFilePath); // 이미지 파일의 로컬 경로
         if (localFile.exists()) {
-            //ImageView imageView7 = findViewById(R.id.imageView7);
-
             Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
 
             int rotation = 0;
             try {
                 ExifInterface exif = new ExifInterface(localFilePath);
-                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION
+                        , ExifInterface.ORIENTATION_NORMAL);
 
                 switch (orientation) {
                     case ExifInterface.ORIENTATION_ROTATE_90:
@@ -168,12 +169,9 @@ public class NewSettingActivity extends AppCompatActivity {
 
             Bitmap rotatedBitmap = rotateImage(bitmap, rotation);
 
-
             if (profileImg != null) {
-
                 profileImg.setImageBitmap(rotatedBitmap);
                 //imageView7.setImageBitmap(rotatedBitmap);
-
                 //imageView7.bringToFront();
                 //Toast.makeText(NewSettingActivity.this, "로컬 파일 존재", Toast.LENGTH_SHORT).show();
             }
@@ -227,7 +225,7 @@ public class NewSettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // detail_info_layout을 보이도록 변경합니다.
-
+                is_Fragment_Open = true;
                 nameFragment = new NameFragment();
                 nameFragment.setSetName(NAME_SET_TEXT);
                 nameFragment.setuserId(userUID);
@@ -240,7 +238,7 @@ public class NewSettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // detail_info_layout을 보이도록 변경합니다.
-
+                is_Fragment_Open = true;
                 emailFragment = new EmailFragment();
                 emailFragment.setuserId(userUID);
                 detail_info_layout.setVisibility(View.VISIBLE);
@@ -252,6 +250,7 @@ public class NewSettingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // detail_info_layout을 보이도록 변경합니다.\
 
+                is_Fragment_Open = true;
                 introduceFragment = new IntroduceFragment();
                 detail_info_layout.setVisibility(View.VISIBLE);
                 introduceFragment.setuserId(userUID);
@@ -265,6 +264,7 @@ public class NewSettingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // detail_info_layout을 보이도록 변경합니다.
 
+                is_Fragment_Open = true;
                 passwordFragment = new PasswordFragment();
                 detail_info_layout.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, passwordFragment).commit();
@@ -275,6 +275,7 @@ public class NewSettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 hideKeyboard();
+                is_Fragment_Open = false;
                 if (detail_info_layout.getVisibility() == View.VISIBLE) {
                     detail_info_layout.setVisibility(View.GONE);
                 }
@@ -452,14 +453,9 @@ public class NewSettingActivity extends AppCompatActivity {
                                         localFile.delete();
                                     }
                                     imageRef.getFile(localFile).addOnSuccessListener(taskSnapshot2 -> {
-                                        // 다운로드 성공
-                                        // localFilePath에 이미지가 저장됨
-                                        // 여기서 UI 업데이트 등을 수행할 수 있습니다.
                                         Toast.makeText(NewSettingActivity.this, "프로필 이미지 변경 완료", Toast.LENGTH_SHORT).show();
                                     }).addOnFailureListener(exception -> {
-                                        // 다운로드 실패
                                     }).addOnProgressListener(taskSnapshot2 -> {
-                                        // 다운로드 진행 중
                                     });
                                 } else {
                                     Toast.makeText(NewSettingActivity.this, "프로필 이미지 변경 실패", Toast.LENGTH_SHORT).show();
@@ -494,6 +490,10 @@ public class NewSettingActivity extends AppCompatActivity {
     public void updateIntroduce(String updatedIntroduce) {
         INTRODUCE_SET_TEXT = updatedIntroduce;
     }
+    public void updateIsFragmentOpen(boolean isFragmentOpen) {
+        is_Fragment_Open = isFragmentOpen;
+    }
+
 
     private Bitmap rotateImage(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
@@ -508,7 +508,8 @@ public class NewSettingActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() {     
+
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             finishAffinity(); // 현재 액티비티와 관련된 모든 액티비티 종료

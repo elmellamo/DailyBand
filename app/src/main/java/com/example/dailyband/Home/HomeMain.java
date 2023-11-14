@@ -6,6 +6,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,6 +48,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mikhaellopez.circularfillableloaders.CircularFillableLoaders;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -194,6 +200,7 @@ public class HomeMain extends AppCompatActivity{
         });
     }
     private void getImage(){
+        /*
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         StorageReference profileImageRef = FirebaseStorage.getInstance().getReference().child("profile_images").child(userUID+".jpg");
         profileImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -204,6 +211,48 @@ public class HomeMain extends AppCompatActivity{
                         .into(circle_iv); // profileImage는 앱의 이미지뷰 객체
             }
         });
+        */
+        String localFilePath = getApplicationContext().getFilesDir() + "/local_image.jpg";
+        File localFile = new File(localFilePath); // 이미지 파일의 로컬 경로
+        if (localFile.exists()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+
+            int rotation = 0;
+            try {
+                ExifInterface exif = new ExifInterface(localFilePath);
+                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION
+                        , ExifInterface.ORIENTATION_NORMAL);
+
+                switch (orientation) {
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        rotation = 90;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        rotation = 180;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        rotation = 270;
+                        break;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Bitmap rotatedBitmap = rotateImage(bitmap, rotation);
+
+            //if (circle_iv != null) {
+            circle_iv.setImageBitmap(rotatedBitmap);
+            //}
+        } else {
+            // 파일이 존재하지 않는 경우
+            // 사용자에게 알림을 표시하거나 다른 조치를 취할 수 있습니다.
+        }
+
+    }
+    private Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
     private void fetchData() {
         showProgressBar();

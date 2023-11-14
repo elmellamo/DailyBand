@@ -56,8 +56,6 @@ public class SplashActivity extends AppCompatActivity{
         else
             AUTO_LOGIN=false;
 
-
-
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_splash_textview);
         Animation animation1 = AnimationUtils.loadAnimation(this,R.anim.anim_splash_imageview);
         splashImage.setVisibility(View.VISIBLE);
@@ -83,8 +81,6 @@ public class SplashActivity extends AppCompatActivity{
                         }
                     }
                 }, SPLASH_DELAY);
-
-
             }
             @Override
             public void onAnimationRepeat(Animation animation) {}

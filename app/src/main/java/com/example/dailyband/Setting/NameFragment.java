@@ -83,4 +83,5 @@ public class NameFragment extends Fragment {
 
         return view;
     }
+
 }
