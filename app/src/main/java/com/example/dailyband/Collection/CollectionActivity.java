@@ -136,9 +136,13 @@ public class CollectionActivity extends AppCompatActivity {
                     adapter = new MySongAdapter(CollectionActivity.this, songs);
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-                    checkEmpty();
-                    callback.onDataFetchedSuccessfully();
+                    emptytxt.setVisibility(songs.size() == 0 ? View.VISIBLE : View.GONE);
+
+                }else{
+                    emptytxt.setVisibility(songs.size() == 0 ? View.VISIBLE : View.GONE);
                 }
+
+                callback.onDataFetchedSuccessfully();
             }
 
             @Override
@@ -166,6 +170,9 @@ public class CollectionActivity extends AppCompatActivity {
                 // getInfo 실패 후의 처리
                 // 여기에서 프로그레스바를 숨김
                 hideProgressBar();
+                songs.clear(); // 데이터를 가져오는데 실패했으므로 리스트 비우기
+                adapter.notifyDataSetChanged(); // 어댑터에 변경된 내용 알림
+                emptytxt.setVisibility(songs.size() == 0 ? View.VISIBLE : View.GONE);
             }
         });
     }

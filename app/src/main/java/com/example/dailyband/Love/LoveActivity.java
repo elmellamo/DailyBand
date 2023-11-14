@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -132,7 +133,9 @@ public class LoveActivity extends AppCompatActivity {
                     adapter = new LoveAdapter(LoveActivity.this, songs);
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-                    checkEmpty();
+                    emptytxt.setVisibility(songs.size() == 0 ? View.VISIBLE : View.GONE);
+                }else{
+                    emptytxt.setVisibility(songs.size() == 0 ? View.VISIBLE : View.GONE);
                 }
 
                 callback.onDataFetchedSuccessfully();
@@ -161,6 +164,9 @@ public class LoveActivity extends AppCompatActivity {
                 // getInfo 실패 후의 처리
                 // 여기에서 프로그레스바를 숨김
                 hideProgressBar();
+                songs.clear(); // 데이터를 가져오는데 실패했으므로 리스트 비우기
+                adapter.notifyDataSetChanged(); // 어댑터에 변경된 내용 알림
+                emptytxt.setVisibility(songs.size() == 0 ? View.VISIBLE : View.GONE);
             }
         });
     }

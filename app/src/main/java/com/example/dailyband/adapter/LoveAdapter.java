@@ -123,7 +123,7 @@ public class LoveAdapter extends RecyclerView.Adapter<LoveAdapter.LoveViewHolder
 
     @Override
     public int getItemCount() {
-        return (null !=songs ? songs.size() : 0);
+        return songs.size();
     }
 
     public class LoveViewHolder extends RecyclerView.ViewHolder {
