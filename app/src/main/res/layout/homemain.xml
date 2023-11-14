@@ -297,7 +297,7 @@
             android:layout_height="20dp"
             android:layout_marginBottom="7dp"
             android:gravity="center"
-            android:text="내 정보"
+            android:text="좋아요"
             android:textSize="13sp"
             android:textColor="#8C000000"
             app:layout_constraintBottom_toBottomOf="parent"
