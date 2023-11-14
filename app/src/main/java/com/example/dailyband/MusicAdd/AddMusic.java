@@ -51,6 +51,7 @@ import com.example.dailyband.Love.LoveActivity;
 import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.MusicFragment.CategoryAddMusic;
 import com.example.dailyband.MusicFragment.DrumFragment;
+import com.example.dailyband.MusicFragment.NewPopularFragment;
 import com.example.dailyband.MusicFragment.PianoFragment;
 import com.example.dailyband.MusicFragment.PopularFragment;
 import com.example.dailyband.MusicFragment.RecordingMain;
@@ -293,7 +294,6 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
             @Override
             public void onClick(View view) {
                 uploadToFirebase();
-                //myStartActivity(AddCaption.class);
             }
         });
 
@@ -368,7 +368,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     }
     public void showUpPopular(){
         detail_pickup_layout.setVisibility(View.VISIBLE);
-        getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, popularFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, new NewPopularFragment()).commit();
     }
     public void showUpOcarina(){
         detail_pickup_layout.setVisibility(View.VISIBLE);

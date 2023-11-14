@@ -89,8 +89,6 @@ public class NewPickMusic extends AppCompatActivity {
     // MediaPlayer 일시정지된 지점을 저장하는 변수
     private int pausedPosition = 0;
     private String writer, explain, singer, play, artist;
-    private WaveVisualizer waveVisualizer;
-    private CircleLineVisualizer visualizer;
     private BlobVisualizer blobVisualizer;
     private AnimatedVectorDrawableCompat avd;
     private AnimatedVectorDrawable avd2;
