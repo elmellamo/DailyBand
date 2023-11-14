@@ -97,12 +97,14 @@ public class HomeMain extends AppCompatActivity{
         circularlayout = findViewById(R.id.circularlayout);
         circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
         circularlayout.bringToFront();
+        circle_iv.bringToFront();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         songs = new ArrayList<>();
         getImage();
         fetchData();
         username.setText(nickname);
+
 
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override

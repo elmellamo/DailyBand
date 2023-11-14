@@ -1,5 +1,7 @@
 package com.example.dailyband.Setting;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +48,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.mikhaellopez.circularfillableloaders.CircularFillableLoaders;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,6 +79,9 @@ public class NewSettingActivity extends AppCompatActivity {
     private IntroduceFragment introduceFragment;
     private PasswordFragment passwordFragment;
     private String name_intent;
+
+    private CircularFillableLoaders circularFillableLoaders;
+    private ConstraintLayout circularlayout;
     private ImageButton addbtn, setbtn, librarybtn, myInfobtn, homeBtn;
 
     @Override
@@ -104,6 +110,10 @@ public class NewSettingActivity extends AppCompatActivity {
         librarybtn = findViewById(R.id.librarybtn);
         setbtn = findViewById(R.id.setbtn);
         addbtn = findViewById(R.id.addbtn);
+
+        circularlayout = findViewById(R.id.circularlayout);
+        circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
+        circularlayout.bringToFront();
 
 
         profileImg.bringToFront();
@@ -361,6 +371,28 @@ public class NewSettingActivity extends AppCompatActivity {
         customDialog.show();
 
     }
+
+
+    private void showProgressBar() {
+        circularlayout.setAlpha(1f);
+        circularlayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressBar() {
+        // 프로그레스바를 숨기는 코드
+        circularlayout.animate()
+                .alpha(0f) // 투명도를 0으로 설정하여 페이드 아웃 애니메이션 적용
+                .setDuration(500) // 애니메이션 지속 시간 (밀리초)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        // 애니메이션 종료 후에 실행할 작업 (예: 뷰를 숨기거나 제거하는 등)
+                        circularlayout.setVisibility(View.GONE);
+                    }
+                })
+                .start();
+    }
+
     private void LOGOUT(){
         Dialog customDialog = new Dialog(this);
         customDialog.setContentView(R.layout.custom_dialog);
@@ -417,6 +449,7 @@ public class NewSettingActivity extends AppCompatActivity {
     }
 
     private void uploadImageToFirebase(Uri imageUri) {
+        showProgressBar();
         Toast.makeText(NewSettingActivity.this, "프로필 이미지 변경 중...", Toast.LENGTH_SHORT).show();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         if (imageUri != null) {
@@ -441,17 +474,21 @@ public class NewSettingActivity extends AppCompatActivity {
                                     }
                                     imageRef.getFile(localFile).addOnSuccessListener(taskSnapshot2 -> {
                                         Toast.makeText(NewSettingActivity.this, "프로필 이미지 변경 완료", Toast.LENGTH_SHORT).show();
+                                        hideProgressBar();
                                     }).addOnFailureListener(exception -> {
+                                        hideProgressBar();
                                     }).addOnProgressListener(taskSnapshot2 -> {
                                     });
                                 } else {
                                     Toast.makeText(NewSettingActivity.this, "프로필 이미지 변경 실패", Toast.LENGTH_SHORT).show();
+                                    hideProgressBar();
                                 }
                             });
                 });
             }).addOnFailureListener(e -> {
                 // 업로드 실패 시 에러 처리
                 Toast.makeText(NewSettingActivity.this, "이미지 수정 실패", Toast.LENGTH_SHORT).show();
+                hideProgressBar();
             });
         }
     }
