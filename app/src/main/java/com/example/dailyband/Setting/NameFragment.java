@@ -75,6 +75,7 @@ public class NameFragment extends Fragment {
                     NewSettingActivity newSettingActivity = (NewSettingActivity) getActivity();
                     newSettingActivity.blindFrame();
                     newSettingActivity.updateName(editText.getText().toString());
+                    newSettingActivity.updateIsFragmentOpen(false);
                     //((YourActivity) requireActivity()).updateName(updatedText);
                 }
             }

@@ -73,7 +73,6 @@ public class NewSettingActivity extends AppCompatActivity {
     public String EMAIL_SET_TEXT, INTRODUCE_SET_TEXT;
     private boolean is_Fragment_Open = false;
     private NameFragment nameFragment;
-    private EmailFragment emailFragment;
     private IntroduceFragment introduceFragment;
     private PasswordFragment passwordFragment;
     private String name_intent;
@@ -94,11 +93,9 @@ public class NewSettingActivity extends AppCompatActivity {
         setting_logout_layout = findViewById(R.id.setting_logout_layout);
         setting_contact_layout = findViewById(R.id.setting_contact_layout);
         nameFragment = new NameFragment();
-        emailFragment = new EmailFragment();
         introduceFragment = new IntroduceFragment();
         passwordFragment  = new PasswordFragment();
         gray_screen = findViewById(R.id.gray_screen);
-        setting_email_layout = findViewById(R.id.setting_email_layout);
         detail_info_layout = findViewById(R.id.detail_info_layout);
         setting_introduce_layout = findViewById(R.id.setting_introduce_layout);
         setting_password_layout = findViewById(R.id.setting_password_layout);
@@ -234,17 +231,7 @@ public class NewSettingActivity extends AppCompatActivity {
             }
         });
 
-        setting_email_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // detail_info_layout을 보이도록 변경합니다.
-                is_Fragment_Open = true;
-                emailFragment = new EmailFragment();
-                emailFragment.setuserId(userUID);
-                detail_info_layout.setVisibility(View.VISIBLE);
-                getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, emailFragment).commit();
-            }
-        });
+
         setting_introduce_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -505,25 +492,18 @@ public class NewSettingActivity extends AppCompatActivity {
         Intent intent = new Intent(this, c);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        finish();
     }
 
     @Override
-    public void onBackPressed() {     
-
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            finishAffinity(); // 현재 액티비티와 관련된 모든 액티비티 종료
-            return;
+    public void onBackPressed() {
+        if(is_Fragment_Open){
+            //getSupportFragmentManager().popBackStack();
+            blindFrame();
+            is_Fragment_Open=false;
         }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "한 번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000); // 2초 안에 다시 뒤로가기 버튼을 눌러야 종료
+        else {
+           myStartActivity(HomeMain.class);
+        }
     }
 }

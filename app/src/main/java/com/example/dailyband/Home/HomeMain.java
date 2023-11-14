@@ -465,6 +465,7 @@ public class HomeMain extends AppCompatActivity{
         Intent intent = new Intent(this, c);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        finish();
     }
     @Override
     public void onBackPressed() {
