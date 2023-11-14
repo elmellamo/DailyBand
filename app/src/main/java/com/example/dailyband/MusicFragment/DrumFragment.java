@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
+import com.example.dailyband.Setting.NewSettingActivity;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.github.squti.androidwaverecorder.WaveConfig;
 import com.github.squti.androidwaverecorder.WaveRecorder;
@@ -134,6 +135,9 @@ public class DrumFragment extends Fragment implements View.OnClickListener{
             waveRecorder.stopRecording();
             isRecording = false;
             isPaused = false;
+
+            AddMusic addMusic = (AddMusic) getActivity();
+            addMusic.updateIsFragmentOpen(false);
 
             Toast.makeText(requireContext(), "녹음을 멈추고 저장합니다.", Toast.LENGTH_LONG).show();
 

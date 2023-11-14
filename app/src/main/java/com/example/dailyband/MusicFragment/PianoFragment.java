@@ -597,6 +597,8 @@ public class PianoFragment extends Fragment implements View.OnClickListener {
             isRecording = false;
             isPaused = false;
 
+            AddMusic addMusic = (AddMusic) getActivity();
+            addMusic.updateIsFragmentOpen(false);
 
             Toast.makeText(requireContext(), "녹음을 멈추고 저장합니다.", Toast.LENGTH_LONG).show();
 

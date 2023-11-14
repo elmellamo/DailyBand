@@ -137,6 +137,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     private String parent_Id;
     private CircularFillableLoaders circularFillableLoaders;
     private ConstraintLayout circularlayout;
+    private boolean is_Fragment_Open = false;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -286,6 +287,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         gray_screen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                is_Fragment_Open = false;
                 if (detail_pickup_layout.getVisibility() == View.VISIBLE) {
                     detail_pickup_layout.setVisibility(View.GONE);
                 }
@@ -301,6 +303,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         plusbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                is_Fragment_Open=true;
                 addCategoryFrameLayout.setVisibility(View.VISIBLE);
                 popularFragment = new PopularFragment();
             }
@@ -930,12 +933,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     private void startToast(String msg){
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finishAffinity(); // 현재 액티비티와 관련된 모든 액티비티 종료
-        return;
-    }
+
 
     //여기부터는 오카리나 관련
     public void startOcarina(){
@@ -984,5 +982,32 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
 
     static public OcarinaTouchListener getTouchListener() {
         return touchListener;
+    }
+
+
+
+    public void updateIsFragmentOpen(boolean isFragmentOpen) {
+        is_Fragment_Open = isFragmentOpen;
+    }
+
+    public void blindFrame(){
+        is_Fragment_Open=false;
+        if (addCategoryFrameLayout.getVisibility() == View.VISIBLE) {
+            addCategoryFrameLayout.setVisibility(View.GONE);
+        }
+        if (detail_pickup_layout.getVisibility() == View.VISIBLE) {
+            detail_pickup_layout.setVisibility(View.GONE);
+        }
+    }
+    @Override
+    public void onBackPressed() {
+        if(is_Fragment_Open){
+            //getSupportFragmentManager().popBackStack();
+            blindFrame();
+            is_Fragment_Open=false;
+        }
+        else {
+            myStartActivity(HomeMain.class);
+        }
     }
 }

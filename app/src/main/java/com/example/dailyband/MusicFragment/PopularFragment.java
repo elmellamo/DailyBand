@@ -97,6 +97,9 @@ public class PopularFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         // 프래그먼트의 뷰가 제거될 때 미디어 플레이어 해제
+        AddMusic addMusic = (AddMusic) getActivity();
+        addMusic.updateIsFragmentOpen(false);
+
         adapter.releaseAllMediaPlayers();
         // updateSeekbar 중지
         adapter.stopUpdateSeekbars();
