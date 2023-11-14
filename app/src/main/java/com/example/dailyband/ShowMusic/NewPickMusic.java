@@ -101,6 +101,13 @@ public class NewPickMusic extends AppCompatActivity {
         if(blobVisualizer != null){
             blobVisualizer.release();
         }
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+            pausedPosition = 0;
+            seekBar.setProgress(0);
+        }
         super.onDestroy();
     }
     protected void onStop(){

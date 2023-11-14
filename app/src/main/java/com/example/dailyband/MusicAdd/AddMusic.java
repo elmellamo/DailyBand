@@ -158,11 +158,11 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         addbtn = findViewById(R.id.addbtn);
         playbtn = findViewById(R.id.playbtn2);
         stopbtn = findViewById(R.id.stopbtn);
-        ocarina4HoleFragment = new Ocarina4HoleFragment();
         backcontext = findViewById(R.id.backcontext);
         music_length = findViewById(R.id.music_length);
         seekBar = findViewById(R.id.seekBar);
         circularlayout = findViewById(R.id.circularlayout);
+        gray_screen = findViewById(R.id.gray_screen);
         circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
         circularlayout.bringToFront();
 
@@ -183,7 +183,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         pianoFragment = new PianoFragment();
         drumFragment = new DrumFragment();
         recordingMain = new RecordingMain();
-        gray_screen = findViewById(R.id.gray_screen);
+        ocarina4HoleFragment = new Ocarina4HoleFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.add_category_framelayout, new CategoryAddMusic()).commit();
 
@@ -278,6 +278,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                 String formattedTime = sdf.format(new Date(currentTimeMillis));
 
+                Log.d("로그", "오카리나 시작합니다.");
                 addTrack(recordingUri, formattedTime);
             }
         });
@@ -372,7 +373,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     }
     public void showUpOcarina(){
         detail_pickup_layout.setVisibility(View.VISIBLE);
-        getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, new Ocarina4HoleFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, ocarina4HoleFragment).commit();
     }
     public void showUpRecording(){
         detail_pickup_layout.setVisibility(View.VISIBLE);

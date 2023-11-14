@@ -42,8 +42,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.mikhaellopez.circularfillableloaders.CircularFillableLoaders;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,7 +67,7 @@ public class NewPopularFragment extends Fragment implements PopUpClickListener {
     private Handler handler;
     private int pausedPosition = 0;
     private String selectedPostId, selectedSongname;
-    private ConstraintLayout circularlayout, showseekbar, motherlayout, recyclerlayout;
+    private ConstraintLayout showseekbar;
     public NewPopularFragment() {
     }
     @Override
@@ -88,12 +86,6 @@ public class NewPopularFragment extends Fragment implements PopUpClickListener {
         seek_bar = view.findViewById(R.id.seek_bar);
         songnametxt = view.findViewById(R.id.songnametxt);
         showseekbar = view.findViewById(R.id.showseekbar);
-        motherlayout = view.findViewById(R.id.motherlayout);
-        recyclerlayout = view.findViewById(R.id.recyclerlayout);
-
-        circularlayout = view.findViewById(R.id.circularlayout);
-        circularlayout.bringToFront();
-
         popup_recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         handler = new Handler();
         mediaPlayer = new MediaPlayer();

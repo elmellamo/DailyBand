@@ -129,7 +129,7 @@ public class Ocarina4HoleFragment extends Fragment {
             String formattedTime = sdf.format(new Date(currentTimeMillis));
             String fileName = formattedTime + ".wav";
 
-            //MediaStore를 이용해서 녹음 팡리 미디어 데이터베이스에 추가
+            //MediaStore를 이용해서 녹음 파일 미디어 데이터베이스에 추가
             ContentValues values = new ContentValues();
             values.put(MediaStore.Audio.Media.DISPLAY_NAME, fileName);
             values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/wav");
@@ -141,7 +141,6 @@ public class Ocarina4HoleFragment extends Fragment {
 
             if (itemUri != null) {
                 try {
-                    // 파일 복사 또는 이동 작업 수행 (이 코드에서는 파일을 복사함)
                     try (ParcelFileDescriptor descriptor = requireContext().getContentResolver().openFileDescriptor(itemUri, "w")) {
                         if (descriptor != null) {
                             FileInputStream inputStream = new FileInputStream(filePath);
