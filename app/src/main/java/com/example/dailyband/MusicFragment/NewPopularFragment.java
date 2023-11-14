@@ -69,7 +69,7 @@ public class NewPopularFragment extends Fragment implements PopUpClickListener {
     private Handler handler;
     private int pausedPosition = 0;
     private String selectedPostId, selectedSongname;
-    private ConstraintLayout circularlayout, showseekbar;
+    private ConstraintLayout circularlayout, showseekbar, motherlayout, recyclerlayout;
     public NewPopularFragment() {
     }
     @Override
@@ -88,6 +88,8 @@ public class NewPopularFragment extends Fragment implements PopUpClickListener {
         seek_bar = view.findViewById(R.id.seek_bar);
         songnametxt = view.findViewById(R.id.songnametxt);
         showseekbar = view.findViewById(R.id.showseekbar);
+        motherlayout = view.findViewById(R.id.motherlayout);
+        recyclerlayout = view.findViewById(R.id.recyclerlayout);
 
         circularlayout = view.findViewById(R.id.circularlayout);
         circularlayout.bringToFront();
@@ -137,7 +139,8 @@ public class NewPopularFragment extends Fragment implements PopUpClickListener {
             public void onClick(View view) {
                 // 현재 MediaPlayer가 null이거나 재생 중이지 않은 경우
                 if (mediaPlayer == null || !mediaPlayer.isPlaying()) {
-                    showProgressBar();
+                    //showProgressBar();
+                    addMusicActivity.showProgressBar_addmusic();
                     // Firebase Storage에서 WAV 파일 다운로드 및 재생 코드
                     StorageReference songRef = FirebaseStorage.getInstance().getReference().child("songs/"+selectedPostId+"/song");
                     songRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -152,7 +155,8 @@ public class NewPopularFragment extends Fragment implements PopUpClickListener {
                                 mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                                     @Override
                                     public void onPrepared(MediaPlayer mediaPlayer) {
-                                        hideProgressBar();
+                                        addMusicActivity.hideProgressBar_addmusic();
+                                        //hideProgressBar();
                                         mediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
                                             @Override
                                             public void onBufferingUpdate(MediaPlayer mp, int i) {
@@ -207,7 +211,8 @@ public class NewPopularFragment extends Fragment implements PopUpClickListener {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             // 다운로드 실패 시 처리
-                            hideProgressBar();
+                            //hideProgressBar();
+                            addMusicActivity.hideProgressBar_addmusic();
                         }
                     });
                 } else {
@@ -249,27 +254,6 @@ public class NewPopularFragment extends Fragment implements PopUpClickListener {
         return view;
     }
 
-    private void showProgressBar() {
-        // 프로그레스바를 보여주는 코드
-        circularlayout.setVisibility(View.VISIBLE);
-    }
-
-    private void hideProgressBar() {
-        // 프로그레스바를 숨기는 코드
-        circularlayout.animate()
-                .alpha(0f) // 투명도를 0으로 설정하여 페이드 아웃 애니메이션 적용
-                .setDuration(500) // 애니메이션 지속 시간 (밀리초)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        // 애니메이션 종료 후에 실행할 작업 (예: 뷰를 숨기거나 제거하는 등)
-                        circularlayout.setVisibility(View.GONE);
-                    }
-                })
-                .start();
-    }
-
-
     private void getSongs(){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("songs");
 
@@ -298,7 +282,7 @@ public class NewPopularFragment extends Fragment implements PopUpClickListener {
                     }
                 });
                 Log.d("로그", "여기 되나요????");
-                adapter = new PopUp_New_PopularAdapter(getContext(), songs, NewPopularFragment.this);
+                adapter = new PopUp_New_PopularAdapter(getContext(), songs, NewPopularFragment.this, popup_recyclerview);
                 popup_recyclerview.setAdapter(adapter);
             }
 

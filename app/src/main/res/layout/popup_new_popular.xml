@@ -5,33 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/graygreen"
     android:paddingHorizontal="15dp"
-    android:paddingVertical="10dp">
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#91646464"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:id="@+id/circularlayout"
-        android:visibility="gone"
-        >
-        <com.mikhaellopez.circularfillableloaders.CircularFillableLoaders
-            android:id="@+id/circularFillableLoaders"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            app:cfl_border="true"
-            app:cfl_border_width="2dp"
-            app:cfl_progress="70"
-            android:src="@drawable/progressimg"
-            app:cfl_wave_amplitude="0.06"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:cfl_wave_color="#809584" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    android:paddingVertical="10dp"
+    android:id="@+id/motherlayout">
 
     <TextView
         android:id="@+id/poptxt"
@@ -48,7 +23,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="300dp"
         android:id="@+id/recyclerlayout"
         app:layout_constraintTop_toBottomOf="@+id/poptxt"
         app:layout_constraintBottom_toTopOf="@+id/showseekbar"
@@ -75,7 +50,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="5dp"
+        android:paddingBottom="5dp"
         app:layout_constraintTop_toBottomOf="@+id/recyclerlayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -138,7 +113,7 @@
             android:singleLine="true"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="여기에 노래 제목이 들어갑니다."

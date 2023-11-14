@@ -401,7 +401,12 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         }
     }
 
-    private void hideProgressBar() {
+    public void showProgressBar_addmusic(){
+        circularlayout.setAlpha(1f);
+        circularlayout.setVisibility(View.VISIBLE);
+    }
+
+    public void hideProgressBar_addmusic() {
         // 프로그레스바를 숨기는 코드
         circularlayout.animate()
                 .alpha(0f) // 투명도를 0으로 설정하여 페이드 아웃 애니메이션 적용
@@ -454,7 +459,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                 Toast.makeText(AddMusic.this, "콜라보레이션 노래가 등록되었습니다.", Toast.LENGTH_SHORT).show();
                 Log.e("로그", "지금 되고 있는거야?" + uri.toString());
                 addTrack(uri, addPostId, addPostId);
-                hideProgressBar();
+                hideProgressBar_addmusic();
             }).addOnFailureListener(e -> {
                 Log.w("asdf", "download:FAILURE", e);
             });

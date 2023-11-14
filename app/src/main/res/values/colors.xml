@@ -21,5 +21,7 @@
     <color name="darkyellogreen">#82b553</color>
     <color name="test_main_clolr">#3a5a40</color>
     <color name="start_green">#79AC78</color>
+    <color name="selectedname">#f1f9f3</color>
     <color name="end_green">#537538</color>
+    <color name="background_wave">#91646464</color>
 </resources>
