@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.UiThread;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.R;
@@ -39,6 +40,8 @@ public class SplashActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.activity_splash);
         final TextView splashText = findViewById(R.id.splashTextView);
         final ImageView splashImage = findViewById(R.id.splashImage);
