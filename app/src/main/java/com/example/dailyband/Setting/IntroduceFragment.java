@@ -70,6 +70,7 @@ public class IntroduceFragment extends Fragment {
                     NewSettingActivity newSettingActivity = (NewSettingActivity) getActivity();
                     newSettingActivity.blindFrame();
                     newSettingActivity.updateIntroduce(NEW_INTRODUCE);
+                    newSettingActivity.updateIsFragmentOpen(false);
                     //((YourActivity) requireActivity()).updateName(updatedText);
                 }
             }

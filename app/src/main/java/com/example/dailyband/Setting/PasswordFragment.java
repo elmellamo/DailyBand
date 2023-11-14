@@ -66,7 +66,6 @@ public class PasswordFragment extends Fragment {
 
                 if (!isPasswordValid(newPassword)) {
                     Toast.makeText(getContext(), "비밀번호는 영문자, 숫자, 기호를 조합하여 8자리 이상이어야 합니다.", Toast.LENGTH_SHORT).show();
-
                     return;
                 }
 
@@ -86,6 +85,7 @@ public class PasswordFragment extends Fragment {
                                                 if(getActivity() instanceof NewSettingActivity){
                                                     NewSettingActivity newSettingActivity = (NewSettingActivity) getActivity();
                                                     newSettingActivity.blindFrame();
+                                                    newSettingActivity.updateIsFragmentOpen(false);
                                                     //((YourActivity) requireActivity()).updateName(updatedText);
                                                 }
                                             } else {

@@ -303,8 +303,9 @@
 
             <ImageView
                 android:layout_marginLeft="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="25dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ocarina_img_original"
                 android:id="@+id/ocarinaimg"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
