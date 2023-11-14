@@ -1007,7 +1007,23 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
             is_Fragment_Open=false;
         }
         else {
-            myStartActivity(HomeMain.class);
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                myStartActivity(HomeMain.class);
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "한 번 더 누르면 만들던 음악이 사라집니다.", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
         }
+
+
+
     }
 }
