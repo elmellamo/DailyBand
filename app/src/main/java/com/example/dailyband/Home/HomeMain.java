@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +63,7 @@ public class HomeMain extends AppCompatActivity{
     private RankingSongAdapter adapter;
     private List<TestSong> songs;
     private ImageView circle_iv;
-
+    private LinearLayout emptytxt;
     private boolean doubleBackToExitPressedOnce = false;
     private static final int REQUEST_PERMISSION_CODE = 1000;
     private FirebaseDatabase mFirebaseDatabase;
@@ -90,6 +91,7 @@ public class HomeMain extends AppCompatActivity{
         setbtn = findViewById(R.id.setbtn);
         homeBtn = findViewById(R.id.homeBtn);
         circle_iv = findViewById(R.id.circle_iv);
+        emptytxt = findViewById(R.id.emptytxt);
         gomakeyourmusic = findViewById(R.id.gomakeyourmusic);
         circularlayout = findViewById(R.id.circularlayout);
         circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
@@ -162,8 +164,10 @@ public class HomeMain extends AppCompatActivity{
                 });
 
                 // 정렬된 데이터를 리사이클러뷰에 표시하기 위해 어댑터에 설정
-                RankingSongAdapter adapter = new RankingSongAdapter(HomeMain.this, songs);
+                adapter = new RankingSongAdapter(HomeMain.this, songs);
                 recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                emptytxt.setVisibility(songs.size() == 0 ? View.VISIBLE : View.GONE);
                 callback.onDataFetchedSuccessfully();
             }
 
@@ -274,7 +278,9 @@ public class HomeMain extends AppCompatActivity{
                     public void onDataFetchFailed() {
                         // getSongs 실패 후의 처리
                         hideProgressBar();
-                        // 여기에서 프로그레스바를 숨김
+                        songs.clear(); // 데이터를 가져오는데 실패했으므로 리스트 비우기
+                        adapter.notifyDataSetChanged(); // 어댑터에 변경된 내용 알림
+                        emptytxt.setVisibility(songs.size() == 0 ? View.VISIBLE : View.GONE);
                     }
                 });
             }
