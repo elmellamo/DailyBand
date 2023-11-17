@@ -29,6 +29,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -39,9 +41,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -121,12 +125,10 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     private RecyclerView musicTrackView;
     private LinearLayoutManager llm;
     private RecyclerView.Adapter adapter;
-    private ConstraintLayout detail_pickup_layout, gray_screen;
+    private ConstraintLayout gray_screen, detail_pickup_layout;
     private FrameLayout detail_instrument_frame;
     private List<ComplexName> parents;
     public ArrayList<String> parentPostId;
-
-    private FrameLayout addCategoryFrameLayout;
     PianoFragment pianoFragment;
     CategoryAddMusic categoryAddMusic;
     DrumFragment drumFragment;
@@ -138,6 +140,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     private CircularFillableLoaders circularFillableLoaders;
     private ConstraintLayout circularlayout;
     private boolean is_Fragment_Open = false;
+    private CardView play_cardview;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,18 +152,18 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
 
         nextmenu = findViewById(R.id.nextmenu);
         plusbtn = findViewById(R.id.plusbtn);
-        detail_pickup_layout = findViewById(R.id.detail_pickup_layout);
         detail_instrument_frame = findViewById(R.id.detail_instrument_frame);
-        addCategoryFrameLayout = findViewById(R.id.add_category_framelayout);
         homeBtn = findViewById(R.id.homeBtn);
         myInfobtn = findViewById(R.id.myInfobtn);
         librarybtn = findViewById(R.id.librarybtn);
         setbtn = findViewById(R.id.setbtn);
+        play_cardview = findViewById(R.id.play_cardview);
         addbtn = findViewById(R.id.addbtn);
         playbtn = findViewById(R.id.playbtn2);
         stopbtn = findViewById(R.id.stopbtn);
         backcontext = findViewById(R.id.backcontext);
         music_length = findViewById(R.id.music_length);
+        detail_pickup_layout = findViewById(R.id.detail_pickup_layout);
         seekBar = findViewById(R.id.seekBar);
         circularlayout = findViewById(R.id.circularlayout);
         gray_screen = findViewById(R.id.gray_screen);
@@ -185,9 +188,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         drumFragment = new DrumFragment();
         recordingMain = new RecordingMain();
         ocarina4HoleFragment = new Ocarina4HoleFragment();
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.add_category_framelayout, new CategoryAddMusic()).commit();
-
+        categoryAddMusic = new CategoryAddMusic();
         parents = new ArrayList<>();
         parentPostId = new ArrayList<>();
 
@@ -287,8 +288,9 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         gray_screen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                is_Fragment_Open = false;
-                if (detail_pickup_layout.getVisibility() == View.VISIBLE) {
+                if(detail_pickup_layout.getVisibility() == View.VISIBLE){
+                    is_Fragment_Open = false;
+                    slideDown(play_cardview);
                     detail_pickup_layout.setVisibility(View.GONE);
                 }
             }
@@ -303,9 +305,12 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         plusbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                is_Fragment_Open=true;
-                addCategoryFrameLayout.setVisibility(View.VISIBLE);
-                popularFragment = new PopularFragment();
+                if(detail_pickup_layout.getVisibility()==View.GONE){
+                    is_Fragment_Open=true;
+                    getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, categoryAddMusic).commit();
+                    detail_pickup_layout.setVisibility(View.VISIBLE);
+                    slideUp(play_cardview);
+                }
             }
         });
         playbtn.setOnClickListener(new View.OnClickListener() {
@@ -373,34 +378,50 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     public void showUpPopular(){
         detail_pickup_layout.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, new NewPopularFragment()).commit();
+        slideUp(play_cardview);
     }
     public void showUpOcarina(){
         detail_pickup_layout.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, ocarina4HoleFragment).commit();
+        slideUp(play_cardview);
     }
     public void showUpRecording(){
         detail_pickup_layout.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, recordingMain).commit();
+        slideUp(play_cardview);
     }
     //피아노 보이게 하기
     public void showUpPiano(){
         detail_pickup_layout.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, pianoFragment).commit();
+        slideUp(play_cardview);
     }
     //드럼 보이게 하기
     public void showUpDrum(){
         detail_pickup_layout.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, drumFragment).commit();
+        slideUp(play_cardview);
     }
-    //addCategoryFrameLayout을 숨기는 메서드
     public void hideAddCategoryFrameLayout(){
-        addCategoryFrameLayout.setVisibility(View.GONE);
+        slideDown(play_cardview);
+        detail_pickup_layout.setVisibility(View.GONE);
+    }
+    public void clearAddCategory(){
+        is_Fragment_Open=false;
+        slideDown(play_cardview);
+        detail_pickup_layout.setVisibility(View.GONE);
     }
     public void hideDetailPickupLayout(){
-        detail_pickup_layout.setVisibility(View.GONE);
+        if (detail_pickup_layout.getVisibility() == View.VISIBLE) {
+            is_Fragment_Open=false;
+            slideDown(play_cardview);
+            detail_pickup_layout.setVisibility(View.GONE);
+        }
     }
     public void hideGray(){
         if (detail_pickup_layout.getVisibility() == View.VISIBLE) {
+            is_Fragment_Open=false;
+            slideDown(play_cardview);
             detail_pickup_layout.setVisibility(View.GONE);
         }
     }
@@ -984,25 +1005,44 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         return touchListener;
     }
 
-
-
     public void updateIsFragmentOpen(boolean isFragmentOpen) {
         is_Fragment_Open = isFragmentOpen;
     }
+    public void slideDown(final View view) {
+        TranslateAnimation animate = new TranslateAnimation(0, 0, 0, view.getHeight());
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        animate.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) { }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.setVisibility(View.GONE); // 애니메이션 종료 후 뷰를 숨김
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) { }
+        });
+        view.startAnimation(animate);
+    }
+
+    public void slideUp(View view) {
+        view.setVisibility(View.VISIBLE);
+        TranslateAnimation animate = new TranslateAnimation(0, 0, view.getHeight(), 0);
+        animate.setDuration(500);
+        view.startAnimation(animate);
+    }
 
     public void blindFrame(){
-        is_Fragment_Open=false;
-        if (addCategoryFrameLayout.getVisibility() == View.VISIBLE) {
-            addCategoryFrameLayout.setVisibility(View.GONE);
-        }
         if (detail_pickup_layout.getVisibility() == View.VISIBLE) {
+            slideDown(play_cardview);
             detail_pickup_layout.setVisibility(View.GONE);
         }
     }
     @Override
     public void onBackPressed() {
         if(is_Fragment_Open){
-            //getSupportFragmentManager().popBackStack();
             blindFrame();
             is_Fragment_Open=false;
         }
@@ -1022,8 +1062,5 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                 }
             }, 2000);
         }
-
-
-
     }
 }

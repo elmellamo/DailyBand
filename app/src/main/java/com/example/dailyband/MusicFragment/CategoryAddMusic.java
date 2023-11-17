@@ -44,7 +44,6 @@ public class CategoryAddMusic extends Fragment {
                     AddMusic addmusic = (AddMusic) getActivity();
                     addmusic.hideAddCategoryFrameLayout();
                     addmusic.startOcarina();
-                    //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
                     addmusic.showUpOcarina();
                 }
             }
@@ -56,7 +55,6 @@ public class CategoryAddMusic extends Fragment {
                 if(getActivity() instanceof AddMusic){
                     AddMusic addmusic = (AddMusic) getActivity();
                     addmusic.hideAddCategoryFrameLayout();
-                    //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
                     addmusic.showUpPopular();
                 }
             }
@@ -68,7 +66,6 @@ public class CategoryAddMusic extends Fragment {
                 if(getActivity() instanceof AddMusic){
                     AddMusic addmusic = (AddMusic) getActivity();
                     addmusic.hideAddCategoryFrameLayout();
-                    //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
                     addmusic.showUpRecording();
                 }
             }
@@ -79,7 +76,7 @@ public class CategoryAddMusic extends Fragment {
                 //AddMusic 액티비티의 addCategoryFrameLayout을 숨김
                 if(getActivity() instanceof AddMusic){
                     AddMusic addmusic = (AddMusic) getActivity();
-                    addmusic.hideAddCategoryFrameLayout();
+                    addmusic.clearAddCategory();
                 }
             }
         });
@@ -90,7 +87,6 @@ public class CategoryAddMusic extends Fragment {
                 if(getActivity() instanceof AddMusic){
                     AddMusic addmusic = (AddMusic) getActivity();
                     addmusic.hideAddCategoryFrameLayout();
-                    //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
                     addmusic.showUpPiano();
                 }
             }
@@ -101,7 +97,6 @@ public class CategoryAddMusic extends Fragment {
                 if(getActivity() instanceof AddMusic){
                     AddMusic addmusic = (AddMusic) getActivity();
                     addmusic.hideAddCategoryFrameLayout();
-                    //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
                     addmusic.showUpDrum();
                 }
             }
@@ -112,7 +107,6 @@ public class CategoryAddMusic extends Fragment {
                 if(getActivity() instanceof AddMusic){
                     AddMusic addmusic = (AddMusic) getActivity();
                     addmusic.hideAddCategoryFrameLayout();
-                    //그 다음에 아래와 같은 동작을 하게 만들어야 한다. 디테일 나와야한다...
                     addmusic.getPathFromStorage();
                 }
             }
