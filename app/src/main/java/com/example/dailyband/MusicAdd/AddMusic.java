@@ -404,25 +404,21 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     }
     public void hideAddCategoryFrameLayout(){
         slideDown(play_cardview);
-        detail_pickup_layout.setVisibility(View.GONE);
     }
     public void clearAddCategory(){
         is_Fragment_Open=false;
         slideDown(play_cardview);
-        detail_pickup_layout.setVisibility(View.GONE);
     }
     public void hideDetailPickupLayout(){
         if (detail_pickup_layout.getVisibility() == View.VISIBLE) {
             is_Fragment_Open=false;
             slideDown(play_cardview);
-            detail_pickup_layout.setVisibility(View.GONE);
         }
     }
     public void hideGray(){
         if (detail_pickup_layout.getVisibility() == View.VISIBLE) {
             is_Fragment_Open=false;
             slideDown(play_cardview);
-            detail_pickup_layout.setVisibility(View.GONE);
         }
     }
 
@@ -1019,6 +1015,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
             @Override
             public void onAnimationEnd(Animation animation) {
                 view.setVisibility(View.GONE); // 애니메이션 종료 후 뷰를 숨김
+                detail_pickup_layout.setVisibility(View.GONE);
             }
 
             @Override
@@ -1037,7 +1034,6 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     public void blindFrame(){
         if (detail_pickup_layout.getVisibility() == View.VISIBLE) {
             slideDown(play_cardview);
-            detail_pickup_layout.setVisibility(View.GONE);
         }
     }
     @Override
