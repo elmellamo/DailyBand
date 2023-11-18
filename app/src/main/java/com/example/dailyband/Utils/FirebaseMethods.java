@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.dailyband.Home.HomeMain;
+import com.example.dailyband.Models.CommentItem;
 import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.Models.TestSong;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -280,6 +281,41 @@ public class FirebaseMethods {
         return newPostKey;
     }
 
+    public void addToOriginalComment(String comment, String comment_postID){
+        String newCommentKey = myRef.child("comment").child(comment_postID).push().getKey();
+        CommentItem oriComment = new CommentItem();
+
+        oriComment.setComment_id(newCommentKey);
+        oriComment.setContents(comment);
+        oriComment.setLove(1);
+        oriComment.setDate_created(getTimeStamp());
+        oriComment.setPost_id(comment_postID);
+        oriComment.setUser_id(userID);
+
+        // 데이터베이스에 넣기
+        assert newCommentKey != null;
+        myRef.child("comment").
+                child(comment_postID).child(newCommentKey).setValue(oriComment);
+        Toast.makeText(mContext, "댓글이 등록되었습니다.", Toast.LENGTH_SHORT).show();
+    }
+
+    public void addToChildComment(String comment, String ori_commentid){
+        String newReCommentKey = myRef.child("comment_child").child(ori_commentid).push().getKey();
+        CommentItem oriComment = new CommentItem();
+
+        oriComment.setComment_id(newReCommentKey);
+        oriComment.setContents(comment);
+        oriComment.setLove(1);
+        oriComment.setDate_created(getTimeStamp());
+        oriComment.setPost_id(ori_commentid);
+        oriComment.setUser_id(userID);
+
+        // 데이터베이스에 넣기
+        assert newReCommentKey != null;
+        myRef.child("comment_child").
+                child(ori_commentid).child(newReCommentKey).setValue(oriComment);
+        Toast.makeText(mContext, "답글이 등록되었습니다.", Toast.LENGTH_SHORT).show();
+    }
     private String getTimeStamp(){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREA);
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));

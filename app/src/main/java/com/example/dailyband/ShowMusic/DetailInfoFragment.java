@@ -29,7 +29,7 @@ import java.io.OutputStream;
 public class DetailInfoFragment extends Fragment {
 
     private View view;
-    private ConstraintLayout downloadlayout, artistlayout, creditlayout, collablayout, collalayout, orilayout;
+    private ConstraintLayout commentlayout, downloadlayout, artistlayout, creditlayout, collablayout, collalayout, orilayout;
     private boolean isLiked;
     private String title, artist, postId, userUid;
     private ImageView heartbtn;
@@ -53,6 +53,7 @@ public class DetailInfoFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.detail_info, container, false);
 
+        commentlayout = view.findViewById(R.id.commentlayout);
         downloadlayout = view.findViewById(R.id.downloadlayout);
         artistlayout = view.findViewById(R.id.artistlayout);
         creditlayout = view.findViewById(R.id.creditlayout);
@@ -72,6 +73,17 @@ public class DetailInfoFragment extends Fragment {
 
         songtitle.setText(title);
         songwriter.setText(artist);
+
+        commentlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //해당 액티비티 관련 인포 뜨게 만들어야 한다.
+                if(getActivity() instanceof NewPickMusic){
+                    NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                    newPickMusic.showUpComment();
+                }
+            }
+        });
 
         downloadlayout.setOnClickListener(new View.OnClickListener() {
             @Override

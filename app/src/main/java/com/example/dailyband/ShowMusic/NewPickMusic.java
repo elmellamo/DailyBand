@@ -36,6 +36,7 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import com.example.dailyband.Collection.CollectionActivity;
 import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.Love.LoveActivity;
+import com.example.dailyband.Models.CommentItem;
 import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.MusicAdd.AddMusic;
@@ -79,7 +80,9 @@ public class NewPickMusic extends AppCompatActivity {
     private ShowMusicInfoFragment showMusicInfoFragment;
     private ShowCollaborationFragment showCollaborationFragment;
     private ShowOrigianlFragment showOrigianlFragment;
+    private CommentDetailFragment commentDetailFragment;
     private DetailInfoFragment detailInfoFragment;
+    private CommentMainFragment commentMainFragment;
     private StorageReference songRef;
     SeekBar seekBar;
     Runnable runnable;
@@ -510,6 +513,12 @@ public class NewPickMusic extends AppCompatActivity {
     public void showUpInfo(){
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, showMusicInfoFragment).commit();
     }
+
+    public void showUpComment(){
+        commentMainFragment = new CommentMainFragment();
+        commentMainFragment.setCommentMain(postId);
+        getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, commentMainFragment).commit();
+    }
     public void showUpColla(){
         showCollaborationFragment = new ShowCollaborationFragment();
         showCollaborationFragment.setCollaborationInfo(postId);
@@ -524,6 +533,12 @@ public class NewPickMusic extends AppCompatActivity {
         if (detail_info_layout.getVisibility() == View.VISIBLE) {
             detail_info_layout.setVisibility(View.GONE);
         }
+    }
+
+    public void changeDetail(CommentItem nextItem){
+        commentDetailFragment = new CommentDetailFragment();
+        commentDetailFragment.setCommentDetail(nextItem);
+        getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, commentDetailFragment).commit();
     }
 
     private void getInfo(){
