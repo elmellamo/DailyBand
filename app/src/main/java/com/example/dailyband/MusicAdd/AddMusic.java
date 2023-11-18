@@ -289,9 +289,8 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
             @Override
             public void onClick(View view) {
                 if(detail_pickup_layout.getVisibility() == View.VISIBLE){
-                    is_Fragment_Open = false;
                     slideDown(play_cardview);
-                    detail_pickup_layout.setVisibility(View.GONE);
+                    is_Fragment_Open = false;
                 }
             }
         });
