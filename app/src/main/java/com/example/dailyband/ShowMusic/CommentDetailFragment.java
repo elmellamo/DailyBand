@@ -28,6 +28,7 @@ import com.example.dailyband.adapter.CommentDetailAdapter;
 import com.example.dailyband.adapter.CommentMainAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -135,11 +136,48 @@ public class CommentDetailFragment extends Fragment{
     }
 
     void initState(){
-        //heartimg = itemView.findViewById(R.id.heartimg);
-        String writeruid=  oricomment.getUser_id();
-        commentcontents.setText(oricomment.getContents());
-        lovenum.setText(String.valueOf(oricomment.getLove()-1));
+        String postId = oricomment.getPost_id();
 
+        String commentId = oricomment.getComment_id();
+        String writeruid =  oricomment.getUser_id();
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        commentcontents.setText(oricomment.getContents());
+
+        //좋아요 이미지
+        DatabaseReference userCommentLoveRef = FirebaseDatabase.getInstance().getReference().child("user_comment_love").child(userID).child(commentId);
+        userCommentLoveRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // user_comment_love 카테고리에 해당 commentId가 있음 - full_heart 이미지 설정
+                    heartimg.setImageResource(R.drawable.newgreenheart);
+                } else {
+                    // user_comment_love 카테고리에 해당 commentId가 없음 - empty_heart 이미지 설정
+                    heartimg.setImageResource(R.drawable.newgreenheart_empty);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("comment").child(postId).child(commentId);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    CommentItem thiscomment = dataSnapshot.getValue(CommentItem.class);
+                    lovenum.setText(String.valueOf(thiscomment.getLove()-1));
+                } else {
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // 데이터를 가져오는데 실패한 경우
+            }
+        });
 
         DatabaseReference userAccountRef = FirebaseDatabase.getInstance().getReference().child("UserAccount").child(writeruid);
         userAccountRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -151,10 +189,8 @@ public class CommentDetailFragment extends Fragment{
                 } else {
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // 데이터 가져오기가 실패한 경우에 대한 처리
             }
         });
 
@@ -200,6 +236,63 @@ public class CommentDetailFragment extends Fragment{
             }
         });
 
+        heartimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseReference userCommentLove = FirebaseDatabase.getInstance().getReference().child("user_comment_love").child(userID).child(commentId);
+                userCommentLove.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            // user_comment_love 카테고리에 해당 commentId가 있음 - 삭제하고 empty_heart 이미지 설정
+                            userCommentLove.removeValue();
+                            // 좋아요가 취소된 경우, comment_child에서 해당 commentId의 좋아요 수를 1 감소시킵니다.
+                            DatabaseReference commentRef = FirebaseDatabase.getInstance().getReference().child("comment").child(postId).child(commentId);
+                            commentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        CommentItem updatecomment = dataSnapshot.getValue(CommentItem.class);
+                                        int currentLove = updatecomment.getLove();
+                                        commentRef.child("love").setValue(currentLove - 1); // 좋아요 수 감소
+                                    }
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    // 데이터를 가져오는데 실패한 경우 처리
+                                }
+                            });
+                        } else {
+                            // user_comment_love 카테고리에 해당 commentId가 없음 - 추가하고 full_heart 이미지 설정
+                            userCommentLove.setValue(true);
+
+                            // 좋아요가 추가된 경우, comment_child에서 해당 commentId의 좋아요 수를 1 증가시킵니다.
+                            DatabaseReference commentRef = FirebaseDatabase.getInstance().getReference().child("comment").child(postId).child(commentId);
+                            commentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        CommentItem updatecomment = dataSnapshot.getValue(CommentItem.class);
+                                        int currentLove = updatecomment.getLove();
+                                        commentRef.child("love").setValue(currentLove + 1); // 좋아요 수 증가
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    // 데이터를 가져오는데 실패한 경우 처리
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // 데이터를 가져오는데 실패한 경우 처리
+                    }
+                });
+            }
+        });
 
     }
 
