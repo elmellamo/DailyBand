@@ -213,6 +213,17 @@ public class FirebaseMethods {
             removeLike(songId, writer_uid, listener);
         }
     }
+
+
+    public void CommentaddOrRemoveLike(String commentId, boolean isLiked, String writer_uid, OnLikeActionListener listener) {
+        if (isLiked) {
+            // 사용자가 좋아요를 누르지 않은 상태에서 눌렀을 때는 좋아요를 추가합니다.
+            //addLike(title, songId, writer_uid, listener);
+        } else {
+            // 사용자가 이미 좋아요를 누른 상태에서 또 눌렀을 때는 좋아요를 취소합니다.
+            //removeLike(songId, writer_uid, listener);
+        }
+    }
     public void uploadNewStorage(final String title, Uri fileUri, String postId) {
         if (fileUri == null) {
             Log.e("로그", "File URI is null");

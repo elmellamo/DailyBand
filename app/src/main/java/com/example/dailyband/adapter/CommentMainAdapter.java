@@ -3,6 +3,7 @@ package com.example.dailyband.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.example.dailyband.Utils.CommentDatailClickListener;
 import com.example.dailyband.Utils.PopUpClickListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -66,6 +68,8 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
         postId = comment.getPost_id();
 
         String commentId = comment.getComment_id();
+        String writeruid =  comment.getUser_id();
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         SimpleDateFormat firebaseDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREA);
         Date castDate = null;
@@ -80,8 +84,26 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
         String desiredDateString = desiredDateFormat.format(castDate);
         holder.when.setText(desiredDateString);
 
+        //좋아요 이미지
+        DatabaseReference userCommentLoveRef = FirebaseDatabase.getInstance().getReference().child("user_comment_love").child(userID).child(commentId);
+        userCommentLoveRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // user_comment_love 카테고리에 해당 commentId가 있음 - full_heart 이미지 설정
+                    holder.heartimg.setImageResource(R.drawable.newgreenheart);
+                } else {
+                    // user_comment_love 카테고리에 해당 commentId가 없음 - empty_heart 이미지 설정
+                    holder.heartimg.setImageResource(R.drawable.newgreenheart_empty);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("comment").child(postId).child(commentId);
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -97,7 +119,6 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
             }
         });
 
-        String writeruid=  comment.getUser_id();
         StorageReference profileImageRef = FirebaseStorage.getInstance().getReference().child("profile_images/" + writeruid + ".jpg");
         profileImageRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
             @Override
@@ -120,8 +141,6 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // 파일 메타데이터 가져오기 실패 시 파일이 존재하지 않음
-                // 해당 경우에 대한 처리를 수행 (예: 기본 이미지 설정 또는 다른 처리)
             }
         });
 
@@ -160,6 +179,64 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+
+        holder.heartimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseReference userCommentLove = FirebaseDatabase.getInstance().getReference().child("user_comment_love").child(userID).child(commentId);
+                userCommentLove.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            // user_comment_love 카테고리에 해당 commentId가 있음 - 삭제하고 empty_heart 이미지 설정
+                            userCommentLove.removeValue();
+                            // 좋아요가 취소된 경우, comment_child에서 해당 commentId의 좋아요 수를 1 감소시킵니다.
+                            DatabaseReference commentRef = FirebaseDatabase.getInstance().getReference().child("comment").child(postId).child(commentId);
+                            commentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        CommentItem updatecomment = dataSnapshot.getValue(CommentItem.class);
+                                        int currentLove = updatecomment.getLove();
+                                        commentRef.child("love").setValue(currentLove - 1); // 좋아요 수 감소
+                                    }
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    // 데이터를 가져오는데 실패한 경우 처리
+                                }
+                            });
+                        } else {
+                            // user_comment_love 카테고리에 해당 commentId가 없음 - 추가하고 full_heart 이미지 설정
+                            userCommentLove.setValue(true);
+
+                            // 좋아요가 추가된 경우, comment_child에서 해당 commentId의 좋아요 수를 1 증가시킵니다.
+                            DatabaseReference commentRef = FirebaseDatabase.getInstance().getReference().child("comment").child(postId).child(commentId);
+                            commentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        CommentItem updatecomment = dataSnapshot.getValue(CommentItem.class);
+                                        int currentLove = updatecomment.getLove();
+                                        commentRef.child("love").setValue(currentLove + 1); // 좋아요 수 증가
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    // 데이터를 가져오는데 실패한 경우 처리
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // 데이터를 가져오는데 실패한 경우 처리
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -168,7 +245,7 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
     }
 
     public class CommentMainViewHolder extends RecyclerView.ViewHolder {
-        public TextView nickname, when, commentcontents, lovenum, child_comment;
+        public TextView nickname, when, commentcontents, lovenum, child_comment, seecomment;
         public ConstraintLayout belowlayout;
         public ImageView heartimg, profile;
 
@@ -182,8 +259,24 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
             belowlayout = itemView.findViewById(R.id.belowlayout);
             heartimg = itemView.findViewById(R.id.heartimg);
             profile = itemView.findViewById(R.id.profile);
+            seecomment = itemView.findViewById(R.id.seecomment);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            belowlayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getBindingAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        CommentItem selectedComment = comments.get(position);
+
+                        if(clickListener !=null){
+                            clickListener.onCommentDatailClicked(selectedComment);
+                        }
+
+                    }
+                }
+            });
+
+            seecomment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int position = getBindingAdapterPosition();
