@@ -16,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -99,6 +101,10 @@ public class NewPickMusic extends AppCompatActivity {
     private boolean isScaleUp = true;
     private CircularFillableLoaders circularFillableLoaders;
     private ConstraintLayout circularlayout;
+    private boolean is_Fragment_Open = false;
+    private boolean is_Re_Comment_Open = false;
+    private boolean is_Second_Open = false;
+    private CardView detail_cardview;
 
     protected void onDestroy(){
         if(blobVisualizer != null){
@@ -160,6 +166,7 @@ public class NewPickMusic extends AppCompatActivity {
         picksongname.setText(title);
         heartbtn = findViewById(R.id.heartbtn);
         optionmenu = findViewById(R.id.optionmenu);
+        detail_cardview = findViewById(R.id.detail_cardview);
         homeBtn = findViewById(R.id.homeBtn);
         myInfobtn = findViewById(R.id.myInfobtn);
         librarybtn = findViewById(R.id.librarybtn);
@@ -206,11 +213,14 @@ public class NewPickMusic extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // detail_info_layout을 보이도록 변경합니다.\
-
-                detailInfoFragment = new DetailInfoFragment();
-                detailInfoFragment.setDetailInfo(isLiked, title, artist, postId, writer_uid);
-                detail_info_layout.setVisibility(View.VISIBLE);
-                getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, detailInfoFragment).commit();
+                if(detail_info_layout.getVisibility()==View.GONE){
+                    is_Fragment_Open = true;
+                    detailInfoFragment = new DetailInfoFragment();
+                    detailInfoFragment.setDetailInfo(isLiked, title, artist, postId, writer_uid);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, detailInfoFragment).commit();
+                    detail_info_layout.setVisibility(View.VISIBLE);
+                    slideUp(detail_cardview);
+                }
             }
         });
 
@@ -218,7 +228,10 @@ public class NewPickMusic extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (detail_info_layout.getVisibility() == View.VISIBLE) {
-                    detail_info_layout.setVisibility(View.GONE);
+                    slideDown(detail_cardview);
+                    is_Fragment_Open = false;
+                    is_Second_Open = false;
+                    is_Re_Comment_Open = false;
                 }
             }
         });
@@ -496,13 +509,6 @@ public class NewPickMusic extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        /* 액티비티가 일시정지될 때 MediaPlayer를 중지하고 해제합니다.
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
-        */
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
             mediaPlayer.release();
@@ -512,35 +518,43 @@ public class NewPickMusic extends AppCompatActivity {
 
     public void showUpInfo(){
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, showMusicInfoFragment).commit();
+        slideUp(detail_cardview);
+        is_Second_Open = true;
     }
 
     public void showUpComment(){
         commentMainFragment = new CommentMainFragment();
         commentMainFragment.setCommentMain(postId);
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, commentMainFragment).commit();
+        slideUp(detail_cardview);
+        is_Second_Open = true;
     }
     public void showUpColla(){
         showCollaborationFragment = new ShowCollaborationFragment();
         showCollaborationFragment.setCollaborationInfo(postId);
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, showCollaborationFragment).commit();
+        slideUp(detail_cardview);
+        is_Second_Open = true;
     }
     public void showUpParent(){
         showOrigianlFragment = new ShowOrigianlFragment();
         showOrigianlFragment.setOriginalInfo(postId);
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, showOrigianlFragment).commit();
+        slideUp(detail_cardview);
+        is_Second_Open = true;
     }
-    public void blindFrame(){
-        if (detail_info_layout.getVisibility() == View.VISIBLE) {
-            detail_info_layout.setVisibility(View.GONE);
-        }
-    }
-
     public void changeDetail(CommentItem nextItem){
         commentDetailFragment = new CommentDetailFragment();
         commentDetailFragment.setCommentDetail(nextItem);
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, commentDetailFragment).commit();
+        is_Re_Comment_Open = true;
     }
-
+    public void blindFrame(){
+        slideDown(detail_cardview);
+        is_Fragment_Open = false;
+        is_Re_Comment_Open = false;
+        is_Second_Open = false;
+    }
     private void getInfo(){
         DatabaseReference userAccountRef = FirebaseDatabase.getInstance().getReference().child("UserAccount").child(writer_uid);
         userAccountRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -566,54 +580,37 @@ public class NewPickMusic extends AppCompatActivity {
         showMusicInfoFragment.setSongInfo(artist, writer, play, singer, explain);
     }
 
-    private void getCollab(String postId){
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        List<ComplexName> collabsongs = new ArrayList<>();
-        DatabaseReference collabRef = databaseReference.child("my_children").child(postId);
-        collabRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                collabsongs.clear();
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    Map<String, Object> objectMap = (HashMap<String, Object>) dataSnapshot.getValue();
-                    ComplexName song = new ComplexName();
-                    song.setWriteruid(objectMap.get("writeruid").toString());
-                    song.setTitle(objectMap.get("title").toString());
-                    song.setSongid(objectMap.get("songid").toString());
-                    collabsongs.add(song);
-                }
-
-                CollabAdapter adapter = new CollabAdapter(NewPickMusic.this, collabsongs);
-
-                adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                    @Override
-                    public void onChanged() {
-                        super.onChanged();
-                        checkEmpty();
-                    }
-
-                    void checkEmpty(){
-                        emptytxt.setVisibility(adapter.getItemCount()==0?View.VISIBLE:View.GONE);
-                    }
-                });
-
-                recyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
     private void myStartActivity(Class c){
         Intent intent = new Intent(this, c);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
+    private void slideDown(final View view) {
+        TranslateAnimation animate = new TranslateAnimation(0, 0, 0, view.getHeight());
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        animate.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) { }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.setVisibility(View.GONE); // 애니메이션 종료 후 뷰를 숨김
+                detail_info_layout.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) { }
+        });
+        view.startAnimation(animate);
+    }
+    private void slideUp(View view) {
+        view.setVisibility(View.VISIBLE);
+        TranslateAnimation animate = new TranslateAnimation(0, 0, view.getHeight(), 0);
+        animate.setDuration(500);
+        view.startAnimation(animate);
+    }
+
     private void showProgressBar() {
         // 프로그레스바를 보여주는 코드
         circularlayout.setVisibility(View.VISIBLE);
@@ -635,6 +632,29 @@ public class NewPickMusic extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
+        if (is_Fragment_Open) {
+            if(is_Second_Open && !is_Re_Comment_Open){
+                //아티스트, 노래소개, 원곡, 콜라보 노래 보기, 댓글 들어가서 뒤로 갔을 때
+                detailInfoFragment = new DetailInfoFragment();
+                detailInfoFragment.setDetailInfo(isLiked, title, artist, postId, writer_uid);
+                getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, detailInfoFragment).commit();
+                is_Second_Open = false;
+            }else if(is_Re_Comment_Open){
+                //대댓글 들어가서 뒤로 가기 할 때 -> 다시 댓글보기가 나와야 한다.
+                is_Re_Comment_Open = false;
+                commentMainFragment = new CommentMainFragment();
+                commentMainFragment.setCommentMain(postId);
+                getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, commentMainFragment).commit();
+                is_Second_Open = true;
+            }else{
+                //그냥 완전히 모든 걸 없애야 한다.
+                slideDown(detail_cardview);
+                is_Fragment_Open = false;
+                is_Re_Comment_Open = false;
+                is_Second_Open = false;
+            }
+        }else{
             super.onBackPressed();
+        }
     }
 }

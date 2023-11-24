@@ -220,6 +220,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:cardCornerRadius="15dp"
+            android:visibility="gone"
             android:id="@+id/detail_cardview"
             >
             <FrameLayout
