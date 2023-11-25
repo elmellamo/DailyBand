@@ -640,6 +640,7 @@ public class NewPickMusic extends AppCompatActivity {
                 detailInfoFragment.setDetailInfo(isLiked, title, artist, postId, writer_uid);
                 getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, detailInfoFragment).commit();
                 is_Second_Open = false;
+                hideProgressBar();
             }else if(is_Re_Comment_Open){
                 //대댓글 들어가서 뒤로 가기 할 때 -> 다시 댓글보기가 나와야 한다.
                 is_Re_Comment_Open = false;
@@ -647,14 +648,17 @@ public class NewPickMusic extends AppCompatActivity {
                 commentMainFragment.setCommentMain(postId);
                 getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, commentMainFragment).commit();
                 is_Second_Open = true;
+                hideProgressBar();
             }else{
                 //그냥 완전히 모든 걸 없애야 한다.
                 slideDown(detail_cardview);
                 is_Fragment_Open = false;
                 is_Re_Comment_Open = false;
                 is_Second_Open = false;
+                hideProgressBar();
             }
         }else{
+            hideProgressBar();
             super.onBackPressed();
         }
     }
