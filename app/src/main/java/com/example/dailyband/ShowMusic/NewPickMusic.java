@@ -229,6 +229,7 @@ public class NewPickMusic extends AppCompatActivity {
             public void onClick(View view) {
                 if (detail_info_layout.getVisibility() == View.VISIBLE) {
                     slideDown(detail_cardview);
+                    hideProgressBar();
                     is_Fragment_Open = false;
                     is_Second_Open = false;
                     is_Re_Comment_Open = false;
