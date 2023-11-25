@@ -611,12 +611,13 @@ public class NewPickMusic extends AppCompatActivity {
         view.startAnimation(animate);
     }
 
-    private void showProgressBar() {
+    public void showProgressBar() {
         // 프로그레스바를 보여주는 코드
+        circularlayout.setAlpha(1f);
         circularlayout.setVisibility(View.VISIBLE);
     }
 
-    private void hideProgressBar() {
+    public void hideProgressBar() {
         // 프로그레스바를 숨기는 코드
         circularlayout.animate()
                 .alpha(0f) // 투명도를 0으로 설정하여 페이드 아웃 애니메이션 적용

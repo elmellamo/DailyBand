@@ -1,6 +1,7 @@
 package com.example.dailyband.ShowMusic;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,10 +32,9 @@ import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.MusicFragment.NewPopularFragment;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.CommentDatailClickListener;
-import com.example.dailyband.Utils.DataFetchCallback;
+import com.example.dailyband.Utils.CommentMainCompletedListener;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.Utils.OnCommentSuccessListener;
-import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.example.dailyband.adapter.CommentMainAdapter;
 import com.example.dailyband.adapter.LoveAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -42,16 +42,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class CommentMainFragment extends Fragment implements CommentDatailClickListener {
+public class CommentMainFragment extends Fragment implements CommentDatailClickListener, CommentMainCompletedListener {
 
     private View view;
     private RecyclerView commentrecycler;
@@ -61,9 +57,10 @@ public class CommentMainFragment extends Fragment implements CommentDatailClickL
     private String postId;
     private List<CommentItem> comments;
     private FirebaseMethods mFirebaseMethods;
-    private OnCommentSuccessListener onCommentSuccessListener;
+    private CommentMainCompletedListener completedListener;
     private CommentMainAdapter adapter;
     private ConstraintLayout emptytxt;
+    private NewPickMusic newPickMusic;
     public CommentMainFragment() {
     }
     @Override
@@ -84,6 +81,7 @@ public class CommentMainFragment extends Fragment implements CommentDatailClickL
         comment_add_edit = view.findViewById(R.id.comment_add_edit);
         registerbtn = view.findViewById(R.id.registerbtn);
         clearimg = view.findViewById(R.id.clearimg);
+        newPickMusic =(NewPickMusic) getActivity();
 
         mFirebaseMethods = new FirebaseMethods(getActivity());
         comments = new ArrayList<>();
@@ -112,14 +110,16 @@ public class CommentMainFragment extends Fragment implements CommentDatailClickL
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     comments.clear();
+                    newPickMusic.showProgressBar();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         CommentItem comment = snapshot.getValue(CommentItem.class);
                         if(comment != null){
                             comments.add(comment);
                         }
                     }
-                    adapter = new CommentMainAdapter(getActivity(), comments, CommentMainFragment.this);
+                    adapter = new CommentMainAdapter((Context) getActivity(), comments, CommentMainFragment.this, CommentMainFragment.this);
                     commentrecycler.setAdapter(adapter);
+
                     adapter.notifyDataSetChanged();
                     emptytxt.setVisibility(comments.size() == 0 ? View.VISIBLE : View.GONE);
                 }else{
@@ -141,6 +141,15 @@ public class CommentMainFragment extends Fragment implements CommentDatailClickL
         if(getActivity() instanceof NewPickMusic){
             NewPickMusic newPickMusic = (NewPickMusic) getActivity();
             newPickMusic.changeDetail(commentItem);
+        }
+    }
+
+
+    @Override
+    public void onCommentMainCompleted() {
+        if(getActivity() instanceof NewPickMusic){
+            NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+            newPickMusic.hideProgressBar();
         }
     }
 }

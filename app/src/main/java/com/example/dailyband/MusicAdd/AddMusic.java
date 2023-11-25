@@ -57,7 +57,6 @@ import com.example.dailyband.MusicFragment.CategoryAddMusic;
 import com.example.dailyband.MusicFragment.DrumFragment;
 import com.example.dailyband.MusicFragment.NewPopularFragment;
 import com.example.dailyband.MusicFragment.PianoFragment;
-import com.example.dailyband.MusicFragment.PopularFragment;
 import com.example.dailyband.MusicFragment.RecordingMain;
 import com.example.dailyband.OcarinaTest.Ocarina4HoleFragment;
 import com.example.dailyband.OcarinaTest.OcarinaTouchListener;
@@ -133,7 +132,6 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     CategoryAddMusic categoryAddMusic;
     DrumFragment drumFragment;
     RecordingMain recordingMain;
-    PopularFragment popularFragment;
     Ocarina4HoleFragment ocarina4HoleFragment;
     private ImageButton homeBtn, setbtn, myInfobtn, librarybtn, addbtn;
     private String parent_Id;

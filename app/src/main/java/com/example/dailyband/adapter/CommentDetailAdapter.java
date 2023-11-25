@@ -1,6 +1,7 @@
 package com.example.dailyband.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,12 +11,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.dailyband.Models.CommentItem;
 import com.example.dailyband.R;
+import com.example.dailyband.Utils.CommentDatailClickListener;
+import com.example.dailyband.Utils.CommentDetailCompletedListener;
+import com.example.dailyband.Utils.CommentMainCompletedListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,10 +47,14 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
     private Context context;
     private List<CommentItem> comments;
     private String postId;
+    private CommentDetailCompletedListener completedListener;
 
-    public CommentDetailAdapter(Context context, List<CommentItem> comments) {
+    private boolean allDataLoaded = false;
+
+    public CommentDetailAdapter(Context context, List<CommentItem> comments, CommentDetailCompletedListener completedListener) {
         this.context = context;
         this.comments = comments;
+        this.completedListener = completedListener;
     }
 
     @NonNull
@@ -122,7 +135,29 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
                 profileImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Glide.with(context).load(uri).into(holder.profile);
+                        Glide.with(context)
+                                .load(uri)
+                                .listener(new RequestListener<Drawable>() {
+                                    @Override
+                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                        if (position == comments.size() - 1) {
+                                            // 마지막 아이템에 도달했을 때
+                                            if (!allDataLoaded) {
+                                                allDataLoaded = true; // 모든 데이터가 로드됨을 표시
+                                                // 모든 데이터가 로드되었음을 알림
+                                                if (completedListener != null) {
+                                                    completedListener.onCommentDetailCompleted();
+                                                }
+                                            }
+                                        }
+                                        return false;
+                                    }
+                                }).into(holder.profile);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

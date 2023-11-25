@@ -22,6 +22,7 @@ import com.example.dailyband.Models.CommentItem;
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.CommentDatailClickListener;
+import com.example.dailyband.Utils.CommentDetailCompletedListener;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.Utils.OnCommentSuccessListener;
 import com.example.dailyband.adapter.CommentDetailAdapter;
@@ -45,7 +46,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class CommentDetailFragment extends Fragment{
+public class CommentDetailFragment extends Fragment implements CommentDetailCompletedListener {
     private View view;
     private RecyclerView re_commentrecycler;
     private EditText comment_add_edit;
@@ -58,6 +59,7 @@ public class CommentDetailFragment extends Fragment{
     private OnCommentSuccessListener onCommentSuccessListener;
     private TextView nickname, when, commentcontents, lovenum;
     private ImageView heartimg, profile;
+    private NewPickMusic newPickMusic;
     public CommentDetailFragment() {
     }
     @Override
@@ -78,6 +80,8 @@ public class CommentDetailFragment extends Fragment{
         lovenum = view.findViewById(R.id.lovenum);
         heartimg = view.findViewById(R.id.heartimg);
         profile = view.findViewById(R.id.profile);
+        newPickMusic =(NewPickMusic) getActivity();
+
 
         re_commentrecycler = view.findViewById(R.id.re_commentrecycler);
         re_commentrecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -113,6 +117,8 @@ public class CommentDetailFragment extends Fragment{
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
+
+                    newPickMusic.showProgressBar();
                     comments.clear();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         CommentItem comment = snapshot.getValue(CommentItem.class);
@@ -120,7 +126,7 @@ public class CommentDetailFragment extends Fragment{
                             comments.add(comment);
                         }
                     }
-                    adapter = new CommentDetailAdapter(getActivity(), comments);
+                    adapter = new CommentDetailAdapter(getActivity(), comments, CommentDetailFragment.this);
                     re_commentrecycler.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }
@@ -296,4 +302,11 @@ public class CommentDetailFragment extends Fragment{
 
     }
 
+    @Override
+    public void onCommentDetailCompleted() {
+        if(getActivity() instanceof NewPickMusic){
+            NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+            newPickMusic.hideProgressBar();
+        }
+    }
 }
