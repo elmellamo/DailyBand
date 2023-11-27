@@ -53,7 +53,6 @@ public class CommentMainFragment extends Fragment implements CommentDatailClickL
     private RecyclerView commentrecycler;
     private EditText comment_add_edit;
     private Button registerbtn;
-    private ImageView clearimg;
     private String postId;
     private List<CommentItem> comments;
     private FirebaseMethods mFirebaseMethods;
@@ -80,7 +79,6 @@ public class CommentMainFragment extends Fragment implements CommentDatailClickL
         emptytxt = view.findViewById(R.id.emptytxt);
         comment_add_edit = view.findViewById(R.id.comment_add_edit);
         registerbtn = view.findViewById(R.id.registerbtn);
-        clearimg = view.findViewById(R.id.clearimg);
         newPickMusic =(NewPickMusic) getActivity();
 
         mFirebaseMethods = new FirebaseMethods(getActivity());

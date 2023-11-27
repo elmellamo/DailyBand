@@ -52,7 +52,6 @@ public class CommentDetailFragment extends Fragment implements CommentDetailComp
     private EditText comment_add_edit;
     private Button registerbtn;
     private CommentDetailAdapter adapter;
-    private ImageView clearimg;
     private CommentItem oricomment;
     private List<CommentItem> comments;
     private FirebaseMethods mFirebaseMethods;
@@ -88,7 +87,6 @@ public class CommentDetailFragment extends Fragment implements CommentDetailComp
 
         comment_add_edit = view.findViewById(R.id.comment_add_edit);
         registerbtn = view.findViewById(R.id.registerbtn);
-        clearimg = view.findViewById(R.id.clearimg);
 
         mFirebaseMethods = new FirebaseMethods(getActivity());
         comments = new ArrayList<>();
@@ -224,7 +222,14 @@ public class CommentDetailFragment extends Fragment implements CommentDetailComp
                 profileImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Glide.with(getActivity()).load(uri).into(profile);
+                        //Glide.with(getActivity()).load(uri).into(profile);
+
+                        // 프래그먼트가 attach된 후에 getActivity()가 null이 아닌지 확인
+                        if (getActivity() != null) {
+                            Glide.with(getActivity())
+                                    .load(uri)
+                                    .into(profile);
+                        }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -308,5 +313,12 @@ public class CommentDetailFragment extends Fragment implements CommentDetailComp
             NewPickMusic newPickMusic = (NewPickMusic) getActivity();
             newPickMusic.hideProgressBar();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Glide 이미지 로드 취소
+        Glide.with(this).clear(profile);
     }
 }

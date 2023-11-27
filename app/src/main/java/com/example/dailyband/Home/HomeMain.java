@@ -6,6 +6,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -13,6 +14,8 @@ import android.media.ExifInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -101,6 +104,7 @@ public class HomeMain extends AppCompatActivity{
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         songs = new ArrayList<>();
+        setSize();
         getImage();
         fetchData();
         username.setText(nickname);
@@ -316,7 +320,28 @@ public class HomeMain extends AppCompatActivity{
                 })
                 .start();
     }
+    // 화면 너비(dp)를 가져오는 메서드
+    public int getScreenWidthInDp() {
+        // 화면 너비를 픽셀 단위로 가져옵니다.
+        int screenWidthPx = Resources.getSystem().getDisplayMetrics().widthPixels;
 
+        // 픽셀 값을 dp 단위로 변환합니다.
+        float density = Resources.getSystem().getDisplayMetrics().density;
+        int screenWidthDp = (int) (screenWidthPx / density);
+
+        Log.d("테스트", "현재 넓이 >> "+screenWidthDp);
+
+        return screenWidthDp;
+    }
+
+    private void setSize() {
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int profileimg = (int) (metrics.widthPixels * 0.39);
+        ConstraintLayout.LayoutParams paramsprofile = (ConstraintLayout.LayoutParams) circle_iv.getLayoutParams();
+        paramsprofile.width = profileimg;
+        paramsprofile.height = profileimg;
+        circle_iv.setLayoutParams(paramsprofile);
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

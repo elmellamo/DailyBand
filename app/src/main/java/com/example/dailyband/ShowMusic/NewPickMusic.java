@@ -10,7 +10,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -67,7 +69,7 @@ import java.util.List;
 import java.util.Map;
 
 public class NewPickMusic extends AppCompatActivity {
-    private ImageView playbtn, stopbtn, optionmenu;
+    private ImageView playbtn, stopbtn, optionmenu, birdimg;
     private CompoundButton heartbtn;
     private boolean isLiked = false;
     private TextView picksongname;
@@ -160,6 +162,7 @@ public class NewPickMusic extends AppCompatActivity {
         showOrigianlFragment = new ShowOrigianlFragment();
         handler = new Handler();
         seekBar = findViewById(R.id.seek_bar);
+        birdimg = findViewById(R.id.birdimg);
         playbtn = findViewById(R.id.playbtn);
         stopbtn = findViewById(R.id.stopbtn);
         picksongname = findViewById(R.id.pick_songname);
@@ -192,6 +195,7 @@ public class NewPickMusic extends AppCompatActivity {
 
         getInfo();
         setInfo();
+        setSize();
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -580,6 +584,23 @@ public class NewPickMusic extends AppCompatActivity {
     public void setInfo(){
         showMusicInfoFragment.setSongInfo(artist, writer, play, singer, explain);
     }
+
+    private void setSize() {
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int blobPixels = (int) (metrics.widthPixels * 0.78); // 화면 너비의 78%
+        int birdPixels = (int) (metrics.widthPixels * 0.52); // 화면 너비의 52%
+
+        ConstraintLayout.LayoutParams paramsBlob = (ConstraintLayout.LayoutParams) blobVisualizer.getLayoutParams();
+        paramsBlob.width = blobPixels;
+        paramsBlob.height = blobPixels;
+        blobVisualizer.setLayoutParams(paramsBlob);
+
+        ConstraintLayout.LayoutParams paramsBird = (ConstraintLayout.LayoutParams) birdimg.getLayoutParams();
+        paramsBird.width = birdPixels;
+        paramsBird.height = birdPixels;
+        birdimg.setLayoutParams(paramsBird);
+    }
+
 
     private void myStartActivity(Class c){
         Intent intent = new Intent(this, c);
