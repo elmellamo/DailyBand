@@ -115,9 +115,8 @@ public class CommentDetailFragment extends Fragment implements CommentDetailComp
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-
-                    newPickMusic.showProgressBar();
                     comments.clear();
+                    newPickMusic.showProgressBar();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         CommentItem comment = snapshot.getValue(CommentItem.class);
                         if(comment != null){

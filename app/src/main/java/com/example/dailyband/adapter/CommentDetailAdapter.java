@@ -1,6 +1,8 @@
 package com.example.dailyband.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
@@ -9,10 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -61,7 +65,7 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
     @Override
     public CommentDetailAdapter.CommentDetailViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.comment_child, parent, false);
-        CommentDetailViewHolder holder = new CommentDetailViewHolder(view);
+        CommentDetailViewHolder  holder = new CommentDetailViewHolder(view);
         return holder;
     }
 
@@ -127,53 +131,76 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
         });
 
         StorageReference profileImageRef = FirebaseStorage.getInstance().getReference().child("profile_images/" + writeruid + ".jpg");
-        profileImageRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
+        profileImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
-            public void onSuccess(StorageMetadata storageMetadata) {
-                // 파일 메타데이터를 성공적으로 가져온 경우 파일이 존재함
-                // 여기에서 이미지 다운로드 및 화면에 표시하는 작업 수행
-                profileImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Glide.with(context)
-                                .load(uri)
-                                .listener(new RequestListener<Drawable>() {
-                                    @Override
-                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                        return false;
-                                    }
+            public void onSuccess(Uri uri) {
+                // 이미지가 존재하는 경우 Glide를 사용하여 이미지 로드
+                Glide.with(context)
+                        .load(uri)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                // 이미지 로드 실패 시 처리
+                                Log.d("테스트", "이미지 로드 실패");
+                                return false;
+                            }
 
-                                    @Override
-                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                        if (position == comments.size() - 1) {
-                                            // 마지막 아이템에 도달했을 때
-                                            if (!allDataLoaded) {
-                                                allDataLoaded = true; // 모든 데이터가 로드됨을 표시
-                                                // 모든 데이터가 로드되었음을 알림
-                                                if (completedListener != null) {
-                                                    completedListener.onCommentDetailCompleted();
-                                                }
-                                            }
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                // 이미지 로드 성공 시 처리
+                                Log.d("테스트", "이미지 로드 성공");
+                                if (position == comments.size() - 1) {
+                                    // 마지막 아이템에 도달했을 때
+                                    if (!allDataLoaded) {
+                                        allDataLoaded = true; // 모든 데이터가 로드됨을 표시
+                                        // 모든 데이터가 로드되었음을 알림
+                                        if (completedListener != null) {
+                                            completedListener.onCommentDetailCompleted();
                                         }
-                                        return false;
                                     }
-                                }).into(holder.profile);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // 이미지 다운로드 실패 시 처리 (예: 기본 이미지 설정 또는 오류 메시지 출력)
-                        holder.profile.setImageResource(R.drawable.brid_second_img);
-                    }
-                });
+                                }
+
+                                return false;
+                            }
+                        })
+                        .into(holder.profile);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // 파일 메타데이터 가져오기 실패 시 파일이 존재하지 않음
-                // 해당 경우에 대한 처리를 수행 (예: 기본 이미지 설정 또는 다른 처리)
+                // 이미지가 존재하지 않는 경우: 기본 이미지를 설정하여 Glide로 로드
+                Glide.with(context)
+                        .load(R.drawable.brid_second_img) // 기본 이미지 리소스
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                // 기본 이미지 로드 실패 시 처리
+                                Log.d("테스트", "기본 이미지 로드 실패");
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                // 기본 이미지 로드 성공 시 처리
+                                Log.d("테스트", "기본 이미지 로드 성공");
+                                if (position == comments.size() - 1) {
+                                    // 마지막 아이템에 도달했을 때
+                                    if (!allDataLoaded) {
+                                        allDataLoaded = true; // 모든 데이터가 로드됨을 표시
+                                        // 모든 데이터가 로드되었음을 알림
+                                        if (completedListener != null) {
+                                            completedListener.onCommentDetailCompleted();
+                                        }
+                                    }
+                                }
+
+                                return false;
+                            }
+                        })
+                        .into(holder.profile);
             }
         });
+
 
         DatabaseReference userAccountRef = FirebaseDatabase.getInstance().getReference().child("UserAccount").child(writeruid);
         userAccountRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -250,6 +277,90 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
                 });
             }
         });
+
+        holder.detailclick1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(writeruid.equals(userID)){
+                    int currentColor = ((ColorDrawable) holder.childlayout.getBackground()).getColor();
+                    int grayGreenColor = ContextCompat.getColor(context, R.color.graygreen);
+
+                    if (currentColor == grayGreenColor) {
+                        holder.childlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.click_green));
+                        holder.heartimg.setVisibility(View.GONE);
+                        holder.lovenum.setVisibility(View.GONE);
+                        holder.deletetrash.setVisibility(View.VISIBLE);
+                        holder.heartlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.trash_Background));
+                    } else {
+                        holder.childlayout.setBackgroundColor(grayGreenColor);
+                        holder.heartimg.setVisibility(View.VISIBLE);
+                        holder.lovenum.setVisibility(View.VISIBLE);
+                        holder.deletetrash.setVisibility(View.GONE);
+                        holder.heartlayout.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                }
+            }
+        });
+        holder.detailclick2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(writeruid.equals(userID)){
+                    int currentColor = ((ColorDrawable) holder.childlayout.getBackground()).getColor();
+                    int grayGreenColor = ContextCompat.getColor(context, R.color.graygreen);
+
+                    if (currentColor == grayGreenColor) {
+                        holder.childlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.click_green));
+                        holder.heartimg.setVisibility(View.GONE);
+                        holder.lovenum.setVisibility(View.GONE);
+                        holder.deletetrash.setVisibility(View.VISIBLE);
+                        holder.heartlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.trash_Background));
+                    } else {
+                        holder.childlayout.setBackgroundColor(grayGreenColor);
+                        holder.heartimg.setVisibility(View.VISIBLE);
+                        holder.lovenum.setVisibility(View.VISIBLE);
+                        holder.deletetrash.setVisibility(View.GONE);
+                        holder.heartlayout.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                }
+            }
+        });
+
+        holder.heartlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(ContextCompat.getColor(context, R.color.click_green) == ((ColorDrawable) holder.childlayout.getBackground()).getColor()){
+                    DatabaseReference commentRef = FirebaseDatabase.getInstance().getReference().child("comment_child").child(postId).child(commentId);
+                    commentRef.removeValue()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(context, "댓글이 성공적으로 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                                    // 데이터를 삭제하고 리사이클러뷰에서도 항목 제거
+                                    int deletedPosition = holder.getAdapterPosition();
+                                    if (deletedPosition != RecyclerView.NO_POSITION) {
+                                        removeItem(deletedPosition);
+                                    }
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // 삭제 실패시 동작할 내용
+                                    Toast.makeText(context, "댓글 삭제에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                                    Log.e("테스트", "데이터 삭제 실패", e);
+                                }
+                            });
+                }
+            }
+        });
+    }
+
+    public void removeItem(int position) {
+        if (comments != null && comments.size() > position) {
+            comments.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, comments.size());
+        }
     }
 
     @Override
@@ -259,7 +370,8 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
 
     public class CommentDetailViewHolder extends RecyclerView.ViewHolder {
         public TextView nickname, when, commentcontents, lovenum;
-        public ImageView heartimg, profile;
+        public ImageView heartimg, profile, deletetrash;
+        public ConstraintLayout detailclick1, detailclick2, heartlayout, childlayout;
 
         public CommentDetailViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -269,6 +381,11 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
             lovenum = itemView.findViewById(R.id.lovenum);
             heartimg = itemView.findViewById(R.id.heartimg);
             profile = itemView.findViewById(R.id.profile);
+            deletetrash = itemView.findViewById(R.id.deletetrash);
+            detailclick1 = itemView.findViewById(R.id.detailclick1);
+            detailclick2 = itemView.findViewById(R.id.detailclick2);
+            heartlayout = itemView.findViewById(R.id.heartlayout);
+            childlayout = itemView.findViewById(R.id.childlayout);
 
 
         }
