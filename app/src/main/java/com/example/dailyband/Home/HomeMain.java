@@ -107,7 +107,6 @@ public class HomeMain extends AppCompatActivity{
         setSize();
         getImage();
         fetchData();
-        username.setText(nickname);
 
 
         homeBtn.setOnClickListener(new View.OnClickListener() {
@@ -200,7 +199,7 @@ public class HomeMain extends AppCompatActivity{
                     username.setText(nickname);
                     callback.onDataFetchedSuccessfully();
                 } else {
-                    // "UserAccount" 카테고리에서 해당 데이터가 없는 경우에 대한 처리
+
                 }
             }
 

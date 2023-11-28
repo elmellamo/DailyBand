@@ -23,5 +23,7 @@
     <color name="start_green">#79AC78</color>
     <color name="selectedname">#f1f9f3</color>
     <color name="end_green">#537538</color>
+    <color name="click_green">#D3E5B5</color>
     <color name="background_wave">#91646464</color>
+    <color name="trash_Background">#E58785</color>
 </resources>

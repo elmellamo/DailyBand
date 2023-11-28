@@ -72,7 +72,7 @@
 
             <ToggleButton
                 android:id="@+id/heartbtn"
-                android:layout_width="0dp"
+                android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:background="@drawable/my_heart_btn"
                 android:checked="false"

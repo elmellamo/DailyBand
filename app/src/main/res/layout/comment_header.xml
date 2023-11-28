@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/graygreen"
+    android:id="@+id/headerlayout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -42,53 +43,87 @@
         app:layout_constraintEnd_toStartOf="@+id/heartlayout"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <TextView
-            android:layout_marginTop="6dp"
-            android:id="@+id/nickname"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="담담이야"
-            android:textSize="15sp"
-            android:textColor="#000000"
-            android:ellipsize="marquee"
-            app:layout_constraintBottom_toTopOf="@+id/commentcontents"
+            android:id="@+id/detailclick"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-        <TextView
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="6dp"
-            android:id="@+id/when"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2023년 10월 20일"
-            android:textSize="14sp"
-            android:textColor="#949494"
-            app:layout_constraintStart_toEndOf="@+id/nickname"
-            app:layout_constraintTop_toTopOf="parent"/>
-        <TextView
-            android:layout_marginTop="2dp"
-            android:id="@+id/commentcontents"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="텍스트"
-            android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@+id/nickname"
-            app:layout_constraintStart_toStartOf="parent"/>
-        <TextView
-            android:layout_marginTop="2dp"
-            android:id="@+id/seecomment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="답글 달기"
-            android:textSize="14sp"
-            app:layout_constraintTop_toBottomOf="@+id/commentcontents"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/middlelayout">
+
+            <TextView
+                android:layout_marginTop="6dp"
+                android:id="@+id/nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="담담이야"
+                android:textSize="15sp"
+                android:textColor="#000000"
+                android:ellipsize="marquee"
+                app:layout_constraintBottom_toTopOf="@+id/commentcontents"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+            <TextView
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="6dp"
+                android:id="@+id/when"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2023년 10월 20일"
+                android:textSize="14sp"
+                android:textColor="#949494"
+                app:layout_constraintStart_toEndOf="@+id/nickname"
+                app:layout_constraintTop_toTopOf="parent"/>
+            <TextView
+                android:layout_marginTop="2dp"
+                android:id="@+id/commentcontents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="텍스트"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@+id/nickname"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/middlelayout"
+            app:layout_constraintTop_toBottomOf="@+id/detailclick"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/belowlayout">
+            <TextView
+                android:layout_marginTop="2dp"
+                android:id="@+id/seecomment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="답글 달기"
+                android:textSize="14sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:layout_marginLeft="60dp"
+                android:id="@+id/detailclick2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#949494"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/seecomment"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/belowlayout"
-            app:layout_constraintTop_toBottomOf="@+id/seecomment"
+            app:layout_constraintTop_toBottomOf="@+id/middlelayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -150,5 +185,17 @@
             app:layout_constraintStart_toStartOf="@+id/heartimg"
             app:layout_constraintEnd_toEndOf="@+id/heartimg"
             app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/deletetrash"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/trash_can"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

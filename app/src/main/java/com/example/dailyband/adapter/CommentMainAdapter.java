@@ -2,6 +2,8 @@ package com.example.dailyband.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -129,50 +132,73 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
         });
 
         StorageReference profileImageRef = FirebaseStorage.getInstance().getReference().child("profile_images/" + writeruid + ".jpg");
-        profileImageRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
-            @Override
-            public void onSuccess(StorageMetadata storageMetadata) {
-                // 파일 메타데이터를 성공적으로 가져온 경우 파일이 존재함
-                // 여기에서 이미지 다운로드 및 화면에 표시하는 작업 수행
-                profileImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Glide.with(context)
-                                .load(uri)
-                                .listener(new RequestListener<Drawable>() {
-                             @Override
-                             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                 return false;
-                             }
 
-                             @Override
-                             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                 if (position == comments.size() - 1) {
-                                     // 마지막 아이템에 도달했을 때
-                                     if (!allDataLoaded) {
-                                         allDataLoaded = true; // 모든 데이터가 로드됨을 표시
-                                         // 모든 데이터가 로드되었음을 알림
-                                         if (completedListener != null) {
-                                             completedListener.onCommentMainCompleted();
-                                         }
-                                     }
-                                 }
-                                 return false;
-                             }
-                         })
+// 프로필 이미지의 다운로드 URL 가져오기
+        profileImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // 이미지가 존재하는 경우 Glide를 사용하여 이미지 로드
+                Glide.with(context)
+                        .load(uri)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                // 이미지 로드 실패 시 처리
+                                Log.d("테스트", "이미지 로드 실패");
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                // 이미지 로드 성공 시 처리
+                                Log.d("테스트", "이미지 로드 성공");
+                                if (position == comments.size() - 1) {
+                                    // 마지막 아이템에 도달했을 때
+                                    if (!allDataLoaded) {
+                                        allDataLoaded = true; // 모든 데이터가 로드됨을 표시
+                                        // 모든 데이터가 로드되었음을 알림
+                                        if (completedListener != null) {
+                                            completedListener.onCommentMainCompleted();
+                                        }
+                                    }
+                                }
+                                return false;
+                            }
+                        })
                         .into(holder.profile);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // 이미지 다운로드 실패 시 처리 (예: 기본 이미지 설정 또는 오류 메시지 출력)
-                        holder.profile.setImageResource(R.drawable.brid_second_img);
-                    }
-                });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+                // 이미지가 존재하지 않는 경우: 기본 이미지를 설정하여 Glide로 로드
+                Glide.with(context)
+                        .load(R.drawable.brid_second_img) // 기본 이미지 리소스
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                // 기본 이미지 로드 실패 시 처리
+                                Log.d("테스트", "기본 이미지 로드 실패");
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                // 기본 이미지 로드 성공 시 처리
+                                Log.d("테스트", "기본 이미지 로드 성공");
+                                if (position == comments.size() - 1) {
+                                    // 마지막 아이템에 도달했을 때
+                                    if (!allDataLoaded) {
+                                        allDataLoaded = true; // 모든 데이터가 로드됨을 표시
+                                        // 모든 데이터가 로드되었음을 알림
+                                        if (completedListener != null) {
+                                            completedListener.onCommentMainCompleted();
+                                        }
+                                    }
+                                }
+                                return false;
+                            }
+                        })
+                        .into(holder.profile);
             }
         });
 
@@ -269,20 +295,53 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
                 });
             }
         });
-/*
-        if (position == comments.size() - 1) {
-            // 마지막 아이템에 도달했을 때
-            if (!allDataLoaded) {
-                allDataLoaded = true; // 모든 데이터가 로드됨을 표시
 
-                // 모든 데이터가 로드되었음을 알림
-                if (completedListener != null) {
-                    completedListener.onCommentMainCompleted();
+        holder.detailclick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(writeruid.equals(userID)){
+                    int currentColor = ((ColorDrawable) holder.headerlayout.getBackground()).getColor();
+                    int grayGreenColor = ContextCompat.getColor(context, R.color.graygreen);
+
+                    if (currentColor == grayGreenColor) {
+                        holder.headerlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.click_green));
+                        holder.heartimg.setVisibility(View.GONE);
+                        holder.lovenum.setVisibility(View.GONE);
+                        holder.deletetrash.setVisibility(View.VISIBLE);
+                        holder.heartlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.trash_Background));
+                    } else {
+                        holder.headerlayout.setBackgroundColor(grayGreenColor);
+                        holder.heartimg.setVisibility(View.VISIBLE);
+                        holder.lovenum.setVisibility(View.VISIBLE);
+                        holder.deletetrash.setVisibility(View.GONE);
+                        holder.heartlayout.setBackgroundColor(Color.TRANSPARENT);
+                    }
                 }
             }
-        }
+        });
+        holder.detailclick2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(writeruid.equals(userID)){
+                    int currentColor = ((ColorDrawable) holder.headerlayout.getBackground()).getColor();
+                    int grayGreenColor = ContextCompat.getColor(context, R.color.graygreen);
 
- */
+                    if (currentColor == grayGreenColor) {
+                        holder.headerlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.click_green));
+                        holder.heartimg.setVisibility(View.GONE);
+                        holder.lovenum.setVisibility(View.GONE);
+                        holder.deletetrash.setVisibility(View.VISIBLE);
+                        holder.heartlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.trash_Background));
+                    } else {
+                        holder.headerlayout.setBackgroundColor(grayGreenColor);
+                        holder.heartimg.setVisibility(View.VISIBLE);
+                        holder.lovenum.setVisibility(View.VISIBLE);
+                        holder.deletetrash.setVisibility(View.GONE);
+                        holder.heartlayout.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -291,9 +350,9 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
     }
 
     public class CommentMainViewHolder extends RecyclerView.ViewHolder {
-        public TextView nickname, when, commentcontents, lovenum, child_comment, seecomment;
-        public ConstraintLayout belowlayout;
-        public ImageView heartimg, profile;
+        public TextView nickname, when, commentcontents, lovenum, child_comment, seecomment, detailclick2;
+        public ConstraintLayout belowlayout, detailclick, headerlayout, heartlayout;
+        public ImageView heartimg, profile, deletetrash;
 
         public CommentMainViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -306,6 +365,11 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
             heartimg = itemView.findViewById(R.id.heartimg);
             profile = itemView.findViewById(R.id.profile);
             seecomment = itemView.findViewById(R.id.seecomment);
+            detailclick = itemView.findViewById(R.id.detailclick);
+            detailclick2 = itemView.findViewById(R.id.detailclick2);
+            deletetrash = itemView.findViewById(R.id.deletetrash);
+            headerlayout = itemView.findViewById(R.id.headerlayout);
+            heartlayout = itemView.findViewById(R.id.heartlayout);
 
             belowlayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -336,7 +400,6 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
                     }
                 }
             });
-
         }
     }
 }
