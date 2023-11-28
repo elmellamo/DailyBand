@@ -107,7 +107,7 @@ public class HomeMain extends AppCompatActivity{
         setSize();
         getImage();
         fetchData();
-
+        getScreenWidthInDp();
 
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -323,12 +323,14 @@ public class HomeMain extends AppCompatActivity{
     public int getScreenWidthInDp() {
         // 화면 너비를 픽셀 단위로 가져옵니다.
         int screenWidthPx = Resources.getSystem().getDisplayMetrics().widthPixels;
+        int heightPx = Resources.getSystem().getDisplayMetrics().heightPixels;
 
         // 픽셀 값을 dp 단위로 변환합니다.
         float density = Resources.getSystem().getDisplayMetrics().density;
         int screenWidthDp = (int) (screenWidthPx / density);
+        int heightDp = (int) (heightPx/density);
 
-        Log.d("테스트", "현재 넓이 >> "+screenWidthDp);
+        Log.d("테스트", "현재 넓이 >> "+screenWidthDp + "   현재 높이 >> "+ heightDp);
 
         return screenWidthDp;
     }

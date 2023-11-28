@@ -12,18 +12,41 @@
         app:layout_constraintBottom_toTopOf="@+id/linelayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
         android:id="@+id/songinfolayout">
-        <ImageView
-            android:id="@+id/heartbtn"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/dark_heart_empty"
+            android:id="@+id/heartlayout"
+            android:layout_height="match_parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginEnd="15dp"/>
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/heartbtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/dark_heart_empty"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/lovenum"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginEnd="15dp"/>
+            <TextView
+                android:id="@+id/lovenum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                app:layout_constraintTop_toBottomOf="@+id/heartbtn"
+                app:layout_constraintStart_toStartOf="@+id/heartbtn"
+                app:layout_constraintEnd_toEndOf="@+id/heartbtn"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <TextView
             android:layout_marginLeft="20dp"
@@ -34,7 +57,8 @@
             android:textStyle="bold"
             android:textSize="20sp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/heartbtn"/>
+            app:layout_constraintBottom_toTopOf="@+id/songwriter"
+            app:layout_constraintStart_toEndOf="@+id/heartlayout"/>
         <TextView
             android:layout_marginLeft="20dp"
             android:id="@+id/songwriter"
@@ -45,7 +69,7 @@
             android:textSize="15sp"
             app:layout_constraintTop_toBottomOf="@+id/songtitle"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/heartbtn"/>
+            app:layout_constraintStart_toEndOf="@+id/heartlayout"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View

@@ -1,15 +1,19 @@
 package com.example.dailyband.ShowMusic;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.dailyband.Collection.CollectionActivity;
 import com.example.dailyband.Home.HomeMain;
@@ -30,6 +34,8 @@ public class ArtistInfo extends AppCompatActivity {
     private String artist, title, postId, userUid;
     private boolean isLiked;
     private ImageButton addbtn, setbtn, librarybtn, myInfobtn, homeBtn;
+    private ImageView bird_img;
+    private ConstraintLayout background_artist;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,8 @@ public class ArtistInfo extends AppCompatActivity {
 
         info_text = findViewById(R.id.info_text);
         artist_detail_textview = findViewById(R.id.artist_detail_textview);
+        bird_img = findViewById(R.id.bird_img);
+        background_artist = findViewById(R.id.background_artist);
         artist_detail_textview.setMovementMethod(new ScrollingMovementMethod());
 
         Intent intent = getIntent();
@@ -52,6 +60,8 @@ public class ArtistInfo extends AppCompatActivity {
         librarybtn = findViewById(R.id.librarybtn);
         setbtn = findViewById(R.id.setbtn);
         addbtn = findViewById(R.id.addbtn);
+
+        setSize();
 
         info_text.setText(artist);
         mDatabase.child("user_introduce").addValueEventListener(new ValueEventListener() {
@@ -107,8 +117,26 @@ public class ArtistInfo extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void setSize() {
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int profileimg = (int) (metrics.widthPixels * 0.39);
+        ConstraintLayout.LayoutParams paramsprofile = (ConstraintLayout.LayoutParams) bird_img.getLayoutParams();
+        paramsprofile.width = profileimg;
+        paramsprofile.height = profileimg;
+        bird_img.setLayoutParams(paramsprofile);
+
+        int background = (int)(metrics.widthPixels * 0.36);
+        ConstraintLayout.LayoutParams backgroundimg = (ConstraintLayout.LayoutParams) background_artist.getLayoutParams();
+        backgroundimg.height = background;
+        backgroundimg.width = metrics.widthPixels;
+        background_artist.setLayoutParams(backgroundimg);
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        setResult(Activity.RESULT_OK); // 현재 액티비티의 결과를 설정
+        finish(); // 현재 액티비티 종료
     }
+
 }

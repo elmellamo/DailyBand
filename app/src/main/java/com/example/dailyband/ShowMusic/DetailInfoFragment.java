@@ -1,5 +1,6 @@
 package com.example.dailyband.ShowMusic;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,8 +19,14 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.scwang.wave.MultiWaveHeader;
@@ -33,7 +40,7 @@ public class DetailInfoFragment extends Fragment {
     private boolean isLiked;
     private String title, artist, postId, userUid;
     private ImageView heartbtn;
-    private TextView songtitle, songwriter;
+    private TextView songtitle, songwriter, lovenum;
     public DetailInfoFragment() {
     }
 
@@ -60,6 +67,7 @@ public class DetailInfoFragment extends Fragment {
         collablayout = view.findViewById(R.id.collablayout);
         collalayout = view.findViewById(R.id.collalayout);
         orilayout = view.findViewById(R.id.orilayout);
+        lovenum = view.findViewById(R.id.lovenum);
 
         heartbtn = view.findViewById(R.id.heartbtn);
         songtitle = view.findViewById(R.id.songtitle);
@@ -73,6 +81,7 @@ public class DetailInfoFragment extends Fragment {
 
         songtitle.setText(title);
         songwriter.setText(artist);
+        setLovenum();
 
         commentlayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,8 +149,7 @@ public class DetailInfoFragment extends Fragment {
                 intent.putExtra("artist_intent", artist);
                 intent.putExtra("postId_intent", postId);
                 intent.putExtra("userUid_intent",userUid);
-                startActivity(intent);
-                getActivity().finish();
+                startActivityForResult(intent, 1);
             }
         });
         creditlayout.setOnClickListener(new View.OnClickListener() {
@@ -182,9 +190,31 @@ public class DetailInfoFragment extends Fragment {
         });
 
 
-
-
         return view;
+    }
+
+    private void setLovenum(){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("songs").child(postId);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    TestSong thissong = dataSnapshot.getValue(TestSong.class);
+                    if(thissong.getLove()-1 >999){
+                        lovenum.setText("999+");
+                    }else{
+                        lovenum.setText(String.valueOf(thissong.getLove()-1));
+                    }
+                } else {
+                    // 해당 postId에 대한 데이터가 존재하지 않음
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // 데이터를 가져오는데 실패한 경우
+            }
+        });
     }
 
     @Override
@@ -200,4 +230,16 @@ public class DetailInfoFragment extends Fragment {
         }
         // 기타 로직 수행
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                // ArtistInfo 액티비티에서 돌아온 후 처리할 작업
+                // 이전 액티비티로 돌아왔을 때 해야 할 작업을 여기에 추가하세요
+            }
+        }
+    }
+
 }
