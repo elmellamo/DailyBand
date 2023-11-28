@@ -162,6 +162,7 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
                                         }
                                     }
                                 }
+
                                 return false;
                             }
                         })
@@ -195,6 +196,7 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
                                         }
                                     }
                                 }
+
                                 return false;
                             }
                         })
