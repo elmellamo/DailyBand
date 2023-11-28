@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -341,6 +342,51 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
                         holder.deletetrash.setVisibility(View.GONE);
                         holder.heartlayout.setBackgroundColor(Color.TRANSPARENT);
                     }
+                }
+            }
+        });
+
+        holder.heartlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("테스트", "여기 클릭됐나?");
+                if(ContextCompat.getColor(context, R.color.click_green) == ((ColorDrawable) holder.headerlayout.getBackground()).getColor()){
+                    DatabaseReference commentRef = FirebaseDatabase.getInstance().getReference().child("comment").child(postId).child(commentId);
+                    commentRef.removeValue()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // 삭제 성공시 동작할 내용
+                                    Log.d("테스트", "데이터 삭제 성공");
+
+
+                                    DatabaseReference commentChildRef = FirebaseDatabase.getInstance().getReference().child("comment_child").child(commentId);
+                                    commentChildRef.removeValue()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    // comment_child 카테고리에서 commentId의 하위 child 삭제 성공
+                                                    Toast.makeText(context, "댓글이 성공적으로 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                                                    Log.d("테스트", "comment_child 하위 child 삭제 성공");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    // comment_child 카테고리에서 commentId의 하위 child 삭제 실패
+                                                    Log.e("테스트", "comment_child 하위 child 삭제 실패", e);
+                                                }
+                                            });
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // 삭제 실패시 동작할 내용
+                                    Toast.makeText(context, "댓글 삭제에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                                    Log.e("테스트", "데이터 삭제 실패", e);
+                                }
+                            });
                 }
             }
         });
