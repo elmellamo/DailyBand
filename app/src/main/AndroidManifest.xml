@@ -30,6 +30,7 @@
         <activity
             android:name="com.example.dailyband.Start.SplashActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,58 +40,71 @@
 
         <activity
             android:name="com.example.dailyband.Start.StartActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
 
         </activity>
 
         <activity android:name=".Home.HomeMain"
+            android:screenOrientation="portrait"
             android:exported="true">
 
         </activity>
         <activity android:name=".Love.LoveActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
 
         </activity>
         <activity android:name=".Collection.CollectionActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
 
         </activity>
 
         <activity android:name=".Utils.SharedData"
+            android:screenOrientation="portrait"
             android:exported="true">
 
         </activity>
 
         <activity android:name=".Login.LoginActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
         </activity>
 
         <activity android:name=".Login.RegisterActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
         </activity>
 
         <activity android:name=".MusicAdd.AddMusic"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing"
             android:exported="true">
         </activity>
         <activity android:name=".ShowMusic.NewPickMusic"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing"
             android:exported="true">
         </activity>
 
         <activity android:name=".ShowMusic.ArtistInfo"
+            android:screenOrientation="portrait"
             android:exported="true">
         </activity>
 
         <activity android:name=".Setting.NewSettingActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
         </activity>
         <activity android:name=".MusicAdd.AddCaption"
+            android:screenOrientation="portrait"
             android:exported="true">
         </activity>
         <service
             android:name=".Utils.MusicService"
+            android:screenOrientation="portrait"
             android:enabled="true"
             android:exported="false" />
     </application>
