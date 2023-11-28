@@ -20,8 +20,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth; // 파이어 베이스 인증
@@ -52,6 +57,10 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.login_btn);
         gotoregisterBtn = findViewById(R.id.gotoregister_btn);
 
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        currentUser = null;
+
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             // 로그인 성공
+                            Download_image();
                             myStartActivity(HomeMain.class);
                             finish();
                         }
@@ -86,7 +96,29 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+    public void Download_image(){
+        String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("profile_images/" + userUid + ".jpg");
+        //String imagePath = Environment.getExternalStorageDirectory() + "/" + userUid + ".jpg";
+        String localFilePath = getApplicationContext().getFilesDir() + "/local_image.jpg"; // 로컬에 저장할 파일 경로
+        File localFile = new File(localFilePath);
+        if (localFile.exists()) {
+            localFile.delete();
+        }
+        storageRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+            // 다운로드 성공
+            // localFilePath에 이미지가 저장됨
+            // 여기서 UI 업데이트 등을 수행할 수 있습니다.
+            //Toast.makeText(SplashActivity.this, "이미지 다운로드", Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(exception -> {
+            // 다운로드 실패
+        }).addOnProgressListener(taskSnapshot -> {
+            // 다운로드 진행 중
+        });
+
+    }
     private void myStartActivity(Class c){
         Intent intent = new Intent(this, c);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
