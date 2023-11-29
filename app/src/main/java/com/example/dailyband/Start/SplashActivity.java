@@ -53,7 +53,7 @@ public class SplashActivity extends AppCompatActivity{
         // SPLASH_DELAY 시간 후에 다음 화면으로 이동합니다.
 
         if (currentUser != null){
-            Download_image();
+            //Download_image();
             AUTO_LOGIN = true;
         }
         else{
@@ -179,7 +179,7 @@ public class SplashActivity extends AppCompatActivity{
                 storageRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(bytes -> {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
-                    // 저장할 경로 설정 (내부 저장소)
+                    //저장할 경로 설정 (내부 저장소)
                     String imagePath = Environment.getExternalStorageDirectory() + "/" + userUid + ".jpg";
 
                     try {

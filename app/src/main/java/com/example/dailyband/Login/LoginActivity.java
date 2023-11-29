@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -41,6 +42,9 @@ public class LoginActivity extends AppCompatActivity {
     private TextView gotoregisterBtn;
     private CircularFillableLoaders circularFillableLoaders;
     private ConstraintLayout circularlayout;
+    private FirebaseAuth mAuth;
+
+    private String loginEmail, loginPW, loginUid;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -88,11 +92,11 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             // 로그인 성공
-                            //Download_image();
+                            Download_image();
                             //myStartActivity(HomeMain.class);
                             //finish();
 
-                            fetchData();
+                            //fetchData();
                             myStartActivity(HomeMain.class);
                             finish();
                         }
@@ -111,8 +115,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    public void Download_image(DataFetchCallback callback){
+    public void Download_image(){
+
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        mAuth = FirebaseAuth.getInstance();
+
+        Toast.makeText(LoginActivity.this, userUid, Toast.LENGTH_SHORT).show();
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference().child("profile_images/" + userUid + ".jpg");
@@ -126,35 +135,33 @@ public class LoginActivity extends AppCompatActivity {
             // 다운로드 성공
             // localFilePath에 이미지가 저장됨
             // 여기서 UI 업데이트 등을 수행할 수 있습니다.
-            //Toast.makeText(SplashActivity.this, "이미지 다운로드", Toast.LENGTH_SHORT).show();
-            callback.onDataFetchedSuccessfully();
+            Toast.makeText(LoginActivity.this, "이미지 불러오는 중...", Toast.LENGTH_SHORT).show();
         }).addOnFailureListener(exception -> {
-            callback.onDataFetchFailed();
+            Toast.makeText(LoginActivity.this, "이미지 불러오기 실패...", Toast.LENGTH_SHORT).show();
             // 다운로드 실패
         }).addOnProgressListener(taskSnapshot -> {
             // 다운로드 진행 중
         });
 
     }
-
-    private void fetchData() {
-        showProgressBar();
-        Download_image(new DataFetchCallback() {
-            @Override
-            public void onDataFetchedSuccessfully() {
-                // getInfo 성공 후의 처리
-                hideProgressBar();
-            }
-
-            @Override
-            public void onDataFetchFailed() {
-                // getInfo 실패 후의 처리
-                // 여기에서 프로그레스바를 숨김
-                hideProgressBar();
-                Toast.makeText(getApplicationContext(), "로그인이 제대로 실행되지 않았습니다.", Toast.LENGTH_LONG).show();
-            }
-        });
+    private void getUserUID(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // 로그인 성공, 사용자 UID 가져오기
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            String uid = user.getUid();
+                            // 여기에서 uid를 사용하면 됩니다.
+                        } else {
+                            // 로그인 실패
+                            // 에러 처리 등을 수행할 수 있습니다.
+                        }
+                    }
+                });
     }
+
 
     private void showProgressBar() {
         // 프로그레스바를 보여주는 코드
