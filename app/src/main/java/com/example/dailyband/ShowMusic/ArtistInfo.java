@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
@@ -21,6 +22,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.dailyband.Collection.CollectionActivity;
 import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.Love.LoveActivity;
@@ -33,11 +35,16 @@ import com.example.dailyband.Utils.DataFetchCallback;
 import com.example.dailyband.adapter.ArtistAdapter;
 import com.example.dailyband.adapter.CollabAdapter;
 import com.example.dailyband.adapter.MySongAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
 import com.mikhaellopez.circularfillableloaders.CircularFillableLoaders;
 
 import java.util.ArrayList;
@@ -195,27 +202,42 @@ public class ArtistInfo extends AppCompatActivity {
             }
         });
     }
-
     private void fetchData() {
         showProgressBar();
+
         getMySong(new DataFetchCallback() {
             @Override
             public void onDataFetchedSuccessfully() {
                 // getInfo 성공 후의 처리
-                hideProgressBar();
+
+                getProfile(new DataFetchCallback() {
+                    @Override
+                    public void onDataFetchedSuccessfully() {
+                        // getSongs 성공 후의 처리
+                        hideProgressBar();
+                        // 여기에서 프로그레스바를 숨김
+                    }
+
+                    @Override
+                    public void onDataFetchFailed() {
+                        // getSongs 실패 후의 처리
+                        hideProgressBar();
+                        songs.clear(); // 데이터를 가져오는데 실패했으므로 리스트 비우기
+                        adapter.notifyDataSetChanged(); // 어댑터에 변경된 내용 알림
+                        emptytxt.setVisibility(songs.size() == 0 ? View.VISIBLE : View.GONE);
+                    }
+                });
             }
 
             @Override
             public void onDataFetchFailed() {
                 // getInfo 실패 후의 처리
-                // 여기에서 프로그레스바를 숨김
                 hideProgressBar();
-                songs.clear(); // 데이터를 가져오는데 실패했으므로 리스트 비우기
-                adapter.notifyDataSetChanged(); // 어댑터에 변경된 내용 알림
-                emptytxt.setVisibility(songs.size() == 0 ? View.VISIBLE : View.GONE);
+                // 여기에서 프로그레스바를 숨김
             }
         });
     }
+
 
     private void showProgressBar() {
         // 프로그레스바를 보여주는 코드
@@ -235,6 +257,41 @@ public class ArtistInfo extends AppCompatActivity {
                     }
                 })
                 .start();
+    }
+
+    private void getProfile(DataFetchCallback callback){
+        StorageReference profileImageRef = FirebaseStorage.getInstance().getReference().child("profile_images/" + userUid + ".jpg");
+
+        profileImageRef.getMetadata().addOnSuccessListener(new OnSuccessListener<StorageMetadata>() {
+            @Override
+            public void onSuccess(StorageMetadata storageMetadata) {
+                // 파일 메타데이터를 성공적으로 가져온 경우 파일이 존재함
+                // 여기에서 이미지 다운로드 및 화면에 표시하는 작업 수행
+                profileImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Glide.with(ArtistInfo.this).load(uri).into(bird_img);
+                        callback.onDataFetchedSuccessfully();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // 이미지 다운로드 실패 시 처리 (예: 기본 이미지 설정 또는 오류 메시지 출력)
+
+                        callback.onDataFetchedSuccessfully();
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // 파일 메타데이터 가져오기 실패 시 파일이 존재하지 않음
+                // 해당 경우에 대한 처리를 수행 (예: 기본 이미지 설정 또는 다른 처리)
+
+                callback.onDataFetchFailed();
+            }
+        });
+
     }
     @Override
     public void onBackPressed() {

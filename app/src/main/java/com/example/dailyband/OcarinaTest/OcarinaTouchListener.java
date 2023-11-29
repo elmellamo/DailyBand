@@ -55,12 +55,10 @@ public class OcarinaTouchListener implements View.OnTouchListener {
         } else if (i == button2) {
             return 2;
         } else if (i == button3) {
-
-            Log.d("PlayAudio", "3번 시작");  // 로그 추가
+            //Log.d("PlayAudio", "3번 시작");  // 로그 추가
             return 3;
         } else if (i == button4) {
-
-            Log.d("PlayAudio", "4번 시작");  // 로그 추가
+            //Log.d("PlayAudio", "4번 시작");  // 로그 추가
             return 4;
         } else if (i == button5) {
             return 5;
@@ -135,92 +133,6 @@ public class OcarinaTouchListener implements View.OnTouchListener {
 
             if (Arrays.equals(buttons, new boolean[] {false, false, false, false, false, false, false, false, false, false, false, false})) {
                 return Note.NULL; //Should be C_6, need to fall through without baseline
-            }
-
-        } else if (currentOcarina.equals("12Hole")) {
-
-            if (Arrays.equals(buttons, new boolean[] {true, true, true, true, true, true, true, true, true, true, true, true})) {
-                return Note.A_4;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {true, true, true, true, true, true, true, true, true, true, false, true})) { // no 11
-                return Note.B_4;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {true, true, true, true, true, true, true, true, true, true, false, false})) {// no 11,12
-                return Note.C_5 ;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {true, true, true, true, true, true, true, false, true, true, false, false})) {// no 11,12,8
-                return Note.D_5;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {true, true, true, true, true, true, false, false, true, true, false, false})) {
-                return Note.E_5;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {true, true, true, true, true, false, false, false, true, true, false, false})) {
-                return Note.F_5;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {true, true, true, true, false, false, false, false, true, true, false, false})) {
-                return Note.G_5;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {true, true, false, true, false, false, false, false, true, true, false, false})) {
-                return Note.A_5;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {true, false, false, true, false, false, false, false, true, true, false, false})) {
-                return Note.B_5;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {false, false, false, true, false, false, false, false, true, true, false, false})) {
-                return Note.C_6;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {false, false, false, true, false, false, false, false, false, true, false, false})) {
-                return Note.D_6;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {false, false, false, true, false, false, false, false, false, false, false, false})) {
-                return Note.E_6;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {false, false, false, false, false, false, false, false, false, false, false, false})) {
-                return Note.NULL; //Should be F_6, but we don't have any control from baseline rn
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {true, true, true, true, true, true, true, true, true, true, true, false})) {
-                return Note.A_4_SHARP;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {true, true, true, true, true, true, true, false, true, true, false, true})) {
-                return Note.C_5_SHARP;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {true, true, true, true, true, true, false, false, true, true, false, true})) {
-                return Note.D_5_SHARP;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {true, true, true, true, false, false, true, false, true, true, false, false})) {
-                return Note.F_5_SHARP;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {true, true, false, true, false, false, true, false, true, true, false, false})) {
-                return Note.G_5_SHARP;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {true, false, false, true, false, false, true, false, true, true, false, false})) {
-                return Note.A_5_SHARP;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {false, false, false, true, false, false, true, false, true, true, false, false})) {
-                return Note.C_6_SHARP;
-            }
-
-            if (Arrays.equals(buttons, new boolean[] {false, false, false, true, false, false, true, false, false, false, false, false})) {
-                return Note.D_6_SHARP;
             }
 
         }

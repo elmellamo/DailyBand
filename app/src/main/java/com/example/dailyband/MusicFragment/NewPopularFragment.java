@@ -317,7 +317,6 @@ public class NewPopularFragment extends Fragment implements PopUpClickListener {
     @Override
     public void onPause() {
         super.onPause();
-
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
             mediaPlayer.release();
@@ -330,7 +329,6 @@ public class NewPopularFragment extends Fragment implements PopUpClickListener {
 
     @Override
     public void onPopUpItemClicked(String postId, String songname) {
-        //mediaPlayer를 null로 만들고 싶어. 모든 리소스 해제하기
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();

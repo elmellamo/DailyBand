@@ -398,6 +398,42 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
                                     if (deletedPosition != RecyclerView.NO_POSITION) {
                                         removeItem(deletedPosition);
                                     }
+
+                                    DatabaseReference userCommentLoveRef = FirebaseDatabase.getInstance().getReference().child("user_comment_love");
+
+                                    userCommentLoveRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            // 각 child(사용자 UID)를 순회합니다.
+                                            for (DataSnapshot userChild : dataSnapshot.getChildren()) {
+                                                String separateuserId = userChild.getKey(); // 각 child의 key는 사용자의 UID입니다.
+                                                DatabaseReference userRef = userCommentLoveRef.child(separateuserId).child(commentId);
+
+                                                userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.exists()) {
+                                                            userRef.removeValue();
+                                                        }
+                                                    }
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                        // 데이터를 가져오는데 실패한 경우 처리
+                                                    }
+                                                });
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            // 데이터를 가져오는데 실패한 경우 처리하는 코드
+                                            Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
+                                        }
+                                    });
+
+
+
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {

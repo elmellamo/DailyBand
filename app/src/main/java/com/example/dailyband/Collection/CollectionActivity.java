@@ -141,13 +141,11 @@ public class CollectionActivity extends AppCompatActivity {
                 }else{
                     emptytxt.setVisibility(songs.size() == 0 ? View.VISIBLE : View.GONE);
                 }
-
                 callback.onDataFetchedSuccessfully();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // 데이터를 가져오는데 실패한 경우 처리하는 코드
                 // 데이터를 가져오는데 실패한 경우 처리하는 코드
                 callback.onDataFetchFailed();
             }
@@ -164,11 +162,9 @@ public class CollectionActivity extends AppCompatActivity {
                 // getInfo 성공 후의 처리
                 hideProgressBar();
             }
-
             @Override
             public void onDataFetchFailed() {
                 // getInfo 실패 후의 처리
-                // 여기에서 프로그레스바를 숨김
                 hideProgressBar();
                 songs.clear(); // 데이터를 가져오는데 실패했으므로 리스트 비우기
                 adapter.notifyDataSetChanged(); // 어댑터에 변경된 내용 알림
@@ -206,5 +202,4 @@ public class CollectionActivity extends AppCompatActivity {
     public void onBackPressed() {
         myStartActivity(HomeMain.class);
     }
-
 }

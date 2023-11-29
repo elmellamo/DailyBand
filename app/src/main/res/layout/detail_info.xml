@@ -310,6 +310,38 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/collablayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginVertical="10dp"
+            android:visibility="gone"
+            android:id="@+id/deletelayout">
+
+            <ImageView
+                android:id="@+id/deletebtn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/detail_delete"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/deletetxt"
+                android:layout_marginEnd="15dp"/>
+            <TextView
+                android:layout_marginLeft="20dp"
+                android:id="@+id/deletetxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="삭제하기"
+                android:textSize="17sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/deletebtn"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
