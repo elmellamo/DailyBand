@@ -115,35 +115,25 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     public void Download_image(DataFetchCallback callback){
-
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        mAuth = FirebaseAuth.getInstance();
-
-        //Toast.makeText(LoginActivity.this, userUid, Toast.LENGTH_SHORT).show();
-
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference().child("profile_images/" + userUid + ".jpg");
-        //String imagePath = Environment.getExternalStorageDirectory() + "/" + userUid + ".jpg";
         String localFilePath = getApplicationContext().getFilesDir() + "/local_image.jpg"; // 로컬에 저장할 파일 경로
         File localFile = new File(localFilePath);
+
         if (localFile.exists()) {
             localFile.delete();
         }
         storageRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
             callback.onDataFetchedSuccessfully();
-
             myStartActivity(HomeMain.class);
             finish();
         }).addOnFailureListener(exception -> {
-            Toast.makeText(LoginActivity.this, "이미지 불러오기 실패...", Toast.LENGTH_SHORT).show();
-            // 다운로드 실패
             callback.onDataFetchFailed();
+            myStartActivity(HomeMain.class);
+            finish();
         }).addOnProgressListener(taskSnapshot -> {
-            // 다운로드 진행 중
-            //callback.onDataFetchedSuccessfully();
         });
-
     }
 
     private void showProgressBar() {
