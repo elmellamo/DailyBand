@@ -49,6 +49,7 @@ import java.util.Locale;
 
 public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdapter.CommentDetailViewHolder> {
     private Context context;
+    private int selectedPosition = RecyclerView.NO_POSITION;
     private List<CommentItem> comments;
     private String postId;
     private CommentDetailCompletedListener completedListener;
@@ -285,21 +286,48 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
             @Override
             public void onClick(View view) {
                 if(writeruid.equals(userID)){
-                    int currentColor = ((ColorDrawable) holder.childlayout.getBackground()).getColor();
-                    int grayGreenColor = ContextCompat.getColor(context, R.color.graygreen);
+                    if(selectedPosition ==  holder.getAbsoluteAdapterPosition()){
+                        //원래 하던대로 해도 돼
+                        int currentColor = ((ColorDrawable) holder.childlayout.getBackground()).getColor();
+                        int grayGreenColor = ContextCompat.getColor(context, R.color.graygreen);
 
-                    if (currentColor == grayGreenColor) {
-                        holder.childlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.click_green));
-                        holder.heartimg.setVisibility(View.GONE);
-                        holder.lovenum.setVisibility(View.GONE);
-                        holder.deletetrash.setVisibility(View.VISIBLE);
-                        holder.heartlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.trash_Background));
-                    } else {
-                        holder.childlayout.setBackgroundColor(grayGreenColor);
-                        holder.heartimg.setVisibility(View.VISIBLE);
-                        holder.lovenum.setVisibility(View.VISIBLE);
-                        holder.deletetrash.setVisibility(View.GONE);
-                        holder.heartlayout.setBackgroundColor(Color.TRANSPARENT);
+                        if (currentColor == grayGreenColor) {
+                            holder.childlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.click_green));
+                            holder.heartimg.setVisibility(View.GONE);
+                            holder.lovenum.setVisibility(View.GONE);
+                            holder.deletetrash.setVisibility(View.VISIBLE);
+                            holder.heartlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.trash_Background));
+                            selectedPosition =  holder.getAbsoluteAdapterPosition();
+                        } else {
+                            holder.childlayout.setBackgroundColor(grayGreenColor);
+                            holder.heartimg.setVisibility(View.VISIBLE);
+                            holder.lovenum.setVisibility(View.VISIBLE);
+                            holder.deletetrash.setVisibility(View.GONE);
+                            holder.heartlayout.setBackgroundColor(Color.TRANSPARENT);
+                            selectedPosition = RecyclerView.NO_POSITION;
+                        }
+                    }else if(selectedPosition == RecyclerView.NO_POSITION){
+                        selectedPosition = holder.getAbsoluteAdapterPosition();
+                        int currentColor = ((ColorDrawable) holder.childlayout.getBackground()).getColor();
+                        int grayGreenColor = ContextCompat.getColor(context, R.color.graygreen);
+
+                        if (currentColor == grayGreenColor) {
+                            holder.childlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.click_green));
+                            holder.heartimg.setVisibility(View.GONE);
+                            holder.lovenum.setVisibility(View.GONE);
+                            holder.deletetrash.setVisibility(View.VISIBLE);
+                            holder.heartlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.trash_Background));
+                            selectedPosition =  holder.getAbsoluteAdapterPosition();
+                        } else {
+                            holder.childlayout.setBackgroundColor(grayGreenColor);
+                            holder.heartimg.setVisibility(View.VISIBLE);
+                            holder.lovenum.setVisibility(View.VISIBLE);
+                            holder.deletetrash.setVisibility(View.GONE);
+                            holder.heartlayout.setBackgroundColor(Color.TRANSPARENT);
+                        }
+                    }else if(selectedPosition != RecyclerView.NO_POSITION && selectedPosition !=  holder.getAbsoluteAdapterPosition()){
+                        //토스트 창 띄우기
+                        Toast.makeText(context, "댓글은 한 번에 1개까지만 선택할 수 있습니다.", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -308,21 +336,48 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
             @Override
             public void onClick(View view) {
                 if(writeruid.equals(userID)){
-                    int currentColor = ((ColorDrawable) holder.childlayout.getBackground()).getColor();
-                    int grayGreenColor = ContextCompat.getColor(context, R.color.graygreen);
+                    if(selectedPosition ==  holder.getAbsoluteAdapterPosition()){
+                        //원래 하던대로 해도 돼
+                        int currentColor = ((ColorDrawable) holder.childlayout.getBackground()).getColor();
+                        int grayGreenColor = ContextCompat.getColor(context, R.color.graygreen);
 
-                    if (currentColor == grayGreenColor) {
-                        holder.childlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.click_green));
-                        holder.heartimg.setVisibility(View.GONE);
-                        holder.lovenum.setVisibility(View.GONE);
-                        holder.deletetrash.setVisibility(View.VISIBLE);
-                        holder.heartlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.trash_Background));
-                    } else {
-                        holder.childlayout.setBackgroundColor(grayGreenColor);
-                        holder.heartimg.setVisibility(View.VISIBLE);
-                        holder.lovenum.setVisibility(View.VISIBLE);
-                        holder.deletetrash.setVisibility(View.GONE);
-                        holder.heartlayout.setBackgroundColor(Color.TRANSPARENT);
+                        if (currentColor == grayGreenColor) {
+                            holder.childlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.click_green));
+                            holder.heartimg.setVisibility(View.GONE);
+                            holder.lovenum.setVisibility(View.GONE);
+                            holder.deletetrash.setVisibility(View.VISIBLE);
+                            holder.heartlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.trash_Background));
+                            selectedPosition =  holder.getAbsoluteAdapterPosition();
+                        } else {
+                            holder.childlayout.setBackgroundColor(grayGreenColor);
+                            holder.heartimg.setVisibility(View.VISIBLE);
+                            holder.lovenum.setVisibility(View.VISIBLE);
+                            holder.deletetrash.setVisibility(View.GONE);
+                            holder.heartlayout.setBackgroundColor(Color.TRANSPARENT);
+                            selectedPosition = RecyclerView.NO_POSITION;
+                        }
+                    }else if(selectedPosition == RecyclerView.NO_POSITION){
+                        selectedPosition = holder.getAbsoluteAdapterPosition();
+                        int currentColor = ((ColorDrawable) holder.childlayout.getBackground()).getColor();
+                        int grayGreenColor = ContextCompat.getColor(context, R.color.graygreen);
+
+                        if (currentColor == grayGreenColor) {
+                            holder.childlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.click_green));
+                            holder.heartimg.setVisibility(View.GONE);
+                            holder.lovenum.setVisibility(View.GONE);
+                            holder.deletetrash.setVisibility(View.VISIBLE);
+                            holder.heartlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.trash_Background));
+                            selectedPosition =  holder.getAbsoluteAdapterPosition();
+                        } else {
+                            holder.childlayout.setBackgroundColor(grayGreenColor);
+                            holder.heartimg.setVisibility(View.VISIBLE);
+                            holder.lovenum.setVisibility(View.VISIBLE);
+                            holder.deletetrash.setVisibility(View.GONE);
+                            holder.heartlayout.setBackgroundColor(Color.TRANSPARENT);
+                        }
+                    }else if(selectedPosition != RecyclerView.NO_POSITION && selectedPosition !=  holder.getAbsoluteAdapterPosition()){
+                        //토스트 창 띄우기
+                        Toast.makeText(context, "댓글은 한 번에 1개까지만 선택할 수 있습니다.", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

@@ -126,8 +126,7 @@ public class CommentDetailFragment extends Fragment implements CommentDetailComp
                     adapter = new CommentDetailAdapter(getActivity(), comments, CommentDetailFragment.this);
                     re_commentrecycler.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-                    if(comments.size()!=0){
-                        NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                    if(comments.size()!=0 && newPickMusic != null){
                         newPickMusic.showProgressBarWithDelay();
                     }
                 }

@@ -111,7 +111,7 @@ public class CommentMainFragment extends Fragment implements CommentDatailClickL
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     comments.clear();
-                    newPickMusic.showProgressBar();
+                    //newPickMusic.showProgressBar();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         CommentItem comment = snapshot.getValue(CommentItem.class);
                         if(comment != null){
@@ -123,10 +123,10 @@ public class CommentMainFragment extends Fragment implements CommentDatailClickL
 
                     adapter.notifyDataSetChanged();
                     emptytxt.setVisibility(comments.size() == 0 ? View.VISIBLE : View.GONE);
-                    if(comments.size()!=0){
-                        NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                    if(comments.size()!=0 && newPickMusic != null){
                         newPickMusic.showProgressBarWithDelay();
                     }
+
                 }else{
                     emptytxt.setVisibility(comments.size() == 0 ? View.VISIBLE : View.GONE);
                 }

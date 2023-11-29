@@ -683,8 +683,7 @@ public class NewPickMusic extends AppCompatActivity {
                 commentMainFragment.setCommentMain(postId);
                 getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, commentMainFragment).commit();
                 is_Second_Open = true;
-                hideProgressBar();
-                //showProgressBarWithDelay();
+                showProgressBarWithDelay();
             }else{
                 //그냥 완전히 모든 걸 없애야 한다.
                 slideDown(detail_cardview);
