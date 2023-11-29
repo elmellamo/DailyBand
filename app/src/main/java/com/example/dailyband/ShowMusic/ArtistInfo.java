@@ -296,8 +296,37 @@ public class ArtistInfo extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        setResult(Activity.RESULT_OK); // 현재 액티비티의 결과를 설정
-        finish(); // 현재 액티비티 종료
+         // 현재 액티비티 종료
+
+        Log.d("테스트", "title "+title+"  postid "+postId);
+        if(title.equals(postId)){
+            DatabaseReference songsRef = FirebaseDatabase.getInstance().getReference("songs");
+            songsRef.child(postId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        TestSong selectedSong = dataSnapshot.getValue(TestSong.class);
+                        Intent intent = new Intent(ArtistInfo.this, NewPickMusic.class);
+                        intent.putExtra("selectedSong", selectedSong);
+
+                        Log.d("테스트", "plz...");
+                        //startActivity(intent);
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // 에러 처리 (예: 데이터베이스 접근 실패 등)
+
+                    Log.d("테스트", "에러 뜸");
+                }
+            });
+
+        }else{
+            setResult(Activity.RESULT_OK); // 현재 액티비티의 결과를 설정
+            finish();
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.dailyband.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -26,6 +27,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.dailyband.Models.CommentItem;
 import com.example.dailyband.R;
+import com.example.dailyband.ShowMusic.ArtistInfo;
 import com.example.dailyband.Utils.CommentDatailClickListener;
 import com.example.dailyband.Utils.CommentDetailCompletedListener;
 import com.example.dailyband.Utils.CommentMainCompletedListener;
@@ -150,18 +152,6 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
                             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                                 // 이미지 로드 성공 시 처리
                                 Log.d("테스트", "이미지 로드 성공");
-                                /*
-                                if (position == comments.size() - 1) {
-                                    // 마지막 아이템에 도달했을 때
-                                    if (!allDataLoaded) {
-                                        allDataLoaded = true; // 모든 데이터가 로드됨을 표시
-                                        // 모든 데이터가 로드되었음을 알림
-                                        if (completedListener != null) {
-                                            completedListener.onCommentDetailCompleted();
-                                        }
-                                    }
-                                }
-                                 */
                                 return false;
                             }
                         })
@@ -444,6 +434,47 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
                                     Log.e("테스트", "데이터 삭제 실패", e);
                                 }
                             });
+                }
+            }
+        });
+
+        holder.profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ArtistInfo.class);
+                //isLiked, title, artist, postId;
+
+                //intent.putExtra("isLiked_intent", isLiked);
+                intent.putExtra("title_intent", comment.getPost_id());
+                intent.putExtra("postId_intent", comment.getPost_id());
+                intent.putExtra("userUid_intent",userID);
+
+                DatabaseReference userAccount_Ref = FirebaseDatabase.getInstance().getReference().child("UserAccount").child(writeruid);
+                userAccount_Ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot userAccountDataSnapshot) {
+                        if (userAccountDataSnapshot.exists()) {
+                            String whatnickname = userAccountDataSnapshot.child("name").getValue(String.class);
+                            intent.putExtra("artist_intent", whatnickname); // 해당 작곡가 이름 들어가야 함..
+
+                            context.startActivity(intent);
+                        } else {
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // 데이터 가져오기가 실패한 경우에 대한 처리
+                    }
+                });
+            }
+        });
+
+        holder.profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (completedListener != null) {
+                    completedListener.onCommentDetailCompleted(commentId, writeruid);
                 }
             }
         });

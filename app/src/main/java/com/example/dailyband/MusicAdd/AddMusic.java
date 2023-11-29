@@ -66,6 +66,7 @@ import com.example.dailyband.Setting.NewSettingActivity;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.Utils.MergeWav;
 import com.example.dailyband.Utils.OnCollaborationClickListener;
+import com.example.dailyband.Utils.OnGrayTouchListener;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.example.dailyband.adapter.MusicTrackAdapter;
 import com.google.android.material.textfield.TextInputLayout;
@@ -85,7 +86,12 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class AddMusic extends AppCompatActivity implements OnCollaborationClickListener {
+public class AddMusic extends AppCompatActivity implements OnCollaborationClickListener, OnGrayTouchListener {
+    @Override
+    public void onGrayClicked() {
+
+    }
+
     public static class MusicTrack {
         public Uri uri;
         public String title = "";
@@ -132,6 +138,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     CategoryAddMusic categoryAddMusic;
     DrumFragment drumFragment;
     RecordingMain recordingMain;
+    NewPopularFragment newPopularFragment;
     Ocarina4HoleFragment ocarina4HoleFragment;
     private ImageButton homeBtn, setbtn, myInfobtn, librarybtn, addbtn;
     private String parent_Id;
@@ -189,6 +196,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         categoryAddMusic = new CategoryAddMusic();
         parents = new ArrayList<>();
         parentPostId = new ArrayList<>();
+        newPopularFragment = new NewPopularFragment();
 
         //리사이클러 뷰 설정
         musicTrackView = (RecyclerView) findViewById(R.id.tracklist);
@@ -289,6 +297,10 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                 if(detail_pickup_layout.getVisibility() == View.VISIBLE){
                     slideDown(play_cardview);
                     is_Fragment_Open = false;
+
+                    if(newPopularFragment != null){
+                        newPopularFragment.onGrayClicked();
+                    }
                 }
             }
         });
@@ -374,7 +386,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     }
     public void showUpPopular(){
         detail_pickup_layout.setVisibility(View.VISIBLE);
-        getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, new NewPopularFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.detail_instrument_frame, newPopularFragment).commit();
         slideUp(play_cardview);
     }
     public void showUpOcarina(){

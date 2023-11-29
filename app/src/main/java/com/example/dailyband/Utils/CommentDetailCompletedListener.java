@@ -2,5 +2,5 @@ package com.example.dailyband.Utils;
 
 public interface CommentDetailCompletedListener {
 
-    void onCommentDetailCompleted();
+    void onCommentDetailCompleted(String postId, String writeruid);
 }

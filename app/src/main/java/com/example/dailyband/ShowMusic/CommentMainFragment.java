@@ -1,24 +1,14 @@
 package com.example.dailyband.ShowMusic;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Rect;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,31 +17,23 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dailyband.Love.LoveActivity;
 import com.example.dailyband.Models.CommentItem;
-import com.example.dailyband.Models.ComplexName;
-import com.example.dailyband.Models.TestSong;
-import com.example.dailyband.MusicAdd.AddMusic;
-import com.example.dailyband.MusicFragment.NewPopularFragment;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.CommentDatailClickListener;
 import com.example.dailyband.Utils.CommentMainCompletedListener;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.Utils.KeyboardUtils;
-import com.example.dailyband.Utils.OnCommentSuccessListener;
 import com.example.dailyband.adapter.CommentMainAdapter;
-import com.example.dailyband.adapter.LoveAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import java.io.OutputStream;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class CommentMainFragment extends Fragment implements CommentDatailClickListener, CommentMainCompletedListener {
+public class CommentMainFragment extends Fragment implements CommentMainCompletedListener, CommentDatailClickListener {
 
     private View view;
     private RecyclerView commentrecycler;
@@ -180,12 +162,11 @@ public class CommentMainFragment extends Fragment implements CommentDatailClickL
         }
     }
 
-
     @Override
-    public void onCommentMainCompleted() {
+    public void onCommentMainCompleted(String postId, String writeruid) {
         if(getActivity() instanceof NewPickMusic){
             NewPickMusic newPickMusic = (NewPickMusic) getActivity();
-            newPickMusic.hideProgressBar();
+            newPickMusic.closeActivity(postId, writeruid);
         }
     }
 }

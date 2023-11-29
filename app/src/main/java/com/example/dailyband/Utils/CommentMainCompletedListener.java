@@ -2,5 +2,5 @@ package com.example.dailyband.Utils;
 
 public interface CommentMainCompletedListener {
 
-    void onCommentMainCompleted();
+    void onCommentMainCompleted(String postId, String writeruid);
 }

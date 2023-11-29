@@ -1,5 +1,8 @@
 package com.example.dailyband.adapter;
 
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -30,6 +33,7 @@ import com.example.dailyband.Models.CommentItem;
 import com.example.dailyband.Models.ComplexName;
 import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.R;
+import com.example.dailyband.ShowMusic.ArtistInfo;
 import com.example.dailyband.ShowMusic.NewPickMusic;
 import com.example.dailyband.Utils.CommentDatailClickListener;
 import com.example.dailyband.Utils.CommentMainCompletedListener;
@@ -85,7 +89,6 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
         String commentId = comment.getComment_id();
         String writeruid =  comment.getUser_id();
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
         SimpleDateFormat firebaseDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREA);
         Date castDate = null;
         try {
@@ -179,25 +182,13 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
                         .listener(new RequestListener<Drawable>() {
                             @Override
                             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                // 기본 이미지 로드 실패 시 처리
-                                //Log.d("테스트", "기본 이미지 로드 실패");
+
                                 return false;
                             }
 
                             @Override
                             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                // 기본 이미지 로드 성공 시 처리
-//                                //Log.d("테스트", "기본 이미지 로드 성공");
-//                                if (position == comments.size() - 1) {
-//                                    // 마지막 아이템에 도달했을 때
-//                                    if (!allDataLoaded) {
-//                                        allDataLoaded = true; // 모든 데이터가 로드됨을 표시
-//                                        // 모든 데이터가 로드되었음을 알림
-//                                        if (completedListener != null) {
-//                                            completedListener.onCommentMainCompleted();
-//                                        }
-//                                    }
-//                                }
+
 
                                 return false;
                             }
@@ -404,7 +395,6 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
         holder.heartlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Log.d("테스트", "여기 클릭됐나?");
                 if(ContextCompat.getColor(context, R.color.click_green) == ((ColorDrawable) holder.headerlayout.getBackground()).getColor()){
                     DatabaseReference commentRef = FirebaseDatabase.getInstance().getReference().child("comment").child(postId).child(commentId);
                     commentRef.removeValue()
@@ -488,6 +478,15 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
                 }
             }
         });
+
+        holder.profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (completedListener != null) {
+                    completedListener.onCommentMainCompleted(commentId, writeruid);
+                }
+            }
+        });
     }
 
     @Override
@@ -516,6 +515,7 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
             deletetrash = itemView.findViewById(R.id.deletetrash);
             headerlayout = itemView.findViewById(R.id.headerlayout);
             heartlayout = itemView.findViewById(R.id.heartlayout);
+
 
             belowlayout.setOnClickListener(new View.OnClickListener() {
                 @Override

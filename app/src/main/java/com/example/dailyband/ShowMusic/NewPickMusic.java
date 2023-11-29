@@ -34,6 +34,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
@@ -562,6 +563,50 @@ public class NewPickMusic extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, showOrigianlFragment).commit();
         slideUp(detail_cardview);
         is_Second_Open = true;
+    }
+
+    public void closeActivity(String close_postid, String close_writeruid){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        Intent close_intent = new Intent(NewPickMusic.this, ArtistInfo.class);
+        //isLiked, title, artist, postId;
+
+        //intent.putExtra("isLiked_intent", isLiked);
+        close_intent.putExtra("title_intent", close_postid);
+        close_intent.putExtra("postId_intent", close_postid);
+        close_intent.putExtra("userUid_intent",close_writeruid);
+
+        DatabaseReference close_userAccountRef = FirebaseDatabase.getInstance().getReference().child("UserAccount").child(close_writeruid);
+        close_userAccountRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot userAccountDataSnapshot) {
+                if (userAccountDataSnapshot.exists()) {
+                    // UserAccount 카테고리에서 name 값을 가져와서 사용하거나 처리할 수 있습니다.
+                    String close_artist = userAccountDataSnapshot.child("name").getValue(String.class);
+                    close_intent.putExtra("artist_intent", close_artist);
+                    startActivity(close_intent);
+                    Log.d("테스트", "제발...");
+                    if (detail_info_layout.getVisibility() == View.VISIBLE) {
+                        slideDown(detail_cardview);
+                        hideProgressBar();
+                        is_Fragment_Open = false;
+                        is_Second_Open = false;
+                        is_Re_Comment_Open = false;
+                    }
+                    //finish();
+                } else {
+                    // "UserAccount" 카테고리에서 해당 데이터가 없는 경우에 대한 처리
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // 데이터 가져오기가 실패한 경우에 대한 처리
+            }
+        });
+
+
     }
     public void changeDetail(CommentItem nextItem){
         commentDetailFragment = new CommentDetailFragment();

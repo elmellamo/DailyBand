@@ -97,6 +97,8 @@ import java.util.Locale;
                 lovenum = itemView.findViewById(R.id.lovenum);
                 containertxt = itemView.findViewById(R.id.containertxt);
                 //여기 click 넣어야 함 아이템 마다
+
+
             }
         }
     }

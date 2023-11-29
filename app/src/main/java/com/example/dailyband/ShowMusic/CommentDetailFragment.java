@@ -342,10 +342,10 @@ public class CommentDetailFragment extends Fragment implements CommentDetailComp
     }
 
     @Override
-    public void onCommentDetailCompleted() {
+    public void onCommentDetailCompleted(String postId, String writeruid){
         if(getActivity() instanceof NewPickMusic){
             NewPickMusic newPickMusic = (NewPickMusic) getActivity();
-            newPickMusic.hideProgressBar();
+            newPickMusic.closeActivity(postId, writeruid);
         }
     }
 

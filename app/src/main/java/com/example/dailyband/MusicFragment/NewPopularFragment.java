@@ -29,6 +29,8 @@ import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.FirebaseMethods;
+import com.example.dailyband.Utils.OnGrayTouchListener;
+import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.example.dailyband.Utils.PopUpClickListener;
 import com.example.dailyband.adapter.PopUp_New_PopularAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -46,7 +48,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class NewPopularFragment extends Fragment implements PopUpClickListener {
+public class NewPopularFragment extends Fragment implements PopUpClickListener, OnGrayTouchListener {
     private RecyclerView popup_recyclerview;
     private PopUp_New_PopularAdapter adapter;
     private ArrayList<TestSong> songs;
@@ -342,5 +344,16 @@ public class NewPopularFragment extends Fragment implements PopUpClickListener {
 
         playbtn.setImageResource(R.drawable.testbtn);
         songnametxt.setText(selectedSongname);
+    }
+
+    @Override
+    public void onGrayClicked() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+            pausedPosition = 0;
+            seek_bar.setProgress(0);
+        }
     }
 }
