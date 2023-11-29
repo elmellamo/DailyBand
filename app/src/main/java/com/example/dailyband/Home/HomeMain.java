@@ -180,7 +180,7 @@ public class HomeMain extends AppCompatActivity{
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // 데이터를 가져오는데 실패한 경우 처리하는 코드
-                Toast.makeText(HomeMain.this, "노래가 성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(HomeMain.this, "노래가 성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show();
             }
         });
 
