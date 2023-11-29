@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -183,6 +184,9 @@ public class NewPickMusic extends AppCompatActivity {
         circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
         circularlayout.bringToFront();
 
+        picksongname.setSingleLine(true);    // 한줄로 표시하기
+        picksongname.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        picksongname.setSelected(true);
 
         gray_screen = findViewById(R.id.gray_screen);
         detail_info_layout = findViewById(R.id.detail_info_layout);

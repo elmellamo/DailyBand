@@ -66,32 +66,26 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/songname_edit_layout"/>
+                app:layout_constraintRight_toLeftOf="@+id/songname_edit"/>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/songname_edit_layout"
-                style="@style/EditTextGreyStyle"
+            <EditText
+                android:textColor="@color/black"
+                android:textColorHint="@color/test_main_clolr"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:hint="제목을 입력하세요"
+                android:background="@null"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@+id/backcontext"
+                android:singleLine="true"
+                android:id="@+id/songname_edit"
                 android:layout_marginStart="10dp"
-                android:theme="@style/EditTextGreyStyle"
                 app:layout_constraintHorizontal_weight="0.8"
                 app:layout_constraintRight_toLeftOf="@+id/nextmenu"
-                app:boxStrokeColor="@android:color/transparent"
-                app:hintEnabled="true">
-
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/songname_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="제목을 입력하세요"
-                    android:textSize="20sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
+                android:textSize="20sp"
+                >
+            </EditText>
             <TextView
                 android:id="@+id/nextmenu"
                 android:layout_width="0dp"
@@ -104,7 +98,7 @@
                 android:textStyle="bold"
                 android:textSize="20sp"
                 android:textColor="@color/test_main_clolr"
-                app:layout_constraintLeft_toRightOf="@+id/songname_edit_layout"
+                app:layout_constraintLeft_toRightOf="@+id/songname_edit"
                 app:layout_constraintHorizontal_weight="0.15"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

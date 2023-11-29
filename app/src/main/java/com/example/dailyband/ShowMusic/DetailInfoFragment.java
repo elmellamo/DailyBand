@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,6 +80,9 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
         songtitle = view.findViewById(R.id.songtitle);
         songwriter = view.findViewById(R.id.songwriter);
 
+
+
+
         if(isLiked){
             heartbtn.setImageResource(R.drawable.dark_heart_full);
         }else{
@@ -95,6 +99,14 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
 
         songtitle.setText(title);
         songwriter.setText(artist);
+
+        songwriter.setSingleLine(true);    // 한줄로 표시하기
+        songwriter.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        songwriter.setSelected(true);
+
+        songtitle.setSingleLine(true);    // 한줄로 표시하기
+        songtitle.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        songtitle.setSelected(true);
         setLovenum();
 
         deletelayout.setOnClickListener(new View.OnClickListener() {
@@ -274,7 +286,7 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
     }
 
     private void totaldelete(){
-        /*      해당 게시물은 postid라고 한다면
+        /*      삭제하고 싶은 해당 게시물의 id를 postid라고 한다면
 
         deleteComment() 함수
                 comment에서 해당 게시물 postid 아래에 있는 것들  originalComment에 저장하고, 아예 삭제
@@ -288,7 +300,6 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
                 userlike에서는 각 사용자들 돌면서 해당 postid 삭제
 
         deleteFamily() 함수
-                deleteFamily() 함수
                 my_children에 child로 postId 있느냐를 따지고
                 ㅇ-> 자식이 있다면 해당 자식들 다 모아서 childList 리스트에 넣어. 그리고 해당 키는 지워.
                 리스트에 있는 자식들을 my_parents에서 순회해야 한다. 그리고 그 안에 딸린 것에 postid 나를 지워야해

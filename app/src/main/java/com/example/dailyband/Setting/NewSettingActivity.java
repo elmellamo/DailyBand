@@ -84,6 +84,7 @@ public class NewSettingActivity extends AppCompatActivity {
     private ConstraintLayout circularlayout;
     private ImageButton addbtn, setbtn, librarybtn, myInfobtn, homeBtn;
 
+    public ConstraintLayout menubar;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +103,7 @@ public class NewSettingActivity extends AppCompatActivity {
         introduceFragment = new IntroduceFragment();
         passwordFragment  = new PasswordFragment();
         gray_screen = findViewById(R.id.gray_screen);
+        menubar = findViewById(R.id.menu_bar);
         detail_info_layout = findViewById(R.id.detail_info_layout);
         setting_introduce_layout = findViewById(R.id.setting_introduce_layout);
         setting_password_layout = findViewById(R.id.setting_password_layout);

@@ -31,6 +31,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -114,6 +115,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
 
     private FirebaseMethods mFirebaseMethods;
 
+    private EditText songname_edit;
     private Uri uri;
     List<MusicTrack> tracks;
     Thread audioThread;
@@ -167,6 +169,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         playbtn = findViewById(R.id.playbtn2);
         stopbtn = findViewById(R.id.stopbtn);
         backcontext = findViewById(R.id.backcontext);
+        songname_edit = findViewById(R.id.songname_edit);
         music_length = findViewById(R.id.music_length);
         detail_pickup_layout = findViewById(R.id.detail_pickup_layout);
         seekBar = findViewById(R.id.seekBar);
@@ -751,8 +754,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         }
     }
     private void uploadToFirebase(){
-        TextInputLayout textInputLayout = findViewById(R.id.songname_edit_layout);
-        final String title = textInputLayout.getEditText().getText().toString();
+        final String title = songname_edit.getText().toString();
 
         if(title.length()<=0) {
             startToast("곡명을 정해주세요.");

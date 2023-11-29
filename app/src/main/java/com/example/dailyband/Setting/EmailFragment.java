@@ -3,6 +3,7 @@ package com.example.dailyband.Setting;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.dailyband.R;
+import com.example.dailyband.ShowMusic.NewPickMusic;
+import com.example.dailyband.Utils.KeyboardUtils;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,6 +36,7 @@ public class EmailFragment extends Fragment {
     Button change_btn;
     private DatabaseReference mDatabase;
 
+    private NewSettingActivity newSettingActivity;
     String EMAIL_SET_TEXT, userId;
     public EmailFragment() {}
 
@@ -53,6 +57,8 @@ public class EmailFragment extends Fragment {
         email_editText = view.findViewById(R.id.email_cardview_edittext);
         pw_editText = view.findViewById(R.id.email_pw_cardview_edittext);
         change_btn = view.findViewById(R.id.change_email_btn);
+
+        newSettingActivity =(NewSettingActivity) getActivity();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         change_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,5 +129,39 @@ public class EmailFragment extends Fragment {
         // 비밀번호가 영문자, 숫자, 기호를 조합하여 8자리 이상인지 확인
         String passwordPattern = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=!]).{8,}$";
         return password.matches(passwordPattern);
+    }
+
+
+    public void onPause(){
+        super.onPause();
+        KeyboardUtils.removeAllKeyboardToggleListeners();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        KeyboardUtils.removeAllKeyboardToggleListeners();
+        KeyboardUtils.addKeyboardToggleListener(newSettingActivity, new KeyboardUtils.SoftKeyboardToggleListener()
+        {
+            @Override
+            public void onToggleSoftKeyboard(boolean isVisible)
+            {
+                ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+
+                if(isVisible) {
+                    // 하단버튼 숨기고 댓글뷰 작게
+                    newSettingActivity.menubar.setVisibility(View.GONE);
+                    int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,200,getResources().getDisplayMetrics());
+                    //layoutParams.height = height;
+                    view.setLayoutParams(layoutParams);
+                }
+                else {
+                    newSettingActivity.menubar.setVisibility(View.VISIBLE);
+                    int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,200,getResources().getDisplayMetrics());
+                    //layoutParams.height = height;
+                    view.setLayoutParams(layoutParams);
+                }
+                Log.d("keyboard", "keyboard visible: "+isVisible);
+            }
+        });
     }
 }

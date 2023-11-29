@@ -6,8 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -50,6 +52,7 @@ public class CollectionActivity extends AppCompatActivity {
     private LinearLayout emptytxt;
     private CircularFillableLoaders circularFillableLoaders;
     private ConstraintLayout circularlayout;
+    private ImageView circle_iv;
     private boolean doubleBackToExitPressedOnce = false;
 
 
@@ -64,6 +67,7 @@ public class CollectionActivity extends AppCompatActivity {
         librarybtn = findViewById(R.id.librarybtn);
         myInfobtn = findViewById(R.id.myInfobtn);
         homeBtn = findViewById(R.id.homeBtn);
+        circle_iv = findViewById(R.id.circle_iv);
         setbtn = findViewById(R.id.setbtn);
         circularlayout = findViewById(R.id.circularlayout);
         circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
@@ -74,7 +78,7 @@ public class CollectionActivity extends AppCompatActivity {
         waveHeader.isRunning();
         waveHeader.setGradientAngle(45);
         waveHeader.setWaveHeight(40);
-
+        setSize();
         recyclerView = findViewById(R.id.mycollectionlist);
         emptytxt = findViewById(R.id.emptytxt);
         recyclerView.setLayoutManager(new LinearLayoutManager(CollectionActivity.this));
@@ -150,6 +154,16 @@ public class CollectionActivity extends AppCompatActivity {
                 callback.onDataFetchFailed();
             }
         });
+    }
+
+    private void setSize() {
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+
+        int background = (int)(metrics.heightPixels * 0.18);
+        ConstraintLayout.LayoutParams backgroundimg = (ConstraintLayout.LayoutParams) circle_iv.getLayoutParams();
+        backgroundimg.height = background;
+        backgroundimg.width = metrics.widthPixels;
+        circle_iv.setLayoutParams(backgroundimg);
     }
     private void checkEmpty(){
         emptytxt.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);

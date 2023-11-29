@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -95,6 +96,10 @@ public class ArtistInfo extends AppCompatActivity {
         circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
         circularlayout.bringToFront();
 
+
+        info_text.setSingleLine(true);    // 한줄로 표시하기
+        info_text.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        info_text.setSelected(true);
         setSize();
         artistsong.setLayoutManager(new LinearLayoutManager(ArtistInfo.this));
         songs = new ArrayList<>();

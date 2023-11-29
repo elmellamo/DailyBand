@@ -58,18 +58,35 @@
             android:textSize="20sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/songwriter"
-            app:layout_constraintStart_toEndOf="@+id/heartlayout"/>
+            app:layout_constraintStart_toEndOf="@+id/heartlayout"
+
+
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:scrollHorizontally="true"
+            android:layout_gravity="center_horizontal"/>
         <TextView
             android:layout_marginLeft="20dp"
             android:id="@+id/songwriter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Song Title"
+            android:text="Song Writer"
             android:textStyle="bold"
             android:textSize="15sp"
             app:layout_constraintTop_toBottomOf="@+id/songtitle"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/heartlayout"/>
+            app:layout_constraintStart_toEndOf="@+id/heartlayout"
+
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:scrollHorizontally="true"
+            android:layout_gravity="center_horizontal"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View

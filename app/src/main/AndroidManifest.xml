@@ -95,7 +95,7 @@
 
         <activity android:name=".Setting.NewSettingActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true">
         </activity>
         <activity android:name=".MusicAdd.AddCaption"
