@@ -109,7 +109,10 @@ public class CommentDetailFragment extends Fragment implements CommentDetailComp
 
         return view;
     }
-
+    public void onPause(){
+        super.onPause();
+        KeyboardUtils.removeAllKeyboardToggleListeners();
+    }
     @Override
     public void onResume() {
         super.onResume();

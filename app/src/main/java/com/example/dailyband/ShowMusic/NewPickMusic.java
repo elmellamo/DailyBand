@@ -565,6 +565,24 @@ public class NewPickMusic extends AppCompatActivity {
         is_Second_Open = true;
     }
 
+    public void deleteActivity(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        Toast.makeText(getApplicationContext(), "해당 음악 삭제 완료", Toast.LENGTH_LONG).show();
+        Intent delete_intent = new Intent(NewPickMusic.this, HomeMain.class);
+        startActivity(delete_intent);
+        Log.d("테스트", "삭제되나요?");
+        if (detail_info_layout.getVisibility() == View.VISIBLE) {
+            slideDown(detail_cardview);
+            hideProgressBar();
+            is_Fragment_Open = false;
+            is_Second_Open = false;
+            is_Re_Comment_Open = false;
+        }
+        finish();
+    }
+
     public void closeActivity(String close_postid, String close_writeruid){
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -605,9 +623,8 @@ public class NewPickMusic extends AppCompatActivity {
                 // 데이터 가져오기가 실패한 경우에 대한 처리
             }
         });
-
-
     }
+
     public void changeDetail(CommentItem nextItem){
         commentDetailFragment = new CommentDetailFragment();
         commentDetailFragment.setCommentDetail(nextItem);

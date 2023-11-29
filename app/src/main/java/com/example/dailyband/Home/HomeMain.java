@@ -186,6 +186,12 @@ public class HomeMain extends AppCompatActivity{
 
     }
 
+    private void test(){
+        for(TestSong tmp : songs){
+            Log.d("테스트", tmp.getTitle());
+        }
+    }
+
     private void getInfo(DataFetchCallback callback){
         //started = true;
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -276,6 +282,7 @@ public class HomeMain extends AppCompatActivity{
                     @Override
                     public void onDataFetchedSuccessfully() {
                         // getSongs 성공 후의 처리
+                        test();
                         hideProgressBar();
                         // 여기에서 프로그레스바를 숨김
                     }

@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import com.example.dailyband.Models.TestSong;
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
+import com.example.dailyband.Utils.OnDeleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +38,7 @@ import com.scwang.wave.MultiWaveHeader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
-public class DetailInfoFragment extends Fragment {
+public class DetailInfoFragment extends Fragment implements OnDeleteListener {
 
     private View view;
     private ConstraintLayout commentlayout, downloadlayout, artistlayout, creditlayout, collablayout, collalayout, orilayout, deletelayout;
@@ -109,6 +110,7 @@ public class DetailInfoFragment extends Fragment {
                 user_songs에서도 해당 사용자, 해당 게시물 삭제
                  */
                 totaldelete();
+
             }
         });
 
@@ -272,16 +274,65 @@ public class DetailInfoFragment extends Fragment {
     }
 
     private void totaldelete(){
-                        /* postId userUid
-                해당 게시물은 postid라고 한다면
+        /*      해당 게시물은 postid라고 한다면
 
-                comment에서 해당 게시물 아예 삭제 >> 여기 commentid가져와서 여기서 또
-                user_comment_love에서 각 사용자들 돌면서 >> 해당 commentid 삭제
+        deleteComment() 함수
+                comment에서 해당 게시물 postid 아래에 있는 것들  originalComment에 저장하고, 아예 삭제
+                >> originalComment를 순회하면서 comment_child에 있는 것들 여기 childComment리스트에 commentid 저장, 아예 삭제
+                >> user_comment_love에서 각 사용자들 돌면서 >> originalcomment, childcomment리스트에 있는 것들 있으면 다 없애기
 
+        deleteSong() 함수
                 songs에서 해당 게시물 삭제
-                userlike에서는 각 사용자들 돌면서 해당 postid 삭제
                 user_songs에서도 해당 사용자, 해당 게시물 삭제
+        deleteSongLike() 함수
+                userlike에서는 각 사용자들 돌면서 해당 postid 삭제
+
+        deleteFamily() 함수
+                deleteFamily() 함수
+                my_children에 child로 postId 있느냐를 따지고
+                ㅇ-> 자식이 있다면 해당 자식들 다 모아서 childList 리스트에 넣어. 그리고 해당 키는 지워.
+                리스트에 있는 자식들을 my_parents에서 순회해야 한다. 그리고 그 안에 딸린 것에 postid 나를 지워야해
+
+                그리고 my_parents에 child로 postId 있느냐? (부모 - 자식)
+                o -> 부모가 있다면 해당 부모들 다 모아서 parentList 리스트에 넣어. 그리고 해당 키는 지워.
+                리스트에 있는 부모들을 my_children에서 순회해야 해. 그리고 그 안에 딸린 것에서 나를 지워.
+
+
+
+                1           2             3          4
+                (나 - 자식) (부모-나-자식) (부모 - 나) (나)
+                1번, 2번 둘다 나가 결국 부모임
+                2, 3번은 둘다 내가 자식인 경우 따져야
+
+                1번은 내가 my_children에 child로 있느냐를 따지고
+                ㅇ-> 자식이 있다면 해당 자식들 다 모아서 리스트에 넣어. 그리고 해당 키는 지워.
+                리스트에 있는 자식들을 my_parents에서 순회해야 한다. 그리고 그 안에 딸린 것에 postid 나를 지워야해
+                x -> 있을 수 없는 경우이다!
+
+                2번은 내가 my_children에 child로 있느냐 ? (나-자식)
+                ㅇ-> 자식이 있다면 해당 자식들 다 모아서 리스트에 넣어. 그리고 해당 키는 지워.
+                리스트에 있는 자식들을 my_parents에서 순회해야 한다. 그리고 그 안에 딸린 것에 postid 나를 지워야해
+                그리고 my_parents에 child로 내가 있느냐? (부모 - 자식)
+                o -> 부모가 있다면 해당 부모들 다 모아서 리스트에 넣어. 그리고 해당 키는 지워.
+                리스트에 있는 부모들을 my_children에서 순회해야 해. 그리고 그 안에 딸린 것에서 나를 지워.
+
+                3번은 my_parents에 child로 내가 있느냐? (부모 - 자식)
+                o -> 부모가 있다면 해당 부모들 다 모아서 리스트에 넣어. 그리고 해당 키는 지워.
+                리스트에 있는 부모들을 my_children에서 순회해야 해. 그리고 그 안에 딸린 것에서 나를 지워.
+
+                4번은 my_parents, my_children 두가지 경우 다 child로 내가 없는 경우
                  */
+
+        deleteSong();
+        deleteSongLike();
+        deleteComment();
+        deleteFamily();
+
+        onDeletedCompleted();
+
+    }
+
+    private void deleteSong(){
         //songs에서 해당 게시물 삭제
         DatabaseReference songRef = FirebaseDatabase.getInstance().getReference().child("songs").child(postId);
         songRef.removeValue()
@@ -354,82 +405,317 @@ public class DetailInfoFragment extends Fragment {
                     }
                 });
 
-        //comment에서 해당 게시물 삭제
-        ArrayList<String> originalComment = new ArrayList<>(); //지우려는 포스트의 원본 댓글 id 담기
+    }
+
+    private void deleteSongLike(){
+        //userlike에서는 각 사용자들 돌면서 해당 postid 삭제
+        DatabaseReference postLoveRef = FirebaseDatabase.getInstance().getReference().child("user_like");
+        postLoveRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {//userSnapshot이 user_like에 있는 각각 사용자 uid
+                    for (DataSnapshot postIdSnapshot : userSnapshot.getChildren()) {//각 사용자 uid의 하위에 있는 좋아요 한 음악들의 postid
+                        String belowpostId = postIdSnapshot.getKey();
+                        if (belowpostId.equals(postId)) {
+                            postIdSnapshot.getRef().removeValue()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            // 삭제 성공 시 수행할 작업
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // 삭제 실패 시 수행할 작업
+                                        }
+                                    });
+                            break; // 찾은 후 바로 종료
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // 처리 중 오류가 발생했을 때 수행할 작업
+            }
+        });
+    }
+
+    private void deleteComment(){
         DatabaseReference commentRef = FirebaseDatabase.getInstance().getReference().child("comment").child(postId);
         commentRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> originalComment = new ArrayList<>();
+                ArrayList<String> childComment = new ArrayList<>();
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String oricommentKey = snapshot.getKey(); // 지우려는 포스트의 원본 댓글 id들 가져옴
+                    String oricommentKey = snapshot.getKey();
                     originalComment.add(oricommentKey);
+                }
+
+                for (String commentChildKey : originalComment) {
+                    DatabaseReference commentChildRef = FirebaseDatabase.getInstance().getReference().child("comment_child").child(commentChildKey);
+                    commentChildRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                String childcommentKey = snapshot.getKey();
+                                childComment.add(childcommentKey);
+                            }
+
+                            commentChildRef.removeValue()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d("테스트", "comment_child > postId 노드 삭제 성공");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.e("테스트", "comment_child > postId 노드 삭제 실패", e);
+                                        }
+                                    });
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
+                        }
+                    });
                 }
 
                 commentRef.removeValue()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                // 삭제 성공시 동작할 내용
                                 Log.d("테스트", "comment > postId 노드 삭제 성공");
+
+                                // Now deleting user_comment_love nodes
+                                DatabaseReference userCommentLoveRef = FirebaseDatabase.getInstance().getReference().child("user_comment_love");
+                                userCommentLoveRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                                            for (String commentKey : originalComment) {
+                                                if (userSnapshot.hasChild(commentKey)) {
+                                                    userSnapshot.child(commentKey).getRef().removeValue()
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    Log.d("테스트", "user_comment_love > postId 노드 삭제 성공");
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Log.e("테스트", "user_comment_love > postId 노드 삭제 실패", e);
+                                                                }
+                                                            });
+                                                }
+                                            }
+
+                                            for (String childCommentKey : childComment) {
+                                                if (userSnapshot.hasChild(childCommentKey)) {
+                                                    userSnapshot.child(childCommentKey).getRef().removeValue()
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    Log.d("테스트", "user_comment_love > childComment 노드 삭제 성공");
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Log.e("테스트", "user_comment_love > childComment 노드 삭제 실패", e);
+                                                                }
+                                                            });
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
+                                    }
+                                });
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                // 삭제 실패시 동작할 내용
                                 Log.e("테스트", "comment > postId 노드 삭제 실패", e);
                             }
                         });
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // 데이터를 가져오는데 실패한 경우 처리하는 코드
                 Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
             }
         });
+    }
 
-        //comment_child에서 해당 게시물 삭제
-        ArrayList<String> childComment = new ArrayList<>(); //지우려는 포스트의 대댓글 id 담기
-        for(String commentChildKey : originalComment){
-            DatabaseReference commentChildRef = FirebaseDatabase.getInstance().getReference().child("comment_child").child(commentChildKey);
-            commentChildRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        String childcommentKey = snapshot.getKey(); // 각 원본 댓글의 대댓글 id들
-                        childComment.add(childcommentKey);
+    private void deleteFamily() {
+        DatabaseReference myChildrenRef = FirebaseDatabase.getInstance().getReference().child("my_children").child(postId);
+        myChildrenRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> childList = new ArrayList<>();
+
+                // Check if children exist
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        String childKey = childSnapshot.getKey();
+                        childList.add(childKey);
                     }
 
-                    commentChildRef.removeValue()
+                    // Remove postId from my_children
+                    myChildrenRef.removeValue()
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    // 삭제 성공시 동작할 내용
-                                    Log.d("테스트", "comment > postId 노드 삭제 성공");
+                                    // Successfully removed postId from my_children
+                                    Log.d("테스트", "my_children > postId 노드 삭제 성공");
+
+                                    // Remove postId from each child's my_parents list
+                                    DatabaseReference myParentsRef = FirebaseDatabase.getInstance().getReference().child("my_parents");
+                                    for (String childKey : childList) {
+                                        myParentsRef.child(childKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                for (DataSnapshot parentSnapshot : dataSnapshot.getChildren()) {
+                                                    if (parentSnapshot.getValue().equals(postId)) {
+                                                        parentSnapshot.getRef().removeValue()
+                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void aVoid) {
+                                                                        // Successfully removed postId from child's parent list
+                                                                        Log.d("테스트", "my_parents > child > postId 노드 삭제 성공");
+                                                                    }
+                                                                })
+                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception e) {
+                                                                        // Failed to remove postId from child's parent list
+                                                                        Log.e("테스트", "my_parents > child > postId 노드 삭제 실패", e);
+                                                                    }
+                                                                });
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                // Handle data fetching error
+                                                Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
+                                            }
+                                        });
+                                    }
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    // 삭제 실패시 동작할 내용
-                                    Log.e("테스트", "comment > postId 노드 삭제 실패", e);
+                                    // Failed to remove postId from my_children
+                                    Log.e("테스트", "my_children > postId 노드 삭제 실패", e);
                                 }
                             });
                 }
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    // 데이터를 가져오는데 실패한 경우 처리하는 코드
-                    Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle data fetching error
+                Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
+            }
+        });
+
+        DatabaseReference myParentsRef = FirebaseDatabase.getInstance().getReference().child("my_parents").child(postId);
+        myParentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String> parentList = new ArrayList<>();
+
+                // Check if parents exist
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot parentSnapshot : dataSnapshot.getChildren()) {
+                        String parentKey = parentSnapshot.getKey();
+                        parentList.add(parentKey);
+                    }
+
+                    // Remove postId from my_parents
+                    myParentsRef.removeValue()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // Successfully removed postId from my_parents
+                                    Log.d("테스트", "my_parents > postId 노드 삭제 성공");
+
+                                    // Remove postId from each parent's my_children list
+                                    DatabaseReference myChildrenRef = FirebaseDatabase.getInstance().getReference().child("my_children");
+                                    for (String parentKey : parentList) {
+                                        myChildrenRef.child(parentKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                                                    if (childSnapshot.getValue().equals(postId)) {
+                                                        childSnapshot.getRef().removeValue()
+                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void aVoid) {
+                                                                        // Successfully removed postId from parent's children list
+                                                                        Log.d("테스트", "my_children > parent > postId 노드 삭제 성공");
+                                                                    }
+                                                                })
+                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception e) {
+                                                                        // Failed to remove postId from parent's children list
+                                                                        Log.e("테스트", "my_children > parent > postId 노드 삭제 실패", e);
+                                                                    }
+                                                                });
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                // Handle data fetching error
+                                                Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
+                                            }
+                                        });
+                                    }
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Failed to remove postId from my_parents
+                                    Log.e("테스트", "my_parents > postId 노드 삭제 실패", e);
+                                }
+                            });
                 }
-            });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle data fetching error
+                Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
+            }
+        });
+    }
+
+
+    @Override
+    public void onDeletedCompleted() {
+        if(getActivity() instanceof NewPickMusic){
+            NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+            newPickMusic.deleteActivity(); //이건 프로필이미지 눌렀을 때를 위하여!
         }
-
-
-
-
-
     }
 
 }

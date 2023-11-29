@@ -86,6 +86,11 @@ public class CommentMainFragment extends Fragment implements CommentMainComplete
         return view;
     }
 
+    public void onPause(){
+        super.onPause();
+        KeyboardUtils.removeAllKeyboardToggleListeners();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -166,7 +171,7 @@ public class CommentMainFragment extends Fragment implements CommentMainComplete
     public void onCommentMainCompleted(String postId, String writeruid) {
         if(getActivity() instanceof NewPickMusic){
             NewPickMusic newPickMusic = (NewPickMusic) getActivity();
-            newPickMusic.closeActivity(postId, writeruid);
+            newPickMusic.closeActivity(postId, writeruid); //이건 프로필이미지 눌렀을 때를 위하여!
         }
     }
 }
