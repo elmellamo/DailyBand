@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/artist_lineborder"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:padding="10dp"
+        android:id="@+id/containertxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="0.9"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/songname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="텍스트"
+            android:textSize="16sp"
+            android:textColor="@color/mainblack"
+            android:ellipsize="marquee"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/whensong"/>
+        <TextView
+            android:id="@+id/whensong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2023년 10월 18일"
+            android:textSize="13sp"
+            android:textColor="#949494"
+            android:ellipsize="marquee"
+            app:layout_constraintTop_toBottomOf="@+id/songname"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <TextView
+
+            android:layout_marginLeft="20dp"
+            android:id="@+id/lovenum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="200"
+            android:textSize="13sp"
+            android:textColor="#949494"
+            app:layout_constraintStart_toEndOf="@+id/whensong"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <ImageView
+            android:layout_marginLeft="5dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/newgreenheart"
+            app:layout_constraintStart_toEndOf="@+id/lovenum"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

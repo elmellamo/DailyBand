@@ -152,17 +152,16 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
                             @Override
                             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                                 // 이미지 로드 성공 시 처리
-                                Log.d("테스트", "이미지 로드 성공");
-                                if (position == comments.size() - 1) {
-                                    // 마지막 아이템에 도달했을 때
-                                    if (!allDataLoaded) {
-                                        allDataLoaded = true; // 모든 데이터가 로드됨을 표시
-                                        // 모든 데이터가 로드되었음을 알림
-                                        if (completedListener != null) {
-                                            completedListener.onCommentMainCompleted();
-                                        }
-                                    }
-                                }
+//                                if (position == comments.size() - 1) {
+//                                    // 마지막 아이템에 도달했을 때
+//                                    if (!allDataLoaded) {
+//                                        allDataLoaded = true; // 모든 데이터가 로드됨을 표시
+//                                        // 모든 데이터가 로드되었음을 알림
+//                                        if (completedListener != null) {
+//                                            completedListener.onCommentMainCompleted();
+//                                        }
+//                                    }
+//                                }
 
                                 return false;
                             }
@@ -179,24 +178,24 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
                             @Override
                             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                                 // 기본 이미지 로드 실패 시 처리
-                                Log.d("테스트", "기본 이미지 로드 실패");
+                                //Log.d("테스트", "기본 이미지 로드 실패");
                                 return false;
                             }
 
                             @Override
                             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                                 // 기본 이미지 로드 성공 시 처리
-                                Log.d("테스트", "기본 이미지 로드 성공");
-                                if (position == comments.size() - 1) {
-                                    // 마지막 아이템에 도달했을 때
-                                    if (!allDataLoaded) {
-                                        allDataLoaded = true; // 모든 데이터가 로드됨을 표시
-                                        // 모든 데이터가 로드되었음을 알림
-                                        if (completedListener != null) {
-                                            completedListener.onCommentMainCompleted();
-                                        }
-                                    }
-                                }
+//                                //Log.d("테스트", "기본 이미지 로드 성공");
+//                                if (position == comments.size() - 1) {
+//                                    // 마지막 아이템에 도달했을 때
+//                                    if (!allDataLoaded) {
+//                                        allDataLoaded = true; // 모든 데이터가 로드됨을 표시
+//                                        // 모든 데이터가 로드되었음을 알림
+//                                        if (completedListener != null) {
+//                                            completedListener.onCommentMainCompleted();
+//                                        }
+//                                    }
+//                                }
 
                                 return false;
                             }
@@ -335,6 +334,7 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
                         holder.lovenum.setVisibility(View.GONE);
                         holder.deletetrash.setVisibility(View.VISIBLE);
                         holder.heartlayout.setBackgroundColor(ContextCompat.getColor(context, R.color.trash_Background));
+
                     } else {
                         holder.headerlayout.setBackgroundColor(grayGreenColor);
                         holder.heartimg.setVisibility(View.VISIBLE);
@@ -349,7 +349,7 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
         holder.heartlayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("테스트", "여기 클릭됐나?");
+                //Log.d("테스트", "여기 클릭됐나?");
                 if(ContextCompat.getColor(context, R.color.click_green) == ((ColorDrawable) holder.headerlayout.getBackground()).getColor()){
                     DatabaseReference commentRef = FirebaseDatabase.getInstance().getReference().child("comment").child(postId).child(commentId);
                     commentRef.removeValue()
