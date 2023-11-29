@@ -5,9 +5,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -50,6 +52,7 @@ public class LoveActivity extends AppCompatActivity {
 
     private CircularFillableLoaders circularFillableLoaders;
     private ConstraintLayout circularlayout;
+    private ImageView circle_iv;
     private ImageButton addbtn, setbtn, librarybtn, myInfobtn, homeBtn;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +65,7 @@ public class LoveActivity extends AppCompatActivity {
         myInfobtn = findViewById(R.id.myInfobtn);
         setbtn = findViewById(R.id.setbtn);
         homeBtn = findViewById(R.id.homeBtn);
+        circle_iv = findViewById(R.id.circle_iv);
         circularlayout = findViewById(R.id.circularlayout);
         circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
         circularlayout.bringToFront();
@@ -72,6 +76,7 @@ public class LoveActivity extends AppCompatActivity {
         waveHeader.setGradientAngle(45);
         waveHeader.setWaveHeight(40);
 
+        setSize();
         recyclerView = findViewById(R.id.lovelist);
         emptytxt = findViewById(R.id.emptytxt);
         recyclerView.setLayoutManager(new LinearLayoutManager(LoveActivity.this));
@@ -192,6 +197,15 @@ public class LoveActivity extends AppCompatActivity {
     }
     private void checkEmpty(){
         emptytxt.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+    }
+    private void setSize() {
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+
+        int background = (int)(metrics.heightPixels * 0.18);
+        ConstraintLayout.LayoutParams backgroundimg = (ConstraintLayout.LayoutParams) circle_iv.getLayoutParams();
+        backgroundimg.height = background;
+        backgroundimg.width = metrics.widthPixels;
+        circle_iv.setLayoutParams(backgroundimg);
     }
     private void myStartActivity(Class c){
         Intent intent = new Intent(this, c);

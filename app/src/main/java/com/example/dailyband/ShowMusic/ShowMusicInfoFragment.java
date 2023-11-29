@@ -1,6 +1,7 @@
 package com.example.dailyband.ShowMusic;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,23 @@ public class ShowMusicInfoFragment extends Fragment {
         playtxt.setText(play);
         singtxt.setText(singer);
         infotxt.setText(explain);
+
+
+        artisttxt.setSingleLine(true);    // 한줄로 표시하기
+        artisttxt.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        artisttxt.setSelected(true);
+
+        writertxt.setSingleLine(true);    // 한줄로 표시하기
+        writertxt.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        writertxt.setSelected(true);
+
+        playtxt.setSingleLine(true);    // 한줄로 표시하기
+        playtxt.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        playtxt.setSelected(true);
+
+        singtxt.setSingleLine(true);    // 한줄로 표시하기
+        singtxt.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        singtxt.setSelected(true);
 
         waveHeader = view.findViewById(R.id.wave_header);
         waveHeader.setVelocity(1);
