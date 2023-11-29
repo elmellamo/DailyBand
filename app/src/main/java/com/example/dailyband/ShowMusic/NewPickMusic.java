@@ -14,6 +14,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.BounceInterpolator;
@@ -196,6 +197,7 @@ public class NewPickMusic extends AppCompatActivity {
         getInfo();
         setInfo();
         setSize();
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -511,6 +513,16 @@ public class NewPickMusic extends AppCompatActivity {
         }
     }
 
+    public void showProgressBarWithDelay() {
+        showProgressBar();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideProgressBar();
+            }
+        }, 700); // 1초 대신 원하는 시간(밀리초) 설정 가능
+    }
     @Override
     protected void onPause() {
         super.onPause();
@@ -532,6 +544,7 @@ public class NewPickMusic extends AppCompatActivity {
         commentMainFragment.setCommentMain(postId);
         getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, commentMainFragment).commit();
         slideUp(detail_cardview);
+        //showProgressBarWithDelay();
         is_Second_Open = true;
     }
     public void showUpColla(){
@@ -671,6 +684,7 @@ public class NewPickMusic extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.detail_info_frame, commentMainFragment).commit();
                 is_Second_Open = true;
                 hideProgressBar();
+                //showProgressBarWithDelay();
             }else{
                 //그냥 완전히 모든 걸 없애야 한다.
                 slideDown(detail_cardview);

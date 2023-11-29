@@ -149,6 +149,7 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
                             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                                 // 이미지 로드 성공 시 처리
                                 Log.d("테스트", "이미지 로드 성공");
+                                /*
                                 if (position == comments.size() - 1) {
                                     // 마지막 아이템에 도달했을 때
                                     if (!allDataLoaded) {
@@ -159,7 +160,7 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
                                         }
                                     }
                                 }
-
+                                 */
                                 return false;
                             }
                         })
@@ -183,6 +184,7 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
                             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                                 // 기본 이미지 로드 성공 시 처리
                                 Log.d("테스트", "기본 이미지 로드 성공");
+                                /*
                                 if (position == comments.size() - 1) {
                                     // 마지막 아이템에 도달했을 때
                                     if (!allDataLoaded) {
@@ -193,6 +195,7 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
                                         }
                                     }
                                 }
+                                 */
 
                                 return false;
                             }

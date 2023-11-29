@@ -3,6 +3,7 @@ package com.example.dailyband.ShowMusic;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -96,6 +98,7 @@ public class CommentMainFragment extends Fragment implements CommentDatailClickL
             }
         });
 
+
         return view;
     }
 
@@ -120,6 +123,10 @@ public class CommentMainFragment extends Fragment implements CommentDatailClickL
 
                     adapter.notifyDataSetChanged();
                     emptytxt.setVisibility(comments.size() == 0 ? View.VISIBLE : View.GONE);
+                    if(comments.size()!=0){
+                        NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                        newPickMusic.showProgressBarWithDelay();
+                    }
                 }else{
                     emptytxt.setVisibility(comments.size() == 0 ? View.VISIBLE : View.GONE);
                 }
