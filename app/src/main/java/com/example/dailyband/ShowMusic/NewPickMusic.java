@@ -93,6 +93,7 @@ public class NewPickMusic extends AppCompatActivity {
     Runnable runnable;
     Handler handler;
     private boolean isPlaying = false;
+    public ConstraintLayout menubar;
     private ImageButton addbtn, setbtn, librarybtn, myInfobtn, homeBtn;
     // MediaPlayer 일시정지된 지점을 저장하는 변수
     private int pausedPosition = 0;
@@ -171,6 +172,7 @@ public class NewPickMusic extends AppCompatActivity {
         heartbtn = findViewById(R.id.heartbtn);
         optionmenu = findViewById(R.id.optionmenu);
         detail_cardview = findViewById(R.id.detail_cardview);
+        menubar = findViewById(R.id.menu_bar);
         homeBtn = findViewById(R.id.homeBtn);
         myInfobtn = findViewById(R.id.myInfobtn);
         librarybtn = findViewById(R.id.librarybtn);

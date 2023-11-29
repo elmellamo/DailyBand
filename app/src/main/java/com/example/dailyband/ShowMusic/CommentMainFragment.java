@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import com.example.dailyband.R;
 import com.example.dailyband.Utils.CommentDatailClickListener;
 import com.example.dailyband.Utils.CommentMainCompletedListener;
 import com.example.dailyband.Utils.FirebaseMethods;
+import com.example.dailyband.Utils.KeyboardUtils;
 import com.example.dailyband.Utils.OnCommentSuccessListener;
 import com.example.dailyband.adapter.CommentMainAdapter;
 import com.example.dailyband.adapter.LoveAdapter;
@@ -100,6 +102,35 @@ public class CommentMainFragment extends Fragment implements CommentDatailClickL
 
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        KeyboardUtils.removeAllKeyboardToggleListeners();
+        KeyboardUtils.addKeyboardToggleListener(newPickMusic, new KeyboardUtils.SoftKeyboardToggleListener()
+        {
+            @Override
+            public void onToggleSoftKeyboard(boolean isVisible)
+            {
+                ViewGroup.LayoutParams layoutParams = commentrecycler.getLayoutParams();
+
+                if(isVisible) {
+                    // 하단버튼 숨기고 댓글뷰 작게
+                    newPickMusic.menubar.setVisibility(View.GONE);
+                    int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,200,getResources().getDisplayMetrics());
+                    layoutParams.height = height;
+                    commentrecycler.setLayoutParams(layoutParams);
+                }
+                else {
+                    newPickMusic.menubar.setVisibility(View.VISIBLE);
+                    int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,400,getResources().getDisplayMetrics());
+                    layoutParams.height = height;
+                    commentrecycler.setLayoutParams(layoutParams);
+                }
+                Log.d("keyboard", "keyboard visible: "+isVisible);
+            }
+        });
     }
 
     private void getComment(){
