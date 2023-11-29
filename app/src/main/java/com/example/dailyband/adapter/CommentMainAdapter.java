@@ -423,6 +423,47 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
                                                     // comment_child 카테고리에서 commentId의 하위 child 삭제 성공
                                                     Toast.makeText(context, "댓글이 성공적으로 삭제되었습니다.", Toast.LENGTH_SHORT).show();
                                                     Log.d("테스트", "comment_child 하위 child 삭제 성공");
+
+
+                                                    DatabaseReference userCommentLoveRef = FirebaseDatabase.getInstance().getReference().child("user_comment_love");
+
+                                                    userCommentLoveRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                            // 각 child(사용자 UID)를 순회합니다.
+                                                            for (DataSnapshot userChild : dataSnapshot.getChildren()) {
+                                                                String separateuserId = userChild.getKey(); // 각 child의 key는 사용자의 UID입니다.
+                                                                DatabaseReference userRef = userCommentLoveRef.child(separateuserId).child(commentId);
+
+                                                                userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                        if (dataSnapshot.exists()) {
+                                                                            userRef.removeValue();
+                                                                        }
+                                                                    }
+                                                                    @Override
+                                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                                        // 데이터를 가져오는데 실패한 경우 처리
+                                                                    }
+                                                                });
+
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                            // 데이터를 가져오는데 실패한 경우 처리하는 코드
+                                                            Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
+                                                        }
+                                                    });
+
+
+
+
+
+
+
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
@@ -432,6 +473,8 @@ public class CommentMainAdapter extends RecyclerView.Adapter<CommentMainAdapter.
                                                     Log.e("테스트", "comment_child 하위 child 삭제 실패", e);
                                                 }
                                             });
+
+
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
