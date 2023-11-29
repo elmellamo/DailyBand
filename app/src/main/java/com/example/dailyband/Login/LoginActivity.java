@@ -97,8 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                             //finish();
 
                             fetchData();
-                            myStartActivity(HomeMain.class);
-                            finish();
+
                         }
                         else{
                             Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
@@ -121,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        Toast.makeText(LoginActivity.this, userUid, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(LoginActivity.this, userUid, Toast.LENGTH_SHORT).show();
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference().child("profile_images/" + userUid + ".jpg");
@@ -132,39 +131,20 @@ public class LoginActivity extends AppCompatActivity {
             localFile.delete();
         }
         storageRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
-            // 다운로드 성공
-            // localFilePath에 이미지가 저장됨
-            // 여기서 UI 업데이트 등을 수행할 수 있습니다.
-            //Toast.makeText(LoginActivity.this, "이미지 불러오는 중...", Toast.LENGTH_SHORT).show();
-
             callback.onDataFetchedSuccessfully();
+
+            myStartActivity(HomeMain.class);
+            finish();
         }).addOnFailureListener(exception -> {
             Toast.makeText(LoginActivity.this, "이미지 불러오기 실패...", Toast.LENGTH_SHORT).show();
             // 다운로드 실패
             callback.onDataFetchFailed();
         }).addOnProgressListener(taskSnapshot -> {
             // 다운로드 진행 중
+            //callback.onDataFetchedSuccessfully();
         });
 
     }
-    private void getUserUID(String email, String password) {
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // 로그인 성공, 사용자 UID 가져오기
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            String uid = user.getUid();
-                            // 여기에서 uid를 사용하면 됩니다.
-                        } else {
-                            // 로그인 실패
-                            // 에러 처리 등을 수행할 수 있습니다.
-                        }
-                    }
-                });
-    }
-
 
     private void showProgressBar() {
         // 프로그레스바를 보여주는 코드
@@ -197,6 +177,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataFetchedSuccessfully() {
                 // getInfo 성공 후의 처리
                 hideProgressBar();
+
             }
 
             @Override
