@@ -1,5 +1,7 @@
 package com.example.dailyband.Login;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,9 +15,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.dailyband.Home.HomeMain;
 import com.example.dailyband.R;
+import com.example.dailyband.Utils.DataFetchCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.mikhaellopez.circularfillableloaders.CircularFillableLoaders;
 
 import java.io.File;
 
@@ -34,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailEdittext, pwEdittext;
     private Button loginBtn;
     private TextView gotoregisterBtn;
+    private CircularFillableLoaders circularFillableLoaders;
+    private ConstraintLayout circularlayout;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -56,6 +63,10 @@ public class LoginActivity extends AppCompatActivity {
         pwEdittext = findViewById(R.id.password_edittext);
         loginBtn = findViewById(R.id.login_btn);
         gotoregisterBtn = findViewById(R.id.gotoregister_btn);
+        circularlayout = findViewById(R.id.circularlayout);
+        circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
+        circularlayout.bringToFront();
+
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -77,7 +88,11 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             // 로그인 성공
-                            Download_image();
+                            //Download_image();
+                            //myStartActivity(HomeMain.class);
+                            //finish();
+
+                            fetchData();
                             myStartActivity(HomeMain.class);
                             finish();
                         }
@@ -96,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    public void Download_image(){
+    public void Download_image(DataFetchCallback callback){
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -112,12 +127,53 @@ public class LoginActivity extends AppCompatActivity {
             // localFilePath에 이미지가 저장됨
             // 여기서 UI 업데이트 등을 수행할 수 있습니다.
             //Toast.makeText(SplashActivity.this, "이미지 다운로드", Toast.LENGTH_SHORT).show();
+            callback.onDataFetchedSuccessfully();
         }).addOnFailureListener(exception -> {
+            callback.onDataFetchFailed();
             // 다운로드 실패
         }).addOnProgressListener(taskSnapshot -> {
             // 다운로드 진행 중
         });
 
+    }
+
+    private void fetchData() {
+        showProgressBar();
+        Download_image(new DataFetchCallback() {
+            @Override
+            public void onDataFetchedSuccessfully() {
+                // getInfo 성공 후의 처리
+                hideProgressBar();
+            }
+
+            @Override
+            public void onDataFetchFailed() {
+                // getInfo 실패 후의 처리
+                // 여기에서 프로그레스바를 숨김
+                hideProgressBar();
+                Toast.makeText(getApplicationContext(), "로그인이 제대로 실행되지 않았습니다.", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void showProgressBar() {
+        // 프로그레스바를 보여주는 코드
+        circularlayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressBar() {
+        // 프로그레스바를 숨기는 코드
+        circularlayout.animate()
+                .alpha(0f) // 투명도를 0으로 설정하여 페이드 아웃 애니메이션 적용
+                .setDuration(500) // 애니메이션 지속 시간 (밀리초)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        // 애니메이션 종료 후에 실행할 작업 (예: 뷰를 숨기거나 제거하는 등)
+                        circularlayout.setVisibility(View.GONE);
+                    }
+                })
+                .start();
     }
     private void myStartActivity(Class c){
         Intent intent = new Intent(this, c);
