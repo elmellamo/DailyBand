@@ -92,11 +92,11 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             // 로그인 성공
-                            Download_image();
+                            //Download_image();
                             //myStartActivity(HomeMain.class);
                             //finish();
 
-                            //fetchData();
+                            fetchData();
                             myStartActivity(HomeMain.class);
                             finish();
                         }
@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    public void Download_image(){
+    public void Download_image(DataFetchCallback callback){
 
         String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -135,10 +135,13 @@ public class LoginActivity extends AppCompatActivity {
             // 다운로드 성공
             // localFilePath에 이미지가 저장됨
             // 여기서 UI 업데이트 등을 수행할 수 있습니다.
-            Toast.makeText(LoginActivity.this, "이미지 불러오는 중...", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(LoginActivity.this, "이미지 불러오는 중...", Toast.LENGTH_SHORT).show();
+
+            callback.onDataFetchedSuccessfully();
         }).addOnFailureListener(exception -> {
             Toast.makeText(LoginActivity.this, "이미지 불러오기 실패...", Toast.LENGTH_SHORT).show();
             // 다운로드 실패
+            callback.onDataFetchFailed();
         }).addOnProgressListener(taskSnapshot -> {
             // 다운로드 진행 중
         });
@@ -187,6 +190,25 @@ public class LoginActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
+    private void fetchData() {
+        showProgressBar();
+        Download_image(new DataFetchCallback() {
+            @Override
+            public void onDataFetchedSuccessfully() {
+                // getInfo 성공 후의 처리
+                hideProgressBar();
+            }
+
+            @Override
+            public void onDataFetchFailed() {
+                // getInfo 실패 후의 처리
+                // 여기에서 프로그레스바를 숨김
+                hideProgressBar();
+            }
+        });
+    }
+
+
 
     private void hideKeyboard() {
         View view = this.getCurrentFocus();
