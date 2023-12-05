@@ -227,9 +227,8 @@ public class ArtistInfo extends AppCompatActivity {
                     public void onDataFetchFailed() {
                         // getSongs 실패 후의 처리
                         hideProgressBar();
-                        songs.clear(); // 데이터를 가져오는데 실패했으므로 리스트 비우기
                         adapter.notifyDataSetChanged(); // 어댑터에 변경된 내용 알림
-                        emptytxt.setVisibility(songs.size() == 0 ? View.VISIBLE : View.GONE);
+                        Log.d("테스트", "여기서 실패");
                     }
                 });
             }
@@ -237,7 +236,11 @@ public class ArtistInfo extends AppCompatActivity {
             @Override
             public void onDataFetchFailed() {
                 // getInfo 실패 후의 처리
+                Log.d("테스트", "처음부터 실패");
                 hideProgressBar();
+
+                songs.clear(); // 데이터를 가져오는데 실패했으므로 리스트 비우기
+                emptytxt.setVisibility(songs.size() == 0 ? View.VISIBLE : View.GONE);
                 // 여기에서 프로그레스바를 숨김
             }
         });

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,6 +41,7 @@ public class RecordingMain extends Fragment {
 
     private String directory_name = "Daily Band";
     private File externalDir;
+    private ImageView clearbtn;
     private boolean isRecording = false;
     private boolean isPaused = false;
     private String filePath; // 녹음된 파일의 경로를 저장할 변수
@@ -64,7 +66,7 @@ public class RecordingMain extends Fragment {
 
         bt_record = view.findViewById(R.id.bt_record);
         stop_record = view.findViewById(R.id.stop_record);
-
+        clearbtn = view.findViewById(R.id.clearbtn);
         waveRecorder = new WaveRecorder(filePath);
         externalDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC), directory_name);
         if (!externalDir.exists()) {
@@ -81,6 +83,16 @@ public class RecordingMain extends Fragment {
 
         stop_record.setOnClickListener(v -> {
             stopRecording();
+        });
+
+        clearbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(getActivity() instanceof AddMusic){
+                    AddMusic addmusic = (AddMusic) getActivity();
+                    addmusic.clearAddCategory();
+                }
+            }
         });
 
         return view;
