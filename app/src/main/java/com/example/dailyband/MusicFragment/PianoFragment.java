@@ -37,12 +37,7 @@ import java.util.Locale;
 public class PianoFragment extends Fragment implements View.OnClickListener {
     // 여기에 필요한 모든 변수 및 상수 선언
     private View view;
-    boolean mStartRecording = true;
-    public int recordingno;
-
     private SoundPool soundPool;
-    Button recordbutton;
-
 
     private int c3, c3black, d3, d3black, e3, f3, f3black, g3, g3black, a3, a3black, b3;
     private int c4, c4black, d4, d4black, e4, f4, f4black, g4, g4black, a4, a4black, b4;
@@ -72,7 +67,7 @@ public class PianoFragment extends Fragment implements View.OnClickListener {
     private File externalDir;
     private boolean isRecording = false;
     private boolean isPaused = false;
-    private String filePath; // 녹음된 파일의 경로를 저장할 변수
+    private String filePath;
 
     public void setOnRecordingCompletedListener(OnRecordingCompletedListener listener) {
         this.recordingCompletedListener = listener;
@@ -93,16 +88,9 @@ public class PianoFragment extends Fragment implements View.OnClickListener {
         // Intilize the scrool view
         scrollView = view.findViewById(R.id.scrollView);
 
-        // Intilize the navigations button
-
-
-        // Method for all PianoKey Buttons
         intilizeAllPianoKeys();
-
-        // Method for all PianoKey Lables TextViews
         intilizeTextViewLablesOnPianoKeys();
 
-        // code for the soundpool
 
         soundPool = new SoundPool.Builder()
                 .setMaxStreams(6)
