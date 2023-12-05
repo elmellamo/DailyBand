@@ -61,48 +61,9 @@ public class PianoFragment extends Fragment implements View.OnClickListener {
             buttonB5, buttonC6,buttonC6black, buttonD6, buttonD6black, buttonE6, buttonF6, buttonF6black,
             buttonG6, buttonG6black, buttonA6, buttonA6black, buttonB6, buttonC7, buttonC7black, buttonD7,
             buttonD7black,  buttonE7,  buttonF7, buttonF7black, buttonG7, buttonG7black, buttonA7, buttonA7black, buttonB7;
-
-    private TextView tc3;
-    private TextView td3;
-    private TextView te3;
-    private TextView tf3;
-    private TextView tg3;
-    private TextView ta3;
-    private TextView tb3;
-
-    private TextView tc4;
-    private TextView td4;
-    private TextView te4;
-    private TextView tf4;
-    private TextView tg4;
-    private TextView ta4;
-    private TextView tb4;
-
-    private TextView tc5;
-    private TextView td5;
-    private TextView te5;
-    private TextView tf5;
-    private TextView tg5;
-    private TextView ta5;
-    private TextView tb5;
-
-    private TextView tc6;
-    private TextView td6;
-    private TextView te6;
-    private TextView tf6;
-    private TextView tg6;
-    private TextView ta6;
-    private TextView tb6;
-
-    private TextView tc7;
-    private TextView td7;
-    private TextView te7;
-    private TextView tf7;
-    private TextView tg7;
-    private TextView ta7;
-    private TextView tb7;
-
-
+    private TextView tc3, td3, te3, tf3, tg3, ta3, tb3, tc4, td4, te4, tf4,tg4, ta4,tb4,tc5,
+            td5, te5, tf5, tg5, ta5, tb5, tc6, td6, te6, tf6, tg6, ta6,tb6, tc7, td7, te7, tf7,
+            tg7, ta7, tb7;
     private Button bt_record, stop_record;
     private WaveRecorder waveRecorder;
     private OnRecordingCompletedListener recordingCompletedListener;
@@ -169,7 +130,7 @@ public class PianoFragment extends Fragment implements View.OnClickListener {
         e4 = soundPool.load(requireContext(), R.raw.e4, 1);
         f4 = soundPool.load(requireContext(), R.raw.f4, 1);
         f4black = soundPool.load(requireContext(), R.raw.f4black, 1);
-        g4 = soundPool.load(requireContext(), R.raw.c4, 1);
+        g4 = soundPool.load(requireContext(), R.raw.g4, 1);
         g4black = soundPool.load(requireContext(), R.raw.g4black, 1);
         a4 = soundPool.load(requireContext(), R.raw.a4, 1);
         a4black = soundPool.load(requireContext(), R.raw.a4black, 1);
@@ -182,7 +143,7 @@ public class PianoFragment extends Fragment implements View.OnClickListener {
         e5 = soundPool.load(requireContext(), R.raw.e5, 1);
         f5 = soundPool.load(requireContext(), R.raw.f5, 1);
         f5black = soundPool.load(requireContext(), R.raw.f5black, 1);
-        g5 = soundPool.load(requireContext(), R.raw.c5, 1);
+        g5 = soundPool.load(requireContext(), R.raw.g5, 1);
         g5black = soundPool.load(requireContext(), R.raw.g5black, 1);
         a5 = soundPool.load(requireContext(), R.raw.a5, 1);
         a5black = soundPool.load(requireContext(), R.raw.a5black, 1);
@@ -207,7 +168,7 @@ public class PianoFragment extends Fragment implements View.OnClickListener {
         d7black = soundPool.load(requireContext(), R.raw.d7black, 1);
         e7 = soundPool.load(requireContext(), R.raw.e7, 1);
         f7 = soundPool.load(requireContext(), R.raw.f7, 1);
-        f3black = soundPool.load(requireContext(), R.raw.f3black, 1);
+        f7black = soundPool.load(requireContext(), R.raw.f7black, 1);
         g7 = soundPool.load(requireContext(), R.raw.g7, 1);
         g7black = soundPool.load(requireContext(), R.raw.g7black, 1);
         a7 = soundPool.load(requireContext(), R.raw.a7, 1);
