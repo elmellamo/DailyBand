@@ -13,14 +13,19 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
+import com.github.angads25.toggle.interfaces.OnToggledListener;
+import com.github.angads25.toggle.model.ToggleableView;
+import com.github.angads25.toggle.widget.LabeledSwitch;
 import com.github.squti.androidwaverecorder.WaveConfig;
 import com.github.squti.androidwaverecorder.WaveRecorder;
 
@@ -36,12 +41,14 @@ public class Ocarina4HoleFragment extends Fragment {
     private View view;
     private Button bt_record, stop_record;
     private WaveRecorder waveRecorder;
+    private HorizontalScrollView scrollView;
     private OnRecordingCompletedListener recordingCompletedListener;
-
+    private ConstraintLayout bottomlayout;
     private String directory_name = "Daily Band";
     private File externalDir;
     private boolean isRecording = false;
     private boolean isPaused = false;
+    private LabeledSwitch instrumnet_switch;
     private String filePath; // 녹음된 파일의 경로를 저장할 변수
     public void setOnRecordingCompletedListener(OnRecordingCompletedListener listener) {
         this.recordingCompletedListener = listener;
@@ -63,7 +70,9 @@ public class Ocarina4HoleFragment extends Fragment {
         view = inflater.inflate(R.layout.ocarina_new, container, false);
         bt_record = view.findViewById(R.id.bt_record);
         stop_record = view.findViewById(R.id.stop_record);
-
+        instrumnet_switch = view.findViewById(R.id.instrumnet_switch);
+        bottomlayout = view.findViewById(R.id.bottomlayout);
+        scrollView = view.findViewById(R.id.scrollView);
 
         bt_record.setOnClickListener(v -> {
             if(!isRecording){
@@ -75,6 +84,19 @@ public class Ocarina4HoleFragment extends Fragment {
             stopRecording();
         });
 
+        instrumnet_switch.setOnToggledListener(new OnToggledListener() {
+            @Override
+            public void onSwitched(ToggleableView toggleableView, boolean isOn) {
+                if(isOn){
+                    bottomlayout.setVisibility(View.GONE);
+                    scrollView.setVisibility(View.VISIBLE);
+
+                }else{
+                    scrollView.setVisibility(View.GONE);
+                    bottomlayout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         return view;
     }
 

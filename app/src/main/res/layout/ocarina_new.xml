@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/button1"
+        app:layout_constraintBottom_toTopOf="@+id/middle_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="20dp"
@@ -36,7 +36,7 @@
             android:background="@drawable/stopbtn_black"/>
         <TextView
             android:layout_marginLeft="20dp"
-            android:id="@+id/pianotxt"
+            android:id="@+id/ocarinatxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ocarina"
@@ -47,61 +47,257 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageButton android:id="@+id/button1"
-        android:src="@drawable/ocarina_selector"
-        android:scaleType="fitCenter"
-        android:background="@null"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:text="1"
-        android:layout_margin="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
-        app:layout_constraintLeft_toRightOf="@+id/button3"
-        app:layout_constraintRight_toRightOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/middle_layout"
+        android:layout_marginHorizontal="20dp"
         app:layout_constraintTop_toBottomOf="@+id/explainlayout"
-        />
-    <ImageButton
-        android:id="@+id/button2"
-        android:src="@drawable/ocarina_selector"
-        android:scaleType="fitCenter"
-        android:background="@null"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:text="2"
-        android:layout_margin="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/button4"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button1"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <ImageButton android:id="@+id/button3"
-        android:src="@drawable/ocarina_selector"
-        android:scaleType="fitCenter"
-        android:background="@null"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:text="3"
-        android:layout_margin="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/button4"
-        app:layout_constraintRight_toLeftOf="@+id/button1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/explainlayout"
-        />
-    <ImageButton
-        android:id="@+id/button4"
-        android:src="@drawable/ocarina_selector"
-        android:scaleType="fitCenter"
-        android:background="@null"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:text="4"
-        android:layout_margin="40dp"
+        <com.github.angads25.toggle.widget.LabeledSwitch
+            android:id="@+id/instrumnet_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:textSize="14sp"
+            app:on="false"
+            app:textOn="피아노"
+            app:textOff="악기"
+            app:colorOn="@color/test_main_clolr"
+            app:colorBorder="@color/test_main_clolr"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottomlayout"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/middle_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+        <ImageButton android:id="@+id/button1"
+            android:src="@drawable/ocarina_selector"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="1"
+            android:clickable="true"
+            android:layout_margin="40dp"
+            app:layout_constraintBottom_toTopOf="@+id/button2"
+            app:layout_constraintLeft_toRightOf="@+id/button3"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+        <ImageButton
+            android:id="@+id/button2"
+            android:src="@drawable/ocarina_selector"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:layout_width="60dp"
+            android:clickable="true"
+            android:layout_height="60dp"
+            android:text="2"
+            android:layout_margin="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/button4"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button1"
+            />
+
+        <ImageButton android:id="@+id/button3"
+            android:src="@drawable/ocarina_selector"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:layout_width="70dp"
+            android:clickable="true"
+            android:layout_height="70dp"
+            android:text="3"
+            android:layout_margin="40dp"
+            app:layout_constraintBottom_toTopOf="@+id/button4"
+            app:layout_constraintRight_toLeftOf="@+id/button1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+        <ImageButton
+            android:id="@+id/button4"
+            android:src="@drawable/ocarina_selector"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:text="4"
+            android:clickable="true"
+            android:layout_margin="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/button2"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button3"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <HorizontalScrollView
+        android:visibility="gone"
+        android:layout_marginTop="5dp"
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/middle_layout"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/button2"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:scrollbarFadeDuration="0"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarDefaultDelayBeforeFade="500000"
+        android:scrollbarSize="5dp"
+        android:scrollbarThumbHorizontal="@color/test_main_clolr"
+        >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp">
+
+            <android.widget.Button
+                android:id="@+id/p1"
+                style="@style/first_key_style_for_pink_key" />
+
+            <android.widget.Button
+                android:id="@+id/p2"
+                style="@style/common_key_style_for_rest_of_the_piano_keys"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/p1" />
+
+            <android.widget.Button
+                android:id="@+id/p3"
+                style="@style/common_key_style_for_rest_of_the_piano_keys"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/p2" />
+
+            <android.widget.Button
+                android:id="@+id/p4"
+                style="@style/common_key_style_for_rest_of_the_piano_keys"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/p3" />
+
+            <android.widget.Button
+                android:id="@+id/p5"
+                style="@style/common_key_style_for_rest_of_the_piano_keys"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/p4" />
+
+            <android.widget.Button
+                android:id="@+id/p6"
+                style="@style/common_key_style_for_rest_of_the_piano_keys"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/p5" />
+
+            <android.widget.Button
+                android:id="@+id/p7"
+                style="@style/common_key_style_for_rest_of_the_piano_keys"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/p6" />
+
+            <android.widget.Button
+                android:id="@+id/b1"
+                style="@style/black_piano_key_style"
+                android:layout_toRightOf="@id/p1" />
+
+            <android.widget.Button
+                android:id="@+id/b2"
+                style="@style/black_piano_key_style"
+                android:layout_toRightOf="@id/p2" />
+
+            <android.widget.Button
+                android:id="@+id/b3"
+                style="@style/black_piano_key_style"
+                android:layout_toRightOf="@id/p4" />
+
+
+            <android.widget.Button
+                android:id="@+id/b4"
+                style="@style/black_piano_key_style"
+                android:layout_toRightOf="@id/p5" />
+
+
+            <android.widget.Button
+                android:id="@+id/b5"
+                style="@style/black_piano_key_style"
+                android:layout_toRightOf="@id/p6" />
+
+
+
+            <TextView
+                android:id="@+id/tc3"
+                style="@style/style_for_TextView_keyText3"
+                android:layout_toLeftOf="@id/p2"
+                android:stateListAnimator="@null"
+                android:text="C5"
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@+id/td3"
+                style="@style/style_for_TextView_keyText3"
+                android:layout_toLeftOf="@id/p3"
+                android:stateListAnimator="@null"
+                android:text="D5"
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@+id/te3"
+                style="@style/style_for_TextView_keyText3"
+                android:layout_toLeftOf="@id/p4"
+                android:stateListAnimator="@null"
+                android:text="E5"
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@+id/tf3"
+                style="@style/style_for_TextView_keyText3"
+                android:layout_toLeftOf="@id/p5"
+                android:stateListAnimator="@null"
+                android:text="F5"
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@+id/tg3"
+                style="@style/style_for_TextView_keyText3"
+                android:layout_toLeftOf="@id/p6"
+                android:stateListAnimator="@null"
+                android:text="G5"
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@+id/ta3"
+                style="@style/style_for_TextView_keyText3"
+                android:layout_toLeftOf="@id/p7"
+                android:stateListAnimator="@null"
+                android:text="A5"
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@+id/tb3"
+                style="@style/style_for_TextView_keyText3"
+                android:stateListAnimator="@null"
+                android:text="B5"
+                android:textIsSelectable="false"
+                android:layout_toRightOf="@id/p6"
+                android:paddingLeft="10dp"/>
+
+
+        </RelativeLayout>
+    </HorizontalScrollView>
+
+
+
 
 
 
