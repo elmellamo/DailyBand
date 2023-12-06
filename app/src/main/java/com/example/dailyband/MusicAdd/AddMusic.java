@@ -433,6 +433,11 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
             slideDown(play_cardview);
         }
     }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0,0);
+    }
 
     public void showProgressBar_addmusic(){
         circularlayout.setAlpha(1f);
@@ -955,8 +960,11 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     }
     private void myStartActivity(Class c){
         Intent intent = new Intent(this, c);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
+        overridePendingTransition(0, 0);
     }
     private void startToast(String msg){
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();

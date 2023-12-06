@@ -3,7 +3,7 @@
     <style name="Theme.DailyBand" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="windowNoTitle">true</item>
-
+        <item name="android:windowAnimationStyle">@null</item>
         <item name="colorPrimary">@color/test_main_clolr</item>
         <item name="colorPrimaryVariant">@color/white</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -14,6 +14,10 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/test_main_clolr</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="NoAnimationTheme" parent="@style/Theme.AppCompat">
+        <item name="android:windowAnimationStyle">@null</item>
     </style>
 
     <style name="EditTextGreyStyle" parent="Widget.Design.TextInputLayout"> // important : parent 를 이것으로.

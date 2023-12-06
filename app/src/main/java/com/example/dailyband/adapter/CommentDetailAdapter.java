@@ -457,6 +457,7 @@ public class CommentDetailAdapter extends RecyclerView.Adapter<CommentDetailAdap
                             String whatnickname = userAccountDataSnapshot.child("name").getValue(String.class);
                             intent.putExtra("artist_intent", whatnickname); // 해당 작곡가 이름 들어가야 함..
 
+                            intent.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
                             context.startActivity(intent);
                         } else {
                         }

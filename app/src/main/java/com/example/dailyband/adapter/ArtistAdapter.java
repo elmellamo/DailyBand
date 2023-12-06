@@ -73,6 +73,9 @@ import java.util.Locale;
                         TestSong selectedSong = songs.get(adapterPosition);
                         Intent intent = new Intent(context, NewPickMusic.class);
                         intent.putExtra("selectedSong", selectedSong);
+
+                        intent.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
                         context.startActivity(intent);
                     }
                 }

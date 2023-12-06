@@ -77,6 +77,7 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.ParentView
                                     TestSong picksong = dataSnapshot.getValue(TestSong.class);
                                     Intent intent = new Intent(context, NewPickMusic.class);
                                     intent.putExtra("selectedSong", picksong);
+                                    intent.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                     context.startActivity(intent);
                                 } else {
                                     // 해당 postId에 대한 데이터가 존재하지 않음

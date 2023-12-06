@@ -538,6 +538,7 @@ public class NewPickMusic extends AppCompatActivity {
             mediaPlayer.release();
             mediaPlayer = null;
         }
+        overridePendingTransition(0,0);
     }
 
     public void showUpInfo(){
@@ -685,8 +686,11 @@ public class NewPickMusic extends AppCompatActivity {
 
     private void myStartActivity(Class c){
         Intent intent = new Intent(this, c);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
+        overridePendingTransition(0, 0);
     }
     private void slideDown(final View view) {
         TranslateAnimation animate = new TranslateAnimation(0, 0, 0, view.getHeight());

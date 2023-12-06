@@ -206,10 +206,18 @@ public class CollectionActivity extends AppCompatActivity {
                 })
                 .start();
     }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0,0);
+    }
     private void myStartActivity(Class c){
         Intent intent = new Intent(this, c);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
+        overridePendingTransition(0, 0);
     }
 
     @Override

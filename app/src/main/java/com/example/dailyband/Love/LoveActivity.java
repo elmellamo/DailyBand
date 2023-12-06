@@ -4,14 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -209,11 +206,21 @@ public class LoveActivity extends AppCompatActivity {
     }
     private void myStartActivity(Class c){
         Intent intent = new Intent(this, c);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
+        overridePendingTransition(0, 0);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0,0);
     }
     @Override
     public void onBackPressed() {
         myStartActivity(HomeMain.class);
     }
+
+
 }
