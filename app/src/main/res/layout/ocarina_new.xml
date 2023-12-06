@@ -78,7 +78,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/bottomlayout"
-        android:visibility="gone"
         android:layout_marginHorizontal="20dp"
         app:layout_constraintTop_toBottomOf="@+id/middle_layout"
         app:layout_constraintStart_toStartOf="parent"
@@ -93,7 +92,8 @@
             android:layout_height="50dp"
             android:text="1"
             android:clickable="true"
-            android:layout_margin="40dp"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginVertical="30dp"
             app:layout_constraintBottom_toTopOf="@+id/button2"
             app:layout_constraintLeft_toRightOf="@+id/button3"
             app:layout_constraintRight_toRightOf="parent"
@@ -108,7 +108,8 @@
             android:clickable="true"
             android:layout_height="60dp"
             android:text="2"
-            android:layout_margin="40dp"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginVertical="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/button4"
             app:layout_constraintRight_toRightOf="parent"
@@ -123,7 +124,8 @@
             android:clickable="true"
             android:layout_height="70dp"
             android:text="3"
-            android:layout_margin="40dp"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginVertical="30dp"
             app:layout_constraintBottom_toTopOf="@+id/button4"
             app:layout_constraintRight_toLeftOf="@+id/button1"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -138,7 +140,8 @@
             android:layout_height="80dp"
             android:text="4"
             android:clickable="true"
-            android:layout_margin="40dp"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginVertical="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/button2"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -146,16 +149,17 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <HorizontalScrollView
-        android:layout_marginTop="5dp"
+        android:visibility="gone"
         android:id="@+id/scrollView"
-        android:layout_marginHorizontal="20dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="20dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="30dp"
         app:layout_constraintTop_toBottomOf="@+id/middle_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:fadeScrollbars="false"
         android:scrollbarFadeDuration="0"
         android:scrollbarAlwaysDrawHorizontalTrack="true"
         android:scrollbarDefaultDelayBeforeFade="500000"
@@ -164,136 +168,218 @@
         >
 
         <RelativeLayout
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
+            android:paddingBottom="20dp"
             android:layout_height="wrap_content">
 
             <android.widget.Button
-                android:id="@+id/p1"
-                style="@style/first_key_style_for_pink_key" />
+                android:id="@+id/oca_p13"
+                style="@style/common_key_style_for_rest_of_the_piano_keys"
+            />
 
             <android.widget.Button
-                android:id="@+id/p2"
+                android:id="@+id/oca_p14"
                 style="@style/common_key_style_for_rest_of_the_piano_keys"
                 android:layout_marginLeft="2dp"
-                android:layout_toRightOf="@id/p1" />
+                android:layout_toRightOf="@id/oca_p13" />
 
             <android.widget.Button
-                android:id="@+id/p3"
+                android:id="@+id/oca_p15"
                 style="@style/common_key_style_for_rest_of_the_piano_keys"
                 android:layout_marginLeft="2dp"
-                android:layout_toRightOf="@id/p2" />
+                android:layout_toRightOf="@id/oca_p14" />
 
             <android.widget.Button
-                android:id="@+id/p4"
+                android:id="@+id/oca_p16"
                 style="@style/common_key_style_for_rest_of_the_piano_keys"
                 android:layout_marginLeft="2dp"
-                android:layout_toRightOf="@id/p3" />
+                android:layout_toRightOf="@id/oca_p15" />
 
             <android.widget.Button
-                android:id="@+id/p5"
+                android:id="@+id/oca_p17"
                 style="@style/common_key_style_for_rest_of_the_piano_keys"
                 android:layout_marginLeft="2dp"
-                android:layout_toRightOf="@id/p4" />
+                android:layout_toRightOf="@id/oca_p16" />
 
             <android.widget.Button
-                android:id="@+id/p6"
+                android:id="@+id/oca_p18"
                 style="@style/common_key_style_for_rest_of_the_piano_keys"
                 android:layout_marginLeft="2dp"
-                android:layout_toRightOf="@id/p5" />
+                android:layout_toRightOf="@id/oca_p17" />
 
             <android.widget.Button
-                android:id="@+id/p7"
+                android:id="@+id/oca_p19"
                 style="@style/common_key_style_for_rest_of_the_piano_keys"
                 android:layout_marginLeft="2dp"
-                android:layout_toRightOf="@id/p6" />
+                android:layout_toRightOf="@id/oca_p18" />
 
             <android.widget.Button
-                android:id="@+id/b1"
+                android:id="@+id/oca_p20"
+                style="@style/common_key_style_for_rest_of_the_piano_keys"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/oca_p19" />
+
+            <android.widget.Button
+                android:id="@+id/oca_p21"
+                style="@style/common_key_style_for_rest_of_the_piano_keys"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/oca_p20" />
+
+            <android.widget.Button
+                android:id="@+id/oca_p22"
+                style="@style/common_key_style_for_rest_of_the_piano_keys"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/oca_p21" />
+
+            <android.widget.Button
+                android:id="@+id/oca_p23"
+                style="@style/common_key_style_for_rest_of_the_piano_keys"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/oca_p22" />
+
+            <android.widget.Button
+                android:id="@+id/oca_p24"
+                style="@style/common_key_style_for_rest_of_the_piano_keys"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@id/oca_p23" />
+
+
+            <android.widget.Button
+                android:id="@+id/oca_b10"
                 style="@style/black_piano_key_style"
-                android:layout_toRightOf="@id/p1" />
+                android:layout_toRightOf="@id/oca_p13" />
 
             <android.widget.Button
-                android:id="@+id/b2"
+                android:id="@+id/oca_b11"
                 style="@style/black_piano_key_style"
-                android:layout_toRightOf="@id/p2" />
+                android:layout_toRightOf="@id/oca_p15" />
 
             <android.widget.Button
-                android:id="@+id/b3"
+                android:id="@+id/oca_b12"
                 style="@style/black_piano_key_style"
-                android:layout_toRightOf="@id/p4" />
-
+                android:layout_toRightOf="@id/oca_p16" />
 
             <android.widget.Button
-                android:id="@+id/b4"
+                android:id="@+id/oca_b13"
                 style="@style/black_piano_key_style"
-                android:layout_toRightOf="@id/p5" />
-
+                android:layout_toRightOf="@id/oca_p18" />
 
             <android.widget.Button
-                android:id="@+id/b5"
+                android:id="@+id/oca_b14"
                 style="@style/black_piano_key_style"
-                android:layout_toRightOf="@id/p6" />
+                android:layout_toRightOf="@id/oca_p19" />
 
+            <android.widget.Button
+                android:id="@+id/oca_b15"
+                style="@style/black_piano_key_style"
+                android:layout_toRightOf="@id/oca_p20" />
 
+            <android.widget.Button
+                android:id="@+id/oca_b16"
+                style="@style/black_piano_key_style"
+                android:layout_toRightOf="@id/oca_p22" />
+
+            <android.widget.Button
+                android:id="@+id/oca_b17"
+                style="@style/black_piano_key_style"
+                android:layout_toRightOf="@id/oca_p23" />
 
             <TextView
-                android:id="@+id/tc3"
-                style="@style/style_for_TextView_keyText3"
-                android:layout_toLeftOf="@id/p2"
+                android:id="@+id/oca_ta4"
+                style="@style/style_for_TextView_keyText4"
+                android:layout_toLeftOf="@id/oca_p14"
+                android:stateListAnimator="@null"
+                android:text="A4"
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@+id/oca_tb4"
+                style="@style/style_for_TextView_keyText4"
+                android:layout_toLeftOf="@id/oca_p15"
+                android:stateListAnimator="@null"
+                android:text="B4"
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@+id/oca_tc5"
+                style="@style/style_for_TextView_keyText5"
+                android:layout_toLeftOf="@id/oca_p16"
                 android:stateListAnimator="@null"
                 android:text="C5"
                 android:textIsSelectable="false" />
 
             <TextView
-                android:id="@+id/td3"
-                style="@style/style_for_TextView_keyText3"
-                android:layout_toLeftOf="@id/p3"
+                android:id="@+id/oca_td5"
+                style="@style/style_for_TextView_keyText5"
+                android:layout_toLeftOf="@id/oca_p17"
                 android:stateListAnimator="@null"
                 android:text="D5"
                 android:textIsSelectable="false" />
 
             <TextView
-                android:id="@+id/te3"
-                style="@style/style_for_TextView_keyText3"
-                android:layout_toLeftOf="@id/p4"
+                android:id="@+id/oca_te5"
+                style="@style/style_for_TextView_keyText5"
+                android:layout_toLeftOf="@id/oca_p18"
                 android:stateListAnimator="@null"
                 android:text="E5"
                 android:textIsSelectable="false" />
 
             <TextView
-                android:id="@+id/tf3"
-                style="@style/style_for_TextView_keyText3"
-                android:layout_toLeftOf="@id/p5"
+                android:id="@+id/oca_tf5"
+                style="@style/style_for_TextView_keyText5"
+                android:layout_toLeftOf="@id/oca_p19"
                 android:stateListAnimator="@null"
                 android:text="F5"
                 android:textIsSelectable="false" />
 
             <TextView
-                android:id="@+id/tg3"
-                style="@style/style_for_TextView_keyText3"
-                android:layout_toLeftOf="@id/p6"
+                android:id="@+id/oca_tg5"
+                style="@style/style_for_TextView_keyText5"
+                android:layout_toLeftOf="@id/oca_p20"
                 android:stateListAnimator="@null"
                 android:text="G5"
                 android:textIsSelectable="false" />
 
             <TextView
-                android:id="@+id/ta3"
-                style="@style/style_for_TextView_keyText3"
-                android:layout_toLeftOf="@id/p7"
+                android:id="@+id/oca_ta5"
+                style="@style/style_for_TextView_keyText5"
+                android:layout_toLeftOf="@id/oca_p21"
                 android:stateListAnimator="@null"
                 android:text="A5"
                 android:textIsSelectable="false" />
 
             <TextView
-                android:id="@+id/tb3"
-                style="@style/style_for_TextView_keyText3"
+                android:id="@+id/oca_tb5"
+                style="@style/style_for_TextView_keyText5"
+                android:layout_toLeftOf="@id/oca_p22"
                 android:stateListAnimator="@null"
                 android:text="B5"
-                android:textIsSelectable="false"
-                android:layout_toRightOf="@id/p6"
-                android:paddingLeft="10dp"/>
+                android:textIsSelectable="false" />
 
+            <TextView
+                android:id="@+id/oca_tc6"
+                style="@style/style_for_TextView_keyText6"
+                android:layout_toLeftOf="@id/oca_p23"
+                android:stateListAnimator="@null"
+                android:text="C6"
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@+id/oca_td6"
+                style="@style/style_for_TextView_keyText6"
+                android:layout_toLeftOf="@id/oca_p24"
+                android:stateListAnimator="@null"
+                android:text="D6"
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@+id/oca_te6"
+                style="@style/style_for_TextView_keyText6"
+                android:layout_toRightOf="@id/oca_p23"
+                android:paddingLeft="15dp"
+                android:stateListAnimator="@null"
+                android:text="E6"
+                android:textIsSelectable="false" />
 
         </RelativeLayout>
     </HorizontalScrollView>

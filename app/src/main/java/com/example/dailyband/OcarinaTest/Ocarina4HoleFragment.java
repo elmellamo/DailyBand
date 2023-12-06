@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -50,6 +51,12 @@ public class Ocarina4HoleFragment extends Fragment {
     private boolean isPaused = false;
     private LabeledSwitch instrumnet_switch;
     private String filePath; // 녹음된 파일의 경로를 저장할 변수
+
+    private Button buttonA4, buttonA4black, buttonB4, buttonC5, buttonC5black, buttonD5,
+            buttonD5black, buttonE5, buttonF5, buttonF5black, buttonG5, buttonG5black, buttonA5, buttonA5black,
+            buttonB5, buttonC6,buttonC6black, buttonD6, buttonD6black, buttonE6;
+    private TextView ta4,tb4,tc5, td5, te5, tf5, tg5, ta5, tb5, tc6, td6, te6;
+
     public void setOnRecordingCompletedListener(OnRecordingCompletedListener listener) {
         this.recordingCompletedListener = listener;
     }
@@ -113,6 +120,79 @@ public class Ocarina4HoleFragment extends Fragment {
         b2.setOnTouchListener(AddMusic.getTouchListener());
         b3.setOnTouchListener(AddMusic.getTouchListener());
         b4.setOnTouchListener(AddMusic.getTouchListener());
+
+        buttonA4 = (Button) getActivity().findViewById(R.id.oca_p13);
+        buttonB4 = (Button) getActivity().findViewById(R.id.oca_p14);
+        buttonC5 = (Button) getActivity().findViewById(R.id.oca_p15);
+        buttonD5 = (Button) getActivity().findViewById(R.id.oca_p16);
+        buttonE5 = (Button) getActivity().findViewById(R.id.oca_p17);
+        buttonF5 = (Button) getActivity().findViewById(R.id.oca_p18);
+        buttonG5 = (Button) getActivity().findViewById(R.id.oca_p19);
+        buttonA5 = (Button) getActivity().findViewById(R.id.oca_p20);
+        buttonB5 = (Button) getActivity().findViewById(R.id.oca_p21);
+        buttonC6 = (Button) getActivity().findViewById(R.id.oca_p22);
+        buttonD6 = (Button) getActivity().findViewById(R.id.oca_p23);
+        buttonE6 = (Button) getActivity().findViewById(R.id.oca_p24);
+
+        buttonA4.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonB4.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonC5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonD5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonE5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonF5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonG5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonA5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonB5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonC6.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonD6.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonE6.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+
+        buttonA4black = (Button) getActivity().findViewById(R.id.oca_b10);
+        buttonC5black = (Button) getActivity().findViewById(R.id.oca_b11);
+        buttonD5black = (Button) getActivity().findViewById(R.id.oca_b12);
+        buttonF5black = (Button) getActivity().findViewById(R.id.oca_b13);
+        buttonG5black = (Button) getActivity().findViewById(R.id.oca_b14);
+        buttonA5black = (Button) getActivity().findViewById(R.id.oca_b15);
+        buttonC6black = (Button) getActivity().findViewById(R.id.oca_b16);
+        buttonD6black = (Button) getActivity().findViewById(R.id.oca_b17);
+
+
+        buttonA4black.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonC5black.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonD5black.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonF5black.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonG5black.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonA5black.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonC6black.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonD6black.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+
+
+        ta4 = (TextView) getActivity().findViewById(R.id.oca_ta4);
+        tb4 = (TextView) getActivity().findViewById(R.id.oca_tb4);
+        tc5 = (TextView) getActivity().findViewById(R.id.oca_tc5);
+        td5 = (TextView) getActivity().findViewById(R.id.oca_td5);
+        te5 = (TextView) getActivity().findViewById(R.id.oca_te5);
+        tf5 = (TextView) getActivity().findViewById(R.id.oca_tf5);
+        tg5 = (TextView) getActivity().findViewById(R.id.oca_tg5);
+        ta5 = (TextView) getActivity().findViewById(R.id.oca_ta5);
+        tb5 = (TextView) getActivity().findViewById(R.id.oca_tb5);
+        tc6 = (TextView) getActivity().findViewById(R.id.oca_tc6);
+        td6 = (TextView) getActivity().findViewById(R.id.oca_td6);
+        te6 = (TextView) getActivity().findViewById(R.id.oca_te6);
+
+        ta4.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        tb4.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        tc5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        td5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        te5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        tf5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        tg5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        ta5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        tb5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        tc6.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        td6.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        te6.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+
     }
 
     private void startRecording() {

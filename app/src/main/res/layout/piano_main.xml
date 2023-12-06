@@ -683,7 +683,7 @@
                 android:id="@+id/tb7"
                 style="@style/style_for_TextView_keyText7"
                 android:layout_toRightOf="@id/p34"
-                android:paddingLeft="10dp"
+                android:paddingLeft="15dp"
                 android:stateListAnimator="@null"
                 android:text="B7"
                 android:textIsSelectable="false" />

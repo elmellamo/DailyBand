@@ -59,6 +59,8 @@ import com.example.dailyband.MusicFragment.DrumFragment;
 import com.example.dailyband.MusicFragment.NewPopularFragment;
 import com.example.dailyband.MusicFragment.PianoFragment;
 import com.example.dailyband.MusicFragment.RecordingMain;
+import com.example.dailyband.OcarinaTest.OcaPianoTouchListener;
+import com.example.dailyband.OcarinaTest.OcaPlayAudio;
 import com.example.dailyband.OcarinaTest.Ocarina4HoleFragment;
 import com.example.dailyband.OcarinaTest.OcarinaTouchListener;
 import com.example.dailyband.OcarinaTest.PlayAudio;
@@ -122,7 +124,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     private boolean isPlaying = false;
     private long playingLocation = 0;
     private long max_len = 0;
-
+    protected static OcaPianoTouchListener ocaPianoTouchListener;
     protected static OcarinaTouchListener touchListener;
     protected static boolean volumeLockEnabled;
     private ImageView plusbtn, playbtn, stopbtn, backcontext;
@@ -974,7 +976,9 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     //여기부터는 오카리나 관련
     public void startOcarina(){
         touchListener = new OcarinaTouchListener("4Hole");
+        ocaPianoTouchListener = new OcaPianoTouchListener();
         PlayAudio.start();
+        OcaPlayAudio.start();
     }
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -1018,6 +1022,10 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
 
     static public OcarinaTouchListener getTouchListener() {
         return touchListener;
+    }
+
+    static public OcaPianoTouchListener getOcaPianoTouchListener(){
+        return ocaPianoTouchListener;
     }
 
     public void updateIsFragmentOpen(boolean isFragmentOpen) {
