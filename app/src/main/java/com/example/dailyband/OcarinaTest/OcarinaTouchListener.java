@@ -55,10 +55,8 @@ public class OcarinaTouchListener implements View.OnTouchListener {
         } else if (i == button2) {
             return 2;
         } else if (i == button3) {
-            //Log.d("PlayAudio", "3번 시작");  // 로그 추가
             return 3;
         } else if (i == button4) {
-            //Log.d("PlayAudio", "4번 시작");  // 로그 추가
             return 4;
         } else if (i == button5) {
             return 5;
