@@ -58,7 +58,7 @@
 
         <com.github.angads25.toggle.widget.LabeledSwitch
             android:id="@+id/instrumnet_switch"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:textSize="14sp"
@@ -153,8 +153,8 @@
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="25dp"
         app:layout_constraintTop_toBottomOf="@+id/middle_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -163,13 +163,13 @@
         android:scrollbarFadeDuration="0"
         android:scrollbarAlwaysDrawHorizontalTrack="true"
         android:scrollbarDefaultDelayBeforeFade="500000"
-        android:scrollbarSize="5dp"
+        android:scrollbarSize="7dp"
         android:scrollbarThumbHorizontal="@color/test_main_clolr"
         >
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:paddingBottom="20dp"
+            android:paddingBottom="25dp"
             android:layout_height="wrap_content">
 
             <android.widget.Button

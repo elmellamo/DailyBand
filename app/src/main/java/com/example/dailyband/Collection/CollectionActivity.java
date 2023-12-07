@@ -39,6 +39,8 @@ import com.scwang.wave.MultiWaveHeader;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,6 +138,14 @@ public class CollectionActivity extends AppCompatActivity {
                         song.setUser_id(objectMap.get("user_id").toString());
                         songs.add(song);
                     }
+
+                    Collections.sort(songs, new Comparator<TestSong>() {
+                        @Override
+                        public int compare(TestSong song1, TestSong song2) {
+                            return song2.getDate_created().compareTo(song1.getDate_created());
+                        }
+                    });
+
 
                     adapter = new MySongAdapter(CollectionActivity.this, songs);
                     recyclerView.setAdapter(adapter);
