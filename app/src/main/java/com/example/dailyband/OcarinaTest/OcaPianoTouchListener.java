@@ -1,7 +1,9 @@
 package com.example.dailyband.OcarinaTest;
 
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 
 import com.example.dailyband.R;
 
@@ -14,12 +16,33 @@ public class OcaPianoTouchListener implements View.OnTouchListener{
 
     @Override
     public boolean onTouch (View v, MotionEvent event) {
-        note = getButtonId(v.getId());
-
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            note = 0;
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                note = getButtonId(v.getId());
+                break;
+            case MotionEvent.ACTION_UP:
+                note = 0;
+                break;
         }
         return true;
+    }
+    // View가 화면에 보이는지 확인하는 메서드
+    private boolean isViewVisible(View view) {
+        if (view == null || !(view.getParent() instanceof HorizontalScrollView)) {
+            return false;
+        }
+
+        HorizontalScrollView horizontalScrollView = (HorizontalScrollView) view.getParent();
+
+        int scrollX = horizontalScrollView.getScrollX();
+        int viewLeft = view.getLeft();
+        int viewRight = view.getRight();
+
+        int scrollViewWidth = horizontalScrollView.getWidth();
+        int scrollMax = horizontalScrollView.getChildAt(0).getMeasuredWidth() - scrollViewWidth;
+
+        return (scrollX <= viewRight && viewLeft <= scrollX + scrollViewWidth) ||
+                (scrollX >= scrollMax && viewRight <= scrollViewWidth);
     }
 
     public int getButtonId(int i) {

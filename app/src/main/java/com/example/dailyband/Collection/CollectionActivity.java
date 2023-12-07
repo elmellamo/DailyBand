@@ -29,6 +29,9 @@ import com.example.dailyband.Setting.NewSettingActivity;
 import com.example.dailyband.Utils.DataFetchCallback;
 import com.example.dailyband.Utils.FirebaseMethods;
 import com.example.dailyband.adapter.MySongAdapter;
+import com.github.angads25.toggle.interfaces.OnToggledListener;
+import com.github.angads25.toggle.model.ToggleableView;
+import com.github.angads25.toggle.widget.LabeledSwitch;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -57,6 +60,7 @@ public class CollectionActivity extends AppCompatActivity {
     private ImageView circle_iv;
     private boolean doubleBackToExitPressedOnce = false;
 
+    private LabeledSwitch switch_btn;
 
     private ImageButton addbtn, setbtn, librarybtn, myInfobtn, homeBtn;
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,7 @@ public class CollectionActivity extends AppCompatActivity {
         circle_iv = findViewById(R.id.circle_iv);
         setbtn = findViewById(R.id.setbtn);
         circularlayout = findViewById(R.id.circularlayout);
+        switch_btn = findViewById(R.id.switch_btn);
         circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
         circularlayout.bringToFront();
 
@@ -85,7 +90,7 @@ public class CollectionActivity extends AppCompatActivity {
         emptytxt = findViewById(R.id.emptytxt);
         recyclerView.setLayoutManager(new LinearLayoutManager(CollectionActivity.this));
         songs = new ArrayList<>();
-        fetchData();
+        fetchData(false);
 
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,9 +122,16 @@ public class CollectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) { myStartActivity(NewSettingActivity.class);    }
         });
+
+        switch_btn.setOnToggledListener(new OnToggledListener() {
+            @Override
+            public void onSwitched(ToggleableView toggleableView, boolean isOn) {
+                fetchData(isOn); // isOn 상태를 fetchData에 전달하여 필요한 정렬 방식을 선택
+            }
+        });
     }
 
-    private void getMySong(DataFetchCallback callback){
+    private void getMySong(boolean isOn, DataFetchCallback callback){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         String myUID = mFirebaseMethods.getMyUid();
         DatabaseReference mysongRef = databaseReference.child("user_songs").child(myUID);
@@ -139,13 +151,27 @@ public class CollectionActivity extends AppCompatActivity {
                         songs.add(song);
                     }
 
-                    Collections.sort(songs, new Comparator<TestSong>() {
-                        @Override
-                        public int compare(TestSong song1, TestSong song2) {
-                            return song2.getDate_created().compareTo(song1.getDate_created());
-                        }
-                    });
-
+                    if(!isOn){
+                        Collections.sort(songs, new Comparator<TestSong>() {
+                            @Override
+                            public int compare(TestSong song1, TestSong song2) {
+                                return song2.getDate_created().compareTo(song1.getDate_created());
+                            }
+                        });
+                    }else{
+                        Collections.sort(songs, new Comparator<TestSong>() {
+                            @Override
+                            public int compare(TestSong song1, TestSong song2) {
+                                // love가 큰 순서대로 정렬
+                                int loveComparison = Integer.compare(song2.getLove(), song1.getLove());
+                                if (loveComparison != 0) {
+                                    return loveComparison;
+                                }
+                                // love가 같은 경우 시간을 큰 순서대로 정렬
+                                return song2.getDate_created().compareTo(song1.getDate_created());
+                            }
+                        });
+                    }
 
                     adapter = new MySongAdapter(CollectionActivity.this, songs);
                     recyclerView.setAdapter(adapter);
@@ -178,9 +204,9 @@ public class CollectionActivity extends AppCompatActivity {
     private void checkEmpty(){
         emptytxt.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
-    private void fetchData() {
+    private void fetchData(boolean isOn) {
         showProgressBar();
-        getMySong(new DataFetchCallback() {
+        getMySong(isOn, new DataFetchCallback() {
             @Override
             public void onDataFetchedSuccessfully() {
                 // getInfo 성공 후의 처리

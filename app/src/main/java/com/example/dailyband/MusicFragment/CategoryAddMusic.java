@@ -43,7 +43,7 @@ public class CategoryAddMusic extends Fragment {
                 if(getActivity() instanceof AddMusic){
                     AddMusic addmusic = (AddMusic) getActivity();
                     addmusic.hideAddCategoryFrameLayout();
-                    addmusic.startOcarina();
+                    //addmusic.startOcarina();
                     addmusic.showUpOcarina();
                 }
             }

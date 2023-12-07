@@ -66,7 +66,7 @@ public class RecordingMain extends Fragment {
 
         bt_record = view.findViewById(R.id.bt_record);
         stop_record = view.findViewById(R.id.stop_record);
-        clearbtn = view.findViewById(R.id.clearbtn);
+        clearbtn = view.findViewById(R.id.clearimg);
         waveRecorder = new WaveRecorder(filePath);
         externalDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC), directory_name);
         if (!externalDir.exists()) {

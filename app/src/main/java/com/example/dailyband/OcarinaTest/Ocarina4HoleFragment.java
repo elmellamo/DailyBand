@@ -1,5 +1,6 @@
 package com.example.dailyband.OcarinaTest;
 import android.content.ContentValues;
+import android.content.Context;
 import android.media.AudioFormat;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
@@ -51,6 +53,9 @@ public class Ocarina4HoleFragment extends Fragment {
     private boolean isPaused = false;
     private LabeledSwitch instrumnet_switch;
     private String filePath; // 녹음된 파일의 경로를 저장할 변수
+
+    private OcaPianoTouchListener ocaPianoTouchListener;
+    private OcarinaTouchListener ocarinaTouchListener;
 
     private Button buttonA4, buttonA4black, buttonB4, buttonC5, buttonC5black, buttonD5,
             buttonD5black, buttonE5, buttonF5, buttonF5black, buttonG5, buttonG5black, buttonA5, buttonA5black,
@@ -107,8 +112,24 @@ public class Ocarina4HoleFragment extends Fragment {
         return view;
     }
 
-    @Override
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof AddMusic) {
+            // 액티비티에서 사용 가능한 메서드를 사용하기 위해 액티비티 인스턴스를 전달합니다.
+            AddMusic activity = (AddMusic) context;
+            ocaPianoTouchListener = new OcaPianoTouchListener();
+            ocarinaTouchListener = new OcarinaTouchListener("4Hole");
+            PlayAudio.start();
+            OcaPlayAudio.start();
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement YourActivity");
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         ImageButton b1 = (ImageButton) getActivity().findViewById(R.id.button1);
@@ -116,10 +137,10 @@ public class Ocarina4HoleFragment extends Fragment {
         ImageButton b3 = (ImageButton) getActivity().findViewById(R.id.button3);
         ImageButton b4 = (ImageButton) getActivity().findViewById(R.id.button4);
 
-        b1.setOnTouchListener(AddMusic.getTouchListener());
-        b2.setOnTouchListener(AddMusic.getTouchListener());
-        b3.setOnTouchListener(AddMusic.getTouchListener());
-        b4.setOnTouchListener(AddMusic.getTouchListener());
+        b1.setOnTouchListener(ocarinaTouchListener);
+        b2.setOnTouchListener(ocarinaTouchListener);
+        b3.setOnTouchListener(ocarinaTouchListener);
+        b4.setOnTouchListener(ocarinaTouchListener);
 
         buttonA4 = (Button) getActivity().findViewById(R.id.oca_p13);
         buttonB4 = (Button) getActivity().findViewById(R.id.oca_p14);
@@ -134,18 +155,18 @@ public class Ocarina4HoleFragment extends Fragment {
         buttonD6 = (Button) getActivity().findViewById(R.id.oca_p23);
         buttonE6 = (Button) getActivity().findViewById(R.id.oca_p24);
 
-        buttonA4.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonB4.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonC5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonD5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonE5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonF5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonG5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonA5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonB5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonC6.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonD6.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonE6.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonA4.setOnTouchListener(ocaPianoTouchListener);
+        buttonB4.setOnTouchListener(ocaPianoTouchListener);
+        buttonC5.setOnTouchListener(ocaPianoTouchListener);
+        buttonD5.setOnTouchListener(ocaPianoTouchListener);
+        buttonE5.setOnTouchListener(ocaPianoTouchListener);
+        buttonF5.setOnTouchListener(ocaPianoTouchListener);
+        buttonG5.setOnTouchListener(ocaPianoTouchListener);
+        buttonA5.setOnTouchListener(ocaPianoTouchListener);
+        buttonB5.setOnTouchListener(ocaPianoTouchListener);
+        buttonC6.setOnTouchListener(ocaPianoTouchListener);
+        buttonD6.setOnTouchListener(ocaPianoTouchListener);
+        buttonE6.setOnTouchListener(ocaPianoTouchListener);
 
         buttonA4black = (Button) getActivity().findViewById(R.id.oca_b10);
         buttonC5black = (Button) getActivity().findViewById(R.id.oca_b11);
@@ -157,14 +178,14 @@ public class Ocarina4HoleFragment extends Fragment {
         buttonD6black = (Button) getActivity().findViewById(R.id.oca_b17);
 
 
-        buttonA4black.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonC5black.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonD5black.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonF5black.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonG5black.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonA5black.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonC6black.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        buttonD6black.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        buttonA4black.setOnTouchListener(ocaPianoTouchListener);
+        buttonC5black.setOnTouchListener(ocaPianoTouchListener);
+        buttonD5black.setOnTouchListener(ocaPianoTouchListener);
+        buttonF5black.setOnTouchListener(ocaPianoTouchListener);
+        buttonG5black.setOnTouchListener(ocaPianoTouchListener);
+        buttonA5black.setOnTouchListener(ocaPianoTouchListener);
+        buttonC6black.setOnTouchListener(ocaPianoTouchListener);
+        buttonD6black.setOnTouchListener(ocaPianoTouchListener);
 
 
         ta4 = (TextView) getActivity().findViewById(R.id.oca_ta4);
@@ -180,18 +201,18 @@ public class Ocarina4HoleFragment extends Fragment {
         td6 = (TextView) getActivity().findViewById(R.id.oca_td6);
         te6 = (TextView) getActivity().findViewById(R.id.oca_te6);
 
-        ta4.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        tb4.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        tc5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        td5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        te5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        tf5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        tg5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        ta5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        tb5.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        tc6.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        td6.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
-        te6.setOnTouchListener(AddMusic.getOcaPianoTouchListener());
+        ta4.setOnTouchListener(ocaPianoTouchListener);
+        tb4.setOnTouchListener(ocaPianoTouchListener);
+        tc5.setOnTouchListener(ocaPianoTouchListener);
+        td5.setOnTouchListener(ocaPianoTouchListener);
+        te5.setOnTouchListener(ocaPianoTouchListener);
+        tf5.setOnTouchListener(ocaPianoTouchListener);
+        tg5.setOnTouchListener(ocaPianoTouchListener);
+        ta5.setOnTouchListener(ocaPianoTouchListener);
+        tb5.setOnTouchListener(ocaPianoTouchListener);
+        tc6.setOnTouchListener(ocaPianoTouchListener);
+        td6.setOnTouchListener(ocaPianoTouchListener);
+        te6.setOnTouchListener(ocaPianoTouchListener);
 
     }
 

@@ -976,7 +976,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     //여기부터는 오카리나 관련
     public void startOcarina(){
         touchListener = new OcarinaTouchListener("4Hole");
-        ocaPianoTouchListener = new OcaPianoTouchListener();
+        //ocaPianoTouchListener = new OcaPianoTouchListener(this);
         PlayAudio.start();
         OcaPlayAudio.start();
     }
