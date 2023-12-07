@@ -286,7 +286,7 @@
 
             <TextView
                 android:id="@+id/oca_ta4"
-                style="@style/style_for_TextView_keyText4"
+                style="@style/oca_style_for_TextView_keyText4"
                 android:layout_toLeftOf="@id/oca_p14"
                 android:stateListAnimator="@null"
                 android:text="A4"
@@ -294,7 +294,7 @@
 
             <TextView
                 android:id="@+id/oca_tb4"
-                style="@style/style_for_TextView_keyText4"
+                style="@style/oca_style_for_TextView_keyText4"
                 android:layout_toLeftOf="@id/oca_p15"
                 android:stateListAnimator="@null"
                 android:text="B4"
@@ -302,7 +302,7 @@
 
             <TextView
                 android:id="@+id/oca_tc5"
-                style="@style/style_for_TextView_keyText5"
+                style="@style/oca_style_for_TextView_keyText5"
                 android:layout_toLeftOf="@id/oca_p16"
                 android:stateListAnimator="@null"
                 android:text="C5"
@@ -310,7 +310,7 @@
 
             <TextView
                 android:id="@+id/oca_td5"
-                style="@style/style_for_TextView_keyText5"
+                style="@style/oca_style_for_TextView_keyText5"
                 android:layout_toLeftOf="@id/oca_p17"
                 android:stateListAnimator="@null"
                 android:text="D5"
@@ -318,7 +318,7 @@
 
             <TextView
                 android:id="@+id/oca_te5"
-                style="@style/style_for_TextView_keyText5"
+                style="@style/oca_style_for_TextView_keyText5"
                 android:layout_toLeftOf="@id/oca_p18"
                 android:stateListAnimator="@null"
                 android:text="E5"
@@ -326,7 +326,7 @@
 
             <TextView
                 android:id="@+id/oca_tf5"
-                style="@style/style_for_TextView_keyText5"
+                style="@style/oca_style_for_TextView_keyText5"
                 android:layout_toLeftOf="@id/oca_p19"
                 android:stateListAnimator="@null"
                 android:text="F5"
@@ -334,7 +334,7 @@
 
             <TextView
                 android:id="@+id/oca_tg5"
-                style="@style/style_for_TextView_keyText5"
+                style="@style/oca_style_for_TextView_keyText5"
                 android:layout_toLeftOf="@id/oca_p20"
                 android:stateListAnimator="@null"
                 android:text="G5"
@@ -342,7 +342,7 @@
 
             <TextView
                 android:id="@+id/oca_ta5"
-                style="@style/style_for_TextView_keyText5"
+                style="@style/oca_style_for_TextView_keyText5"
                 android:layout_toLeftOf="@id/oca_p21"
                 android:stateListAnimator="@null"
                 android:text="A5"
@@ -350,7 +350,7 @@
 
             <TextView
                 android:id="@+id/oca_tb5"
-                style="@style/style_for_TextView_keyText5"
+                style="@style/oca_style_for_TextView_keyText5"
                 android:layout_toLeftOf="@id/oca_p22"
                 android:stateListAnimator="@null"
                 android:text="B5"
@@ -358,7 +358,7 @@
 
             <TextView
                 android:id="@+id/oca_tc6"
-                style="@style/style_for_TextView_keyText6"
+                style="@style/oca_style_for_TextView_keyText6"
                 android:layout_toLeftOf="@id/oca_p23"
                 android:stateListAnimator="@null"
                 android:text="C6"
@@ -366,7 +366,7 @@
 
             <TextView
                 android:id="@+id/oca_td6"
-                style="@style/style_for_TextView_keyText6"
+                style="@style/oca_style_for_TextView_keyText6"
                 android:layout_toLeftOf="@id/oca_p24"
                 android:stateListAnimator="@null"
                 android:text="D6"
@@ -374,7 +374,7 @@
 
             <TextView
                 android:id="@+id/oca_te6"
-                style="@style/style_for_TextView_keyText6"
+                style="@style/oca_style_for_TextView_keyText6"
                 android:layout_toRightOf="@id/oca_p23"
                 android:paddingLeft="15dp"
                 android:stateListAnimator="@null"
