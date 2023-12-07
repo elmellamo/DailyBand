@@ -16,6 +16,9 @@ public class OcaPianoTouchListener implements View.OnTouchListener{
     public boolean onTouch (View v, MotionEvent event) {
         note = getButtonId(v.getId());
 
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            note = 0;
+        }
         return true;
     }
 
@@ -106,6 +109,8 @@ public class OcaPianoTouchListener implements View.OnTouchListener{
             return Note.D_6_SHARP;
         }else if(note == 20){
             return Note.E_6;
+        }else if(note ==0){
+            return Note.NULL;
         }
 
         return Note.NULL;
