@@ -2,11 +2,13 @@ package com.example.dailyband.Start;
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -20,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.dailyband.Home.HomeMain;
+import com.example.dailyband.Login.LoginActivity;
 import com.example.dailyband.R;
 import com.example.dailyband.Utils.MusicService;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,8 +54,15 @@ public class SplashActivity extends AppCompatActivity{
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         // SPLASH_DELAY 시간 후에 다음 화면으로 이동합니다.
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean autoLoginEnabled = preferences.getBoolean("auto_login_enabled", false);
 
-        if (currentUser != null){
+        //if(autoLoginEnabled)
+        //    Toast.makeText(SplashActivity.this, "자동로그인 true", Toast.LENGTH_SHORT).show();
+        //else
+        //    Toast.makeText(SplashActivity.this, "자동로그인 false", Toast.LENGTH_SHORT).show();
+
+        if (currentUser != null && autoLoginEnabled){
             //Download_image();
             AUTO_LOGIN = true;
         }

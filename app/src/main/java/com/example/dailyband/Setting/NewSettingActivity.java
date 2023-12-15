@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -12,6 +13,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.animation.Animation;
@@ -36,6 +38,7 @@ import com.example.dailyband.Login.LoginActivity;
 import com.example.dailyband.Love.LoveActivity;
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
+import com.example.dailyband.Start.SplashActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -327,10 +330,15 @@ public class NewSettingActivity extends AppCompatActivity {
         TextView dialogMessage = customDialog.findViewById(R.id.confirmTextView);
         Button dialogWithdraw = customDialog.findViewById(R.id.yesButton);
         Button dialogCancel = customDialog.findViewById(R.id.noButton);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         dialogWithdraw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("auto_login_enabled", false);
+                editor.commit();
+
                 customDialog.dismiss();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference rootRef = database.getReference();
@@ -359,7 +367,6 @@ public class NewSettingActivity extends AppCompatActivity {
 
                 FirebaseAuth.getInstance().signOut();
                 myStartActivity(LoginActivity.class);
-
             }
         });
 

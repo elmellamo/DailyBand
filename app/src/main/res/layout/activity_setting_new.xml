@@ -451,11 +451,10 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/setting_withdrawal_layout"
                         android:layout_marginTop="15dp"
-                        android:layout_marginBottom="15dp"
                         android:clickable="true"
                         app:layout_constraintTop_toBottomOf="@id/setting_logout_layout"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/music_onoff_layout"
                         >
                         <ImageView
                             android:id="@+id/setting_withdrawal_img"
@@ -495,6 +494,61 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             />
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/music_onoff_layout"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:clickable="true"
+                        app:layout_constraintTop_toBottomOf="@id/setting_withdrawal_layout"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        >
+                        <ImageView
+                            android:id="@+id/music_onoff_img"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/setting_withdrawal_img"
+                            android:layout_marginStart="10dp"
+                            app:civ_border_color="#000000"
+                            app:civ_border_overlay="true"
+                            app:civ_border_width="0dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+
+                        <TextView
+                            android:id="@+id/music_onoff_textview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="배경음악"
+                            android:textStyle="bold"
+                            android:textColor="#000000"
+                            android:textSize="16sp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/music_onoff_img"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <ImageView
+                            android:id="@+id/music_onoff_toggle"
+                            android:src="@drawable/setting_go_img"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="5dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
                 </LinearLayout>
             </ScrollView>

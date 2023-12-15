@@ -4,7 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -81,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String emailstr = emailEdittext.getText().toString();
                 String pwstr = pwEdittext.getText().toString();
+
 
                 if (emailstr.isEmpty() || pwstr.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "빈 칸 없이 입력하세요.", Toast.LENGTH_SHORT).show();
@@ -161,13 +164,18 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
     private void fetchData() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean autoLoginEnabled = preferences.getBoolean("auto_login_enabled", false);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("auto_login_enabled", true);
+        editor.apply();
+
         showProgressBar();
         Download_image(new DataFetchCallback() {
             @Override
             public void onDataFetchedSuccessfully() {
                 // getInfo 성공 후의 처리
                 hideProgressBar();
-
             }
 
             @Override
