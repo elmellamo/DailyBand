@@ -513,7 +513,7 @@
                             android:id="@+id/music_onoff_img"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:src="@drawable/setting_withdrawal_img"
+                            android:src="@drawable/music_onoff"
                             android:layout_marginStart="10dp"
                             app:civ_border_color="#000000"
                             app:civ_border_overlay="true"
@@ -536,16 +536,17 @@
                             app:layout_constraintStart_toEndOf="@id/music_onoff_img"
                             app:layout_constraintBottom_toBottomOf="parent"/>
 
-                        <ImageView
+                        <Switch
                             android:id="@+id/music_onoff_toggle"
-                            android:src="@drawable/setting_go_img"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginEnd="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textOn="On"
+                            android:textOff="Off"
+                            android:checked="false"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            />
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

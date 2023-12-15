@@ -20,8 +20,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,6 +90,8 @@ public class NewSettingActivity extends AppCompatActivity {
     private ImageButton addbtn, setbtn, librarybtn, myInfobtn, homeBtn;
 
     public ConstraintLayout menubar;
+    private Switch musicOnOffToggle;
+    private SharedPreferences preferences;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +119,8 @@ public class NewSettingActivity extends AppCompatActivity {
         librarybtn = findViewById(R.id.librarybtn);
         setbtn = findViewById(R.id.setbtn);
         addbtn = findViewById(R.id.addbtn);
+        musicOnOffToggle = findViewById(R.id.music_onoff_toggle);
+        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         circularlayout = findViewById(R.id.circularlayout);
         circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
@@ -317,6 +323,20 @@ public class NewSettingActivity extends AppCompatActivity {
                 email.putExtra(Intent.EXTRA_SUBJECT, "데일리밴드 1대1 문의");
                 email.putExtra(Intent.EXTRA_TEXT, "아이디 : \n\n문의사항 : ");
                 startActivity(email);
+            }
+        });
+
+        boolean bgOnOff = preferences.getBoolean("bg_onoff", false);
+        musicOnOffToggle.setChecked(bgOnOff);
+
+        musicOnOffToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Switch 상태가 변경될 때 호출되는 메서드
+                // SharedPreferences에 상태 저장
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("bg_onoff", isChecked);
+                editor.commit();
             }
         });
     }

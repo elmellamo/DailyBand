@@ -39,6 +39,7 @@ public class SplashActivity extends AppCompatActivity{
 
     private static final long SPLASH_DELAY = 650;
     private boolean AUTO_LOGIN = false;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +49,15 @@ public class SplashActivity extends AppCompatActivity{
         setContentView(R.layout.activity_splash);
         final TextView splashText = findViewById(R.id.splashTextView);
         final ImageView splashImage = findViewById(R.id.splashImage);
-        Intent musicServiceIntent = new Intent(this, MusicService.class);
-        startService(musicServiceIntent);
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean bgOnOff = preferences.getBoolean("bg_onoff", false);
+
+        if(bgOnOff) {
+            Intent musicServiceIntent = new Intent(this, MusicService.class);
+            startService(musicServiceIntent);
+        }
+        else{}
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         // SPLASH_DELAY 시간 후에 다음 화면으로 이동합니다.
