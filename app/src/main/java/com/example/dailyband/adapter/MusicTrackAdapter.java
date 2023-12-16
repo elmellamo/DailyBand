@@ -81,14 +81,4 @@ public class MusicTrackAdapter extends RecyclerView.Adapter<MusicTrackAdapter.Tr
         return this.tracks.size();
     }
 
-    // 아이템 클릭시 이벤트리스너
-//    private OnItemClickEventListener mItemClickListener;
-//
-//    public interface OnItemClickEventListener {
-//        void onItemClick(View a_view, int a_position);
-//    }
-//    public void setOnItemClickListener(OnItemClickEventListener a_listener) {
-//        mItemClickListener = a_listener;
-//    }
-
 }
