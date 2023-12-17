@@ -349,8 +349,32 @@ public class HomeMain extends AppCompatActivity{
         super.onResume();
         // 이미지를 업데이트하는 코드를 여기에 추가
         getImage(); // 혹은 이미지 업데이트하는 메서드 호출
+        getInfo_resume();
+
     }
 
+    private void getInfo_resume(){
+        //started = true;
+        String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference userAccountRef = FirebaseDatabase.getInstance().getReference().child("UserAccount").child(userUID);
+        userAccountRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot userAccountDataSnapshot) {
+                if (userAccountDataSnapshot.exists()) {
+                    // UserAccount 카테고리에서 name 값을 가져와서 사용하거나 처리할 수 있습니다.
+                    nickname = userAccountDataSnapshot.child("name").getValue(String.class);
+                    username.setText(nickname);
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // 데이터 가져오기가 실패한 경우에 대한 처리
+            }
+        });
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
