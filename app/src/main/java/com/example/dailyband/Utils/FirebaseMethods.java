@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StreamDownloadTask;
 
@@ -226,11 +227,11 @@ public class FirebaseMethods {
     }
     public void uploadNewStorage(final String title, Uri fileUri, String postId) {
         if (fileUri == null) {
-            Log.e("로그", "File URI is null");
+            Log.e("테스트", "File URI is null");
             // 적절한 예외 처리 또는 오류 메시지를 사용하여 사용자에게 알림
             return;
         }
-        Log.e("로그", "음악 업로드 중...");
+        Log.e("테스트", "음악 업로드 중...");
 
         String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         //uploadkey=1;
@@ -248,6 +249,12 @@ public class FirebaseMethods {
             //업로드 실패 시 처리
             Toast.makeText(mContext, "노래 등록에 실패하였습니다.", Toast.LENGTH_SHORT).show();
             Log.d("테스트", "노래 실패 원인??? >> "+e);
+
+            int errorCode = ((StorageException) e).getErrorCode();
+            String errorMessage = e.getMessage();
+            Log.d("테스트", "노래 실패 원인 11 "+errorCode);
+            Log.d("테스트", "노래 실패 원인 22 "+errorMessage);
+
         });
 
         Intent intent = new Intent(mContext, HomeMain.class);

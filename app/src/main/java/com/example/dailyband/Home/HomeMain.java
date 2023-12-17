@@ -345,6 +345,13 @@ public class HomeMain extends AppCompatActivity{
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // 이미지를 업데이트하는 코드를 여기에 추가
+        getImage(); // 혹은 이미지 업데이트하는 메서드 호출
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_PERMISSION_CODE) {
