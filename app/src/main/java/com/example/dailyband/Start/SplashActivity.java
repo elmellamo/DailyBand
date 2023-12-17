@@ -51,7 +51,7 @@ public class SplashActivity extends AppCompatActivity{
         final ImageView splashImage = findViewById(R.id.splashImage);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean bgOnOff = preferences.getBoolean("bg_onoff", false);
+        boolean bgOnOff = preferences.getBoolean("bg_onoff", true);
 
         if(bgOnOff) {
             Intent musicServiceIntent = new Intent(this, MusicService.class);

@@ -115,12 +115,12 @@ public class NewSettingActivity extends AppCompatActivity {
         setting_introduce_layout = findViewById(R.id.setting_introduce_layout);
         setting_password_layout = findViewById(R.id.setting_password_layout);
         homeBtn = findViewById(R.id.homeBtn);
-        myInfobtn = findViewById(R.id.myInfobtn);
         librarybtn = findViewById(R.id.librarybtn);
         setbtn = findViewById(R.id.setbtn);
         addbtn = findViewById(R.id.addbtn);
         musicOnOffToggle = findViewById(R.id.music_onoff_toggle);
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        myInfobtn = findViewById(R.id.myInfobtn);
 
         circularlayout = findViewById(R.id.circularlayout);
         circularFillableLoaders = (CircularFillableLoaders)findViewById(R.id.circularFillableLoaders);
@@ -326,7 +326,7 @@ public class NewSettingActivity extends AppCompatActivity {
             }
         });
 
-        boolean bgOnOff = preferences.getBoolean("bg_onoff", false);
+        boolean bgOnOff = preferences.getBoolean("bg_onoff", true);
         musicOnOffToggle.setChecked(bgOnOff);
 
         musicOnOffToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
