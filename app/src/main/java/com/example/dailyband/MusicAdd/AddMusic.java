@@ -122,6 +122,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
     List<MusicTrack> tracks;
     Thread audioThread;
     private boolean isPlaying = false;
+    private boolean isTouchingSeekbar = false;
     private long playingLocation = 0;
     private long max_len = 0;
     protected static OcaPianoTouchListener ocaPianoTouchListener;
@@ -384,7 +385,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                isTouchingSeekbar = true;
             }
 
             @Override
@@ -397,6 +398,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                     playingLocation = (int)mlocation;
                     updateMusicPosition();
                 }
+                isTouchingSeekbar = false;
             }
         });
 
@@ -834,6 +836,13 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
         if(audioThread != null)
             audioThread.interrupt();
         audioThread = null;
+
+        playingLocation = startPoint;
+
+        isPlaying = true;
+        Runnable r = new AudioTrackRunnable();
+        audioThread = new Thread(r);
+        audioThread.start();
     }
 
     public class AudioTrackRunnable implements Runnable {
@@ -889,7 +898,7 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                 int[] readInt = new int[mBufferSize/2];
 
                 at.play();
-                while (isPlaying) {
+                while (isPlaying && !Thread.currentThread().isInterrupted()) {
                     try {
                         // 버퍼 초기화
                         for(int j=0;j<mBufferSize/2;j++) {
@@ -928,16 +937,19 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                         ByteBuffer.wrap(writeData).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().put(writeShorts);
 
                         // 오디오 출력
-                        at.write(writeData, 0, ret);
+                        if(isPlaying && !Thread.currentThread().isInterrupted())
+                            at.write(writeData, 0, ret);
 
                         // 현재 재생위치 업데이트
-                        playingLocation += ret;
-                        runOnUiThread(new Runnable(){
-                            @Override
-                            public void run() {
-                                updateMusicPosition();
-                            }
-                        });
+                        if(!isTouchingSeekbar && isPlaying && !Thread.currentThread().isInterrupted()) {
+                            playingLocation += ret;
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateMusicPosition();
+                                }
+                            });
+                        }
 
                     } catch (IOException e) {
                         e.printStackTrace();
