@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
+import com.example.dailyband.Utils.OnGrayTouchListener;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.github.squti.androidwaverecorder.WaveConfig;
 import com.github.squti.androidwaverecorder.WaveRecorder;
@@ -34,7 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class PianoFragment extends Fragment implements View.OnClickListener {
+public class PianoFragment extends Fragment implements View.OnClickListener, OnGrayTouchListener {
     // 여기에 필요한 모든 변수 및 상수 선언
     private View view;
     private SoundPool soundPool;
@@ -606,6 +607,11 @@ public class PianoFragment extends Fragment implements View.OnClickListener {
         } else {
             Toast.makeText(requireContext(), "아직 녹음을 시작하지 않았습니다.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onGrayClicked() {
+        stopRecording();
     }
 }
 

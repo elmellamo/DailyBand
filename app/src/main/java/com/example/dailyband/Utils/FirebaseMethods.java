@@ -248,12 +248,12 @@ public class FirebaseMethods {
         }).addOnFailureListener(e->{
             //업로드 실패 시 처리
             Toast.makeText(mContext, "노래 등록에 실패하였습니다.", Toast.LENGTH_SHORT).show();
-            Log.d("테스트", "노래 실패 원인??? >> "+e);
+            Log.e("테스트", "노래 실패 원인??? >> "+e);
 
             int errorCode = ((StorageException) e).getErrorCode();
             String errorMessage = e.getMessage();
-            Log.d("테스트", "노래 실패 원인 11 "+errorCode);
-            Log.d("테스트", "노래 실패 원인 22 "+errorMessage);
+            Log.e("테스트", "노래 실패 원인 11 "+errorCode);
+            Log.e("테스트", "노래 실패 원인 22 "+errorMessage);
 
         });
 

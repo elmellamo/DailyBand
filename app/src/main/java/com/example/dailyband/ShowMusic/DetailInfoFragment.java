@@ -345,6 +345,10 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
 
     private void deleteSong(){
         //songs에서 해당 게시물 삭제
+        if(getActivity() instanceof NewPickMusic){
+            NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+            newPickMusic.showProgressBar();
+        }
         DatabaseReference songRef = FirebaseDatabase.getInstance().getReference().child("songs").child(postId);
         songRef.removeValue()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -361,6 +365,10 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
                         // 삭제 실패시 동작할 내용
                         Toast.makeText(getContext(), "노래 삭제에 실패하였습니다.", Toast.LENGTH_SHORT).show();
                         Log.e("테스트", "데이터 삭제 실패", e);
+                        if(getActivity() instanceof NewPickMusic){
+                            NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                            newPickMusic.hideProgressBar();
+                        }
                     }
                 });
     }
@@ -382,6 +390,10 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
                         // 삭제 실패시 동작할 내용
                         Toast.makeText(getContext(), "노래 삭제에 실패하였습니다.", Toast.LENGTH_SHORT).show();
                         Log.e("테스트", "데이터 삭제 실패", e);
+                        if(getActivity() instanceof NewPickMusic){
+                            NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                            newPickMusic.hideProgressBar();
+                        }
                     }
                 });
     }
@@ -419,6 +431,10 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // 처리 중 오류가 발생했을 때 수행할 작업
+                if(getActivity() instanceof NewPickMusic){
+                    NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                    newPickMusic.hideProgressBar();
+                }
             }
         });
     }
@@ -452,6 +468,10 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     Log.e("테스트", "comment > postId 노드 삭제 실패", e);
+                                    if(getActivity() instanceof NewPickMusic){
+                                        NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                                        newPickMusic.hideProgressBar();
+                                    }
                                 }
                             });
                 } else {
@@ -464,6 +484,10 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
+                if(getActivity() instanceof NewPickMusic){
+                    NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                    newPickMusic.hideProgressBar();
+                }
             }
         });
     }
@@ -507,6 +531,10 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
                                         }
 
                                         Toast.makeText(getContext(), "노래 삭제에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                                        if(getActivity() instanceof NewPickMusic){
+                                            NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                                            newPickMusic.hideProgressBar();
+                                        }
                                     }
                                 });
                     } else {
@@ -522,6 +550,10 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                     Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
                     Toast.makeText(getContext(), "노래 삭제에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                    if(getActivity() instanceof NewPickMusic){
+                        NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                        newPickMusic.hideProgressBar();
+                    }
                 }
             });
         }
@@ -594,6 +626,10 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
                 Toast.makeText(getContext(), "노래 삭제에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                if(getActivity() instanceof NewPickMusic){
+                    NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                    newPickMusic.hideProgressBar();
+                }
             }
         });
     }
@@ -655,6 +691,10 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Handle data fetching error
                 Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
+                if(getActivity() instanceof NewPickMusic){
+                    NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                    newPickMusic.hideProgressBar();
+                }
             }
         });
     }
@@ -691,6 +731,10 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
                     // Handle data fetching error
                     Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
                     checkAllOperationsCompleted(childList.size());
+                    if(getActivity() instanceof NewPickMusic){
+                        NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                        newPickMusic.hideProgressBar();
+                    }
                 }
             });
         }
@@ -754,6 +798,10 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Handle data fetching error
                 Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
+                if(getActivity() instanceof NewPickMusic){
+                    NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                    newPickMusic.hideProgressBar();
+                }
             }
         });
     }
@@ -795,6 +843,10 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
                     // Handle data fetching error
                     Log.e("테스트", "데이터 가져오기 실패", databaseError.toException());
                     checkAllOperationsCompleted(parentcounter, totalParents);
+                    if(getActivity() instanceof NewPickMusic){
+                        NewPickMusic newPickMusic = (NewPickMusic) getActivity();
+                        newPickMusic.hideProgressBar();
+                    }
                 }
             });
         }

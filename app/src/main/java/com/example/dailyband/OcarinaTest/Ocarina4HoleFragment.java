@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
+import com.example.dailyband.Utils.OnGrayTouchListener;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.github.angads25.toggle.interfaces.OnToggledListener;
 import com.github.angads25.toggle.model.ToggleableView;
@@ -40,7 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Ocarina4HoleFragment extends Fragment {
+public class Ocarina4HoleFragment extends Fragment implements OnGrayTouchListener {
     private View view;
     private Button bt_record, stop_record;
     private WaveRecorder waveRecorder;
@@ -302,5 +303,10 @@ public class Ocarina4HoleFragment extends Fragment {
         } else {
             Toast.makeText(requireContext(), "아직 녹음을 시작하지 않았습니다.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onGrayClicked() {
+        stopRecording();
     }
 }

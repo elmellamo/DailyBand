@@ -306,6 +306,18 @@ public class AddMusic extends AppCompatActivity implements OnCollaborationClickL
                     if(newPopularFragment != null){
                         newPopularFragment.onGrayClicked();
                     }
+                    if(recordingMain != null){
+                        recordingMain.onGrayClicked();
+                    }
+                    if(drumFragment != null){
+                        drumFragment.onGrayClicked();
+                    }
+                    if(pianoFragment != null){
+                        pianoFragment.onGrayClicked();
+                    }
+                    if(ocarina4HoleFragment != null){
+                        ocarina4HoleFragment.onGrayClicked();
+                    }
                 }
             }
         });

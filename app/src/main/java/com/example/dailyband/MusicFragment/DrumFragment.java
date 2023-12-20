@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
 import com.example.dailyband.Setting.NewSettingActivity;
+import com.example.dailyband.Utils.OnGrayTouchListener;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.github.squti.androidwaverecorder.WaveConfig;
 import com.github.squti.androidwaverecorder.WaveRecorder;
@@ -34,7 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class DrumFragment extends Fragment implements View.OnClickListener{
+public class DrumFragment extends Fragment implements View.OnClickListener, OnGrayTouchListener {
     private View view;
     private ConstraintLayout basslayout, crash_cymbol_cardview, mid_tom_cardview, ride_cymbal_cardview,
             smare_cardview, high_tom_cardview, low_tom_cardview, open_hihat_layout, close_hihat_layout;
@@ -232,5 +233,10 @@ public class DrumFragment extends Fragment implements View.OnClickListener{
         }else if(id==R.id.crash_cymbol_cardview){
             soundPool.play(crash_cymbal, 1, 1, 0, 0, 1);
         }
+    }
+
+    @Override
+    public void onGrayClicked() {
+        stopRecording();
     }
 }

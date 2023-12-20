@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.dailyband.MusicAdd.AddMusic;
 import com.example.dailyband.R;
+import com.example.dailyband.Utils.OnGrayTouchListener;
 import com.example.dailyband.Utils.OnRecordingCompletedListener;
 import com.github.squti.androidwaverecorder.WaveConfig;
 import com.github.squti.androidwaverecorder.WaveRecorder;
@@ -32,7 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class RecordingMain extends Fragment {
+public class RecordingMain extends Fragment implements OnGrayTouchListener {
     //private static final int PERMISSION_REQUEST_CODE = 1;
     private View view;
     private Button bt_record, stop_record;
@@ -181,5 +182,10 @@ public class RecordingMain extends Fragment {
         } else {
             Toast.makeText(requireContext(), "아직 녹음을 시작하지 않았습니다.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onGrayClicked() {
+        stopRecording();
     }
 }
