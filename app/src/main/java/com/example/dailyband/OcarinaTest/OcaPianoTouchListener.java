@@ -11,11 +11,12 @@ import java.util.Arrays;
 
 public class OcaPianoTouchListener implements View.OnTouchListener{
     private static int note;
+    private View fragmentRootView;
     public OcaPianoTouchListener() {
     }
 
     @Override
-    public boolean onTouch (View v, MotionEvent event) {
+    public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 note = getButtonId(v.getId());
@@ -26,33 +27,10 @@ public class OcaPianoTouchListener implements View.OnTouchListener{
         }
         return true;
     }
-    // View가 화면에 보이는지 확인하는 메서드
-    private boolean isViewVisible(View view) {
-        if (view == null || !(view.getParent() instanceof HorizontalScrollView)) {
-            return false;
-        }
 
-        HorizontalScrollView horizontalScrollView = (HorizontalScrollView) view.getParent();
-
-        int scrollX = horizontalScrollView.getScrollX();
-        int viewLeft = view.getLeft();
-        int viewRight = view.getRight();
-
-        int scrollViewWidth = horizontalScrollView.getWidth();
-        int scrollMax = horizontalScrollView.getChildAt(0).getMeasuredWidth() - scrollViewWidth;
-
-        return (scrollX <= viewRight && viewLeft <= scrollX + scrollViewWidth) ||
-                (scrollX >= scrollMax && viewRight <= scrollViewWidth);
-    }
 
     public int getButtonId(int i) {
-        if (i == R.id.oca_p13 || i==R.id.oca_ta4) {
-            return 1;
-        } else if (i == R.id.oca_b10) {
-            return 2;
-        } else if (i == R.id.oca_p14 || i==R.id.oca_tb4) {
-            return 3;
-        } else if (i == R.id.oca_p15|| i==R.id.oca_tc5) {
+        if (i == R.id.oca_p15|| i==R.id.oca_tc5) {
             return 4;
         } else if (i == R.id.oca_b11) {
             return 5;
@@ -76,16 +54,6 @@ public class OcaPianoTouchListener implements View.OnTouchListener{
             return 14;
         } else if (i == R.id.oca_p21 || i==R.id.oca_tb5) {
             return 15;
-        } else if (i == R.id.oca_p22|| i==R.id.oca_tc6) {
-            return 16;
-        } else if (i == R.id.oca_b16) {
-            return 17;
-        } else if (i == R.id.oca_p23 || i==R.id.oca_td6) {
-            return 18;
-        } else if (i == R.id.oca_b17) {
-            return 19;
-        } else if (i == R.id.oca_p24 || i == R.id.oca_te6) {
-            return 20;
         } else {
             return 0;
         }

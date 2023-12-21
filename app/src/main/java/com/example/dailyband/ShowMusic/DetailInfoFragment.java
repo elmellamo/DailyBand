@@ -102,7 +102,6 @@ public class DetailInfoFragment extends Fragment implements OnDeleteListener {
             deletelayout.setVisibility(View.VISIBLE);
         }
 
-
         songtitle.setText(title);
         songwriter.setText(artist);
 

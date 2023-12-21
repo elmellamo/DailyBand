@@ -45,7 +45,7 @@ public class Ocarina4HoleFragment extends Fragment implements OnGrayTouchListene
     private View view;
     private Button bt_record, stop_record;
     private WaveRecorder waveRecorder;
-    private HorizontalScrollView scrollView;
+    private HorizontalScrollView ocarina_scrollView;
     private OnRecordingCompletedListener recordingCompletedListener;
     private ConstraintLayout bottomlayout;
     private String directory_name = "Daily Band";
@@ -85,7 +85,7 @@ public class Ocarina4HoleFragment extends Fragment implements OnGrayTouchListene
         stop_record = view.findViewById(R.id.stop_record);
         instrumnet_switch = view.findViewById(R.id.instrumnet_switch);
         bottomlayout = view.findViewById(R.id.bottomlayout);
-        scrollView = view.findViewById(R.id.scrollView);
+        ocarina_scrollView = view.findViewById(R.id.ocarina_scrollView);
 
         bt_record.setOnClickListener(v -> {
             if(!isRecording){
@@ -102,10 +102,10 @@ public class Ocarina4HoleFragment extends Fragment implements OnGrayTouchListene
             public void onSwitched(ToggleableView toggleableView, boolean isOn) {
                 if(isOn){
                     bottomlayout.setVisibility(View.GONE);
-                    scrollView.setVisibility(View.VISIBLE);
+                    ocarina_scrollView.setVisibility(View.VISIBLE);
 
                 }else{
-                    scrollView.setVisibility(View.GONE);
+                    ocarina_scrollView.setVisibility(View.GONE);
                     bottomlayout.setVisibility(View.VISIBLE);
                 }
             }
@@ -120,6 +120,8 @@ public class Ocarina4HoleFragment extends Fragment implements OnGrayTouchListene
         if (context instanceof AddMusic) {
             // 액티비티에서 사용 가능한 메서드를 사용하기 위해 액티비티 인스턴스를 전달합니다.
             AddMusic activity = (AddMusic) context;
+
+            // Fragment 내부에서 OcaPianoTouchListener를 생성할 때 프래그먼트의 루트 뷰를 전달합니다.
             ocaPianoTouchListener = new OcaPianoTouchListener();
             ocarinaTouchListener = new OcarinaTouchListener("4Hole");
             PlayAudio.start();
@@ -143,8 +145,8 @@ public class Ocarina4HoleFragment extends Fragment implements OnGrayTouchListene
         b3.setOnTouchListener(ocarinaTouchListener);
         b4.setOnTouchListener(ocarinaTouchListener);
 
-        buttonA4 = (Button) getActivity().findViewById(R.id.oca_p13);
-        buttonB4 = (Button) getActivity().findViewById(R.id.oca_p14);
+        //buttonA4 = (Button) getActivity().findViewById(R.id.oca_p13);
+        //buttonB4 = (Button) getActivity().findViewById(R.id.oca_p14);
         buttonC5 = (Button) getActivity().findViewById(R.id.oca_p15);
         buttonD5 = (Button) getActivity().findViewById(R.id.oca_p16);
         buttonE5 = (Button) getActivity().findViewById(R.id.oca_p17);
@@ -152,12 +154,12 @@ public class Ocarina4HoleFragment extends Fragment implements OnGrayTouchListene
         buttonG5 = (Button) getActivity().findViewById(R.id.oca_p19);
         buttonA5 = (Button) getActivity().findViewById(R.id.oca_p20);
         buttonB5 = (Button) getActivity().findViewById(R.id.oca_p21);
-        buttonC6 = (Button) getActivity().findViewById(R.id.oca_p22);
-        buttonD6 = (Button) getActivity().findViewById(R.id.oca_p23);
-        buttonE6 = (Button) getActivity().findViewById(R.id.oca_p24);
+        //buttonC6 = (Button) getActivity().findViewById(R.id.oca_p22);
+        //buttonD6 = (Button) getActivity().findViewById(R.id.oca_p23);
+        //buttonE6 = (Button) getActivity().findViewById(R.id.oca_p24);
 
-        buttonA4.setOnTouchListener(ocaPianoTouchListener);
-        buttonB4.setOnTouchListener(ocaPianoTouchListener);
+       // buttonA4.setOnTouchListener(ocaPianoTouchListener);
+        //buttonB4.setOnTouchListener(ocaPianoTouchListener);
         buttonC5.setOnTouchListener(ocaPianoTouchListener);
         buttonD5.setOnTouchListener(ocaPianoTouchListener);
         buttonE5.setOnTouchListener(ocaPianoTouchListener);
@@ -165,32 +167,32 @@ public class Ocarina4HoleFragment extends Fragment implements OnGrayTouchListene
         buttonG5.setOnTouchListener(ocaPianoTouchListener);
         buttonA5.setOnTouchListener(ocaPianoTouchListener);
         buttonB5.setOnTouchListener(ocaPianoTouchListener);
-        buttonC6.setOnTouchListener(ocaPianoTouchListener);
-        buttonD6.setOnTouchListener(ocaPianoTouchListener);
-        buttonE6.setOnTouchListener(ocaPianoTouchListener);
+        //buttonC6.setOnTouchListener(ocaPianoTouchListener);
+        //buttonD6.setOnTouchListener(ocaPianoTouchListener);
+        //buttonE6.setOnTouchListener(ocaPianoTouchListener);
 
-        buttonA4black = (Button) getActivity().findViewById(R.id.oca_b10);
+        //buttonA4black = (Button) getActivity().findViewById(R.id.oca_b10);
         buttonC5black = (Button) getActivity().findViewById(R.id.oca_b11);
         buttonD5black = (Button) getActivity().findViewById(R.id.oca_b12);
         buttonF5black = (Button) getActivity().findViewById(R.id.oca_b13);
         buttonG5black = (Button) getActivity().findViewById(R.id.oca_b14);
         buttonA5black = (Button) getActivity().findViewById(R.id.oca_b15);
-        buttonC6black = (Button) getActivity().findViewById(R.id.oca_b16);
-        buttonD6black = (Button) getActivity().findViewById(R.id.oca_b17);
+  //      buttonC6black = (Button) getActivity().findViewById(R.id.oca_b16);
+//        buttonD6black = (Button) getActivity().findViewById(R.id.oca_b17);
 
 
-        buttonA4black.setOnTouchListener(ocaPianoTouchListener);
+        //buttonA4black.setOnTouchListener(ocaPianoTouchListener);
         buttonC5black.setOnTouchListener(ocaPianoTouchListener);
         buttonD5black.setOnTouchListener(ocaPianoTouchListener);
         buttonF5black.setOnTouchListener(ocaPianoTouchListener);
         buttonG5black.setOnTouchListener(ocaPianoTouchListener);
         buttonA5black.setOnTouchListener(ocaPianoTouchListener);
-        buttonC6black.setOnTouchListener(ocaPianoTouchListener);
-        buttonD6black.setOnTouchListener(ocaPianoTouchListener);
+        //buttonC6black.setOnTouchListener(ocaPianoTouchListener);
+        //buttonD6black.setOnTouchListener(ocaPianoTouchListener);
 
 
-        ta4 = (TextView) getActivity().findViewById(R.id.oca_ta4);
-        tb4 = (TextView) getActivity().findViewById(R.id.oca_tb4);
+        //ta4 = (TextView) getActivity().findViewById(R.id.oca_ta4);
+        //tb4 = (TextView) getActivity().findViewById(R.id.oca_tb4);
         tc5 = (TextView) getActivity().findViewById(R.id.oca_tc5);
         td5 = (TextView) getActivity().findViewById(R.id.oca_td5);
         te5 = (TextView) getActivity().findViewById(R.id.oca_te5);
@@ -198,12 +200,12 @@ public class Ocarina4HoleFragment extends Fragment implements OnGrayTouchListene
         tg5 = (TextView) getActivity().findViewById(R.id.oca_tg5);
         ta5 = (TextView) getActivity().findViewById(R.id.oca_ta5);
         tb5 = (TextView) getActivity().findViewById(R.id.oca_tb5);
-        tc6 = (TextView) getActivity().findViewById(R.id.oca_tc6);
-        td6 = (TextView) getActivity().findViewById(R.id.oca_td6);
-        te6 = (TextView) getActivity().findViewById(R.id.oca_te6);
+        //tc6 = (TextView) getActivity().findViewById(R.id.oca_tc6);
+        //td6 = (TextView) getActivity().findViewById(R.id.oca_td6);
+        //te6 = (TextView) getActivity().findViewById(R.id.oca_te6);
 
-        ta4.setOnTouchListener(ocaPianoTouchListener);
-        tb4.setOnTouchListener(ocaPianoTouchListener);
+        //ta4.setOnTouchListener(ocaPianoTouchListener);
+        //tb4.setOnTouchListener(ocaPianoTouchListener);
         tc5.setOnTouchListener(ocaPianoTouchListener);
         td5.setOnTouchListener(ocaPianoTouchListener);
         te5.setOnTouchListener(ocaPianoTouchListener);
@@ -211,9 +213,9 @@ public class Ocarina4HoleFragment extends Fragment implements OnGrayTouchListene
         tg5.setOnTouchListener(ocaPianoTouchListener);
         ta5.setOnTouchListener(ocaPianoTouchListener);
         tb5.setOnTouchListener(ocaPianoTouchListener);
-        tc6.setOnTouchListener(ocaPianoTouchListener);
-        td6.setOnTouchListener(ocaPianoTouchListener);
-        te6.setOnTouchListener(ocaPianoTouchListener);
+        //tc6.setOnTouchListener(ocaPianoTouchListener);
+        //td6.setOnTouchListener(ocaPianoTouchListener);
+        //te6.setOnTouchListener(ocaPianoTouchListener);
 
     }
 
