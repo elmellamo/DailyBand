@@ -237,6 +237,8 @@ public class DrumFragment extends Fragment implements View.OnClickListener, OnGr
 
     @Override
     public void onGrayClicked() {
-        stopRecording();
+        if (isAdded() && getContext() != null) {
+            stopRecording();
+        }
     }
 }

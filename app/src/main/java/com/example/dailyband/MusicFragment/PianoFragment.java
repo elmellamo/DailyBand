@@ -608,10 +608,11 @@ public class PianoFragment extends Fragment implements View.OnClickListener, OnG
             Toast.makeText(requireContext(), "아직 녹음을 시작하지 않았습니다.", Toast.LENGTH_SHORT).show();
         }
     }
-
     @Override
     public void onGrayClicked() {
-        stopRecording();
+        if (isAdded() && getContext() != null) {
+            stopRecording();
+        }
     }
 }
 

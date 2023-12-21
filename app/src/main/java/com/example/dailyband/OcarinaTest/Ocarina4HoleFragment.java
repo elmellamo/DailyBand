@@ -304,9 +304,10 @@ public class Ocarina4HoleFragment extends Fragment implements OnGrayTouchListene
             Toast.makeText(requireContext(), "아직 녹음을 시작하지 않았습니다.", Toast.LENGTH_SHORT).show();
         }
     }
-
     @Override
     public void onGrayClicked() {
-        stopRecording();
+        if (isAdded() && getContext() != null) {
+            stopRecording();
+        }
     }
 }
