@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +46,7 @@ public class Ocarina4HoleFragment extends Fragment implements OnGrayTouchListene
     private View view;
     private Button bt_record, stop_record;
     private WaveRecorder waveRecorder;
-    private HorizontalScrollView ocarina_scrollView;
+    private LinearLayout ocarina_scrollView;
     private OnRecordingCompletedListener recordingCompletedListener;
     private ConstraintLayout bottomlayout;
     private String directory_name = "Daily Band";

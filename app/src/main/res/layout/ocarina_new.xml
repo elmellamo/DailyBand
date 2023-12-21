@@ -148,14 +148,13 @@
             app:layout_constraintTop_toBottomOf="@+id/button3"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <HorizontalScrollView
+    <LinearLayout
         android:id="@+id/ocarina_scrollView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="25dp"
-
-        android:visibility="gone"
+android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/middle_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -291,7 +290,7 @@
                 android:textIsSelectable="false" />
 
         </RelativeLayout>
-    </HorizontalScrollView>
+    </LinearLayout>
 
 
 
